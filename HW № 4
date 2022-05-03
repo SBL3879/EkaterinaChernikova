@@ -1,0 +1,20 @@
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static string name, zodiac, workplace;
+        static int age;
+		    static void Main(string[] args)
+        {
+            Console.WriteLine("Как вас зовут?"); name = Console.ReadLine();
+			      Console.WriteLine("Сколько вам лет?"); age = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Какой ваш знак зодиака?"); zodiac = Console.ReadLine();
+            Console.WriteLine("Где вы работаете?"); workplace = Console.ReadLine();
+
+            Console.WriteLine($"\nВас зовут {name}, ваш возраст {age}, ваш знак зодиака {zodiac}, и ваше место работы {workplace}.");
+			      Console.ReadKey();
+		    }
+    }
+}
