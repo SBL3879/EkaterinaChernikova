@@ -2,22 +2,23 @@ using System;
 
 namespace ConsoleApp1
 {
-    class Program
-    {
-		static byte b = 255;
-		static int i = 1000;
-		static float f = 5.5f;
-		static short s = 32500;
-		static long l = 10000000000000;
-		static double d = 111111111.222222222d;
-		static uint u = 2000;
-		static char c = 'z';
-		static string st = "hi";
-		static DateTime time = DateTime.Now;
+	class Program
+	{
+		
 		static void Main(string[] args)
-        {
-			Console.WriteLine(b + "\n" + i + "\n" + f + "\n" + s + "\n" + l + "\n" + d + "\n" + u + "\n" + c + "\n" + st + "\n" + time);
-			Console.ReadKey();
-		    }
-    }
+		{
+		byte dataSize = 150;
+		int value = 1000;
+		float number = 5.5f;
+		short price = 32500;
+		long jackPot = 10000000000000;
+		double rate = 111111111.222222222d;
+		uint year = 2022;
+		char symbol = 'P';
+		string word = "Hi";
+		DateTime time = DateTime.Now;
+		Console.WriteLine(dataSize + "\n" + value + "\n" + number + "\n" + price + "\n" + jackPot + "\n" + rate + "\n" + year + "\n" + symbol + "\n" + word + "\n" + time);
+		Console.ReadKey();
+		}
+	}
 }
