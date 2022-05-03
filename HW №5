@@ -1,0 +1,24 @@
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string firstName, lastName, buffer;
+
+            firstName = "Блоховский";
+            lastName = "Барсик";
+
+            Console.WriteLine($"До: firstName: {firstName} lastName: {lastName}");
+
+            buffer = firstName;
+            firstName = lastName;
+            lastName = buffer;
+
+            Console.WriteLine($"После: firstName: {firstName} lastName: {lastName}");
+            Console.ReadKey();
+        }
+    }
+}
