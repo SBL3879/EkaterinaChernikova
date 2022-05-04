@@ -1,0 +1,25 @@
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Picture[] gallery = new Picture[52];
+
+            int lineCount = gallery.Length / 3;
+            int remains = gallery.Length % 3;
+
+            Console.WriteLine($"Кол-во полных строк: {lineCount}\nКол-во картинок в не полной строке: {remains}");
+            Console.ReadKey();
+        }
+    }
+    class Picture
+    {
+        int sizeX;
+        int sizeY;
+        int fileSize;
+        string fileFormat;
+    }
+}
