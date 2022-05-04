@@ -1,0 +1,19 @@
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int crystalPrize = 75;
+            Console.WriteLine("Сколько у вас золота?");
+            int gold = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Кристаллы стоят {crystalPrize} золота, сколько хотите купить?");
+            int crystal = Convert.ToInt32(Console.ReadLine());
+            gold -= crystal * crystalPrize;
+            Console.WriteLine($"У вас {gold} золота и {crystal} кристаллов");
+            Console.ReadKey();
+        }
+    }
+}
