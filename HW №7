@@ -6,13 +6,13 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            int crystalPrize = 75;
+            int crystallPrize = 75;
             Console.WriteLine("Сколько у вас золота?");
             int gold = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine($"Кристаллы стоят {crystalPrize} золота, сколько хотите купить?");
-            int crystal = Convert.ToInt32(Console.ReadLine());
-            gold -= crystal * crystalPrize;
-            Console.WriteLine($"У вас {gold} золота и {crystal} кристаллов");
+            Console.WriteLine($"Кристаллы стоят {crystallPrize} золота, сколько хотите купить?");
+            int crystall = Convert.ToInt32(Console.ReadLine());
+            gold -= crystall * crystallPrize;
+            Console.WriteLine($"У вас {gold} золота и {crystall} кристаллов");
             Console.ReadKey();
         }
     }
