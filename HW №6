@@ -7,9 +7,10 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             int gallerySize = 52;
+            int lineLength = 3;
 
-            int lineCount = gallerySize / 3;
-            int remains = gallerySize % 3;
+            int lineCount = gallerySize / lineLength;
+            int remains = gallerySize % lineLength;
 
             Console.WriteLine($"Кол-во полных строк: {lineCount}\n" +
                 $"Кол-во картинок в не полной строке: {remains}");
