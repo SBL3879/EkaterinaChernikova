@@ -9,11 +9,13 @@ namespace ConsoleApp1
             Console.Write("Введите кол-во старушек: ");
             int queueSize = Convert.ToInt32(Console.ReadLine());
 
-            int totalMinutes = queueSize * 10;
-            int hours = totalMinutes / 60;
-            int minutes = totalMinutes % 60;
+            int doctorAppointmentTime = 10;
+            int hour = 60;
+            int totalMinutes = queueSize * doctorAppointmentTime;
+            int waitingHours = totalMinutes / hour;
+            int waitingMinutes = totalMinutes % hour;
 
-            Console.WriteLine($"Вы должны отстоять в очереди {hours} часа и {minutes} минут.");
+            Console.WriteLine($"Вы должны отстоять в очереди {waitingHours} часа и {waitingMinutes} минут.");
             Console.ReadKey();
         }
     }
