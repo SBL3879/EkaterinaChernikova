@@ -1,0 +1,16 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int a = 10;
+            int b = 38;
+            int c = (31 - 5 * a) / b;
+            Console.WriteLine(c);
+            // Ответ будет 0, т.к. int не может вывести 0,5 (за числа с точкой отвечают double и float(0,5f))
+        }
+    }
+}
