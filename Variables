@@ -1,0 +1,22 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            byte miniNumbers = 250;
+            sbyte variousNumbers = -120;
+            short shortNumbers = 32500;
+            int adjectiveNumbers = -500000000;
+            uint positiveNumbers = 50000000; 
+            long biggerNumbers = 1000000000000000000;
+            float numbersWithAPeriod = 55.777f;
+            double adjectiveNumbersWithAPeriod = 155.357; 
+            char symbol = 'K';
+            string words = "Привет, как дела?";
+
+        }
+    }
+}
