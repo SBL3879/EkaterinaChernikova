@@ -6,17 +6,19 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            byte miniNumbers = 250;
-            sbyte variousNumbers = -120;
-            short shortNumbers = 32500;
-            int adjectiveNumbers = -500000000;
-            uint positiveNumbers = 50000000; 
-            long biggerNumbers = 1000000000000000000;
-            float numbersWithAPeriod = 55.777f;
-            double adjectiveNumbersWithAPeriod = 155.357; 
-            char symbol = 'K';
-            string words = "Привет, как дела?";
+            int fahrenheit = 451;
+            uint price = 32700;
+            float heightOfEverest = 8848.86f;
+            char symbol = '!';
+            string words = "Hello everyone";
+            byte age = 33;
+            sbyte dataSize = 100;
+            short year = 2022;
+            long jackPot = 100000000000000;
+            double volumeOfLakeBaikal = 744.4;
 
+            Console.WriteLine(fahrenheit + "\n" + price + "\n" + heightOfEverest  + "\n" + symbol + "\n" + words + "\n" + age + "\n" + dataSize + "\n" + year + "\n" + jackPot + "\n" + volumeOfLakeBaikal);
+            Console.ReadKey();
         }
     }
 }
