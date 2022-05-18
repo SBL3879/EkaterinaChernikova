@@ -1,0 +1,24 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int gold;
+            int crystall;
+            int crystallPrize = 30;
+
+            Console.WriteLine("Привет, путешественник. Добро пожаловать в наш магазин кристаллов.");
+            Console.Write("Сколько у вас золота:");
+            gold = Convert.ToInt32(Console.ReadLine());
+            Console.Write($"Кристаллы стоят {crystallPrize} золота, сколько хотите купить:");
+            crystall = Convert.ToInt32(Console.ReadLine());
+            gold -= crystall * crystallPrize;
+
+            Console.WriteLine($"У вас {gold} золота и {crystall} кристаллов");
+            Console.ReadKey();
+        }
+    }
+}
