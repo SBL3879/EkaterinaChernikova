@@ -1,0 +1,20 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int gallerySize = 52;
+            int lineLength = 3;
+
+            int lineCount = gallerySize / lineLength;
+            int remains = gallerySize % lineLength;
+
+            Console.WriteLine($"Кол-во полных строк: {lineCount}\n" +
+                $"Кол-во картинок в не полной строке: {remains}");
+            Console.ReadKey();
+        }
+    }
+}
