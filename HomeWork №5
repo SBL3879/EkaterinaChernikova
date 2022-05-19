@@ -6,18 +6,20 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            string firstName, lastName, buffer;
+            string firstName;
+            string lastName;
+            string buffer;
 
             firstName = "Вазовский";
             lastName = "Майк";
-
-            Console.WriteLine($"До: firstName: {firstName} lastName: {lastName}");
-
+            
+            Console.WriteLine($"До: Имя: {firstName} Фамилия: {lastName}");
+            
             buffer = firstName;
             firstName = lastName;
             lastName = buffer;
-
-            Console.WriteLine($"После: firstName: {firstName} lastName: {lastName}");
+            
+            Console.WriteLine($"После: Имя: {firstName} Фамилия: {lastName}");
             Console.ReadKey();
         }
     }
