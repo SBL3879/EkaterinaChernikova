@@ -1,0 +1,25 @@
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int peopleCount;
+            int waitingTime;
+            int waitingHours;
+            int waitingMinutes;
+            int receptionTime = 10;
+            int minutesInHour = 60;
+
+            Console.WriteLine("Добро пожаловать в нашу поликлинику. К врачу можете пройти в порядке живой очереди. Время приёма врача 10 минут.");
+            Console.Write("Сколько людей в очереди: ");
+            peopleCount = Convert.ToInt32(Console.ReadLine());
+
+            waitingHours = (peopleCount * receptionTime) / minutesInHour;
+            waitingMinutes = (peopleCount * receptionTime) % minutesInHour;
+
+            Console.WriteLine($"Вы должны отстоять в очереди: {waitingHours} час(-а/ов), {waitingMinutes} минут.");
+            Console.ReadKey();
+        }
+    }
+}
