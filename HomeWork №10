@@ -1,0 +1,21 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int a = 5;
+            int b = 96;
+            int c = 7;
+
+            //В for обычно задается начальное и конечное значение переменной цикла и какие-либо правила для её изменения.Тут for подходит
+            for (int i = a; i <= b; i += c) 
+            {
+                Console.WriteLine(i); 
+            }
+            Console.ReadKey();
+        }
+    }
+}
