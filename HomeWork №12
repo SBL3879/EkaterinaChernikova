@@ -1,0 +1,79 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            float rub = 1000.0f;
+            float usd = 1000.0f;
+            float eur = 1000.0f;
+
+            float exchangeRateRubUsd = 56.9690f;
+            float exchangeRateRubEur = 58.8705f;
+            float exchangeRateUsdEur = 0.97f;
+
+            bool exit = false;
+            string userInput;
+            float transferSum;
+
+            while (!exit)
+            {
+                Console.Clear();
+                Console.WriteLine($"Ваш баланс:\n" +
+                    $"RUB = {rub}\n" +
+                    $"USD = {usd}\n" +
+                    $"EUR = {eur}\n" +
+                    $"\nКакую валюту вы хотите конвертировать?\n" +
+                    $"1. RUB => USD \n" +
+                    $"2. RUB => EUR \n" +
+                    $"3. USD => RUB \n" +
+                    $"4. USD => EUR \n" +
+                    $"5. EUR => RUB \n" +
+                    $"6. EUR => USD \n");
+                Console.Write("Введите номер меню: ");
+
+                userInput = Console.ReadLine();
+                if(userInput == "1" || userInput == "2" || userInput == "3" ||
+                   userInput == "4" || userInput == "5" || userInput == "6")
+                {
+                    Console.Write("Сколько валюты желаете сконвертировать? ");
+                    transferSum = Convert.ToSingle(Console.ReadLine());
+
+                    switch (userInput)
+                    {
+                        case "1":
+                            rub -= transferSum;
+                            usd += transferSum / exchangeRateRubUsd;
+                            break;
+                        case "2":
+                            rub -= transferSum;
+                            eur += transferSum / exchangeRateRubEur;
+                            break;
+                        case "3":
+                            usd -= transferSum;
+                            rub += transferSum * exchangeRateRubUsd;
+                            break;
+                        case "4":
+                            usd -= transferSum;
+                            eur += transferSum * exchangeRateUsdEur;
+                            break;
+                        case "5":
+                            eur -= transferSum;
+                            rub += transferSum * exchangeRateRubEur;
+                            break;
+                        case "6":
+                            eur -= transferSum;
+                            usd += transferSum / exchangeRateUsdEur;
+                            break;
+                    }
+                }
+                else if (userInput == "7")
+                {
+                    exit = true;
+                }
+            }
+        }
+    }
+}
