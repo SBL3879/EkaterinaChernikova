@@ -6,14 +6,14 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            int a = 5;
-            int b = 96;
-            int c = 7;
+            int firstNumber = 5;
+            int lastNumber = 96;
+            int numberStep = 7;
 
             //В for обычно задается начальное и конечное значение переменной цикла и какие-либо правила для её изменения.Тут for подходит
-            for (int i = a; i <= b; i += c) 
+            for (int i = firstNumber; i <= lastNumber; i += numberStep)
             {
-                Console.WriteLine(i); 
+                Console.WriteLine(i);
             }
             Console.ReadKey();
         }
