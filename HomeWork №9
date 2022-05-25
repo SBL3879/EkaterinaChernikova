@@ -7,12 +7,14 @@ namespace HomeWork
         static void Main(string[] args)
         {
             string userInput;
+            string stopWord;
 
             userInput = "";
+            stopWord = "exit";
 
-            while(userInput != "exit")
+            while (userInput != stopWord)
             {
-                Console.WriteLine("Выйти из цикла?(напишите exit)");
+                Console.WriteLine("Выйти из цикла?(напишите " + stopWord + ")");
                 userInput = Console.ReadLine();
             }
         }
