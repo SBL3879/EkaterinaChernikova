@@ -12,13 +12,16 @@ namespace HomeWork
 
             float exchangeRateRubUsd = 56.9690f;
             float exchangeRateRubEur = 58.8705f;
-            float exchangeRateUsdEur = 0.97f;
+            float exchangeRateUsdEur = 0.9677f;
+            float exchangeRateUsdRub = 0.0175f;
+            float exchangeRateEurUsd = 1.0334f;
+            float exchangeRateEurRub = 0.0170f;
 
             bool exit = false;
             string userInput;
-            float transferSum;
+            float transferSum = 0.0f;
 
-            while (!exit)
+            while (exit == false)
             {
                 Console.Clear();
                 Console.WriteLine($"Ваш баланс:\n" +
@@ -35,21 +38,23 @@ namespace HomeWork
                 Console.Write("Введите номер меню: ");
 
                 userInput = Console.ReadLine();
-                if(userInput == "1" || userInput == "2" || userInput == "3" ||
-                   userInput == "4" || userInput == "5" || userInput == "6")
+                if (userInput == "1" || userInput == "2" || userInput == "3" ||
+                    userInput == "4" || userInput == "5" || userInput == "6" || userInput == "7")
                 {
-                    Console.Write("Сколько валюты желаете сконвертировать? ");
-                    transferSum = Convert.ToSingle(Console.ReadLine());
-
+                    if (userInput != "7")
+                    {
+                        Console.Write("Сколько валюты желаете сконвертировать? ");
+                        transferSum = Convert.ToSingle(Console.ReadLine());
+                    }
                     switch (userInput)
                     {
                         case "1":
                             rub -= transferSum;
-                            usd += transferSum / exchangeRateRubUsd;
+                            usd += transferSum * exchangeRateUsdRub;
                             break;
                         case "2":
                             rub -= transferSum;
-                            eur += transferSum / exchangeRateRubEur;
+                            eur += transferSum * exchangeRateEurRub;
                             break;
                         case "3":
                             usd -= transferSum;
@@ -57,7 +62,7 @@ namespace HomeWork
                             break;
                         case "4":
                             usd -= transferSum;
-                            eur += transferSum * exchangeRateUsdEur;
+                            eur += transferSum * exchangeRateEurUsd;
                             break;
                         case "5":
                             eur -= transferSum;
@@ -65,13 +70,12 @@ namespace HomeWork
                             break;
                         case "6":
                             eur -= transferSum;
-                            usd += transferSum / exchangeRateUsdEur;
+                            usd += transferSum * exchangeRateUsdEur;
+                            break;
+                        case "7":
+                            exit = true;
                             break;
                     }
-                }
-                else if (userInput == "7")
-                {
-                    exit = true;
                 }
             }
         }
