@@ -1,0 +1,26 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int number;
+            int divider1 = 3;
+            int divider2 = 5;
+            int sum = 0;
+            Random rand = new Random();
+
+            number = rand.Next(1, 101);
+
+            Console.WriteLine($"Случайное число: {number}");
+
+            for (int i = 1; i < number; i++)
+                if (i % divider1 == 0 || i % divider2 == 0)
+                    sum += i;
+            Console.WriteLine($"Сумма чисел меньше {number} и кратных {divider1} или {divider2} равна: {sum}");
+            Console.ReadKey();
+        }
+    }
+}
