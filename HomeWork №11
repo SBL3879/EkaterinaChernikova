@@ -12,7 +12,7 @@ namespace HomeWork
             int sum = 0;
             int randomMin = 1;
             int randomMax = 101;
-            Random rand = new Random();
+            Random random = new Random();
 
             number = rand.Next(randomMin, randomMax);
 
