@@ -14,7 +14,7 @@ namespace HomeWork
             int randomMax = 101;
             Random random = new Random();
 
-            number = rand.Next(randomMin, randomMax);
+            number = random.Next(randomMin, randomMax);
 
             Console.WriteLine($"Случайное число: {number}");
 
