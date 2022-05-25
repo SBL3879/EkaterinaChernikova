@@ -10,9 +10,11 @@ namespace HomeWork
             int divider1 = 3;
             int divider2 = 5;
             int sum = 0;
+            int randomMin = 1;
+            int randomMax = 101;
             Random rand = new Random();
 
-            number = rand.Next(1, 101);
+            number = rand.Next(randomMin, randomMax);
 
             Console.WriteLine($"Случайное число: {number}");
 
