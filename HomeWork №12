@@ -34,48 +34,49 @@ namespace HomeWork
                     $"3. USD => RUB \n" +
                     $"4. USD => EUR \n" +
                     $"5. EUR => RUB \n" +
-                    $"6. EUR => USD \n");
+                    $"6. EUR => USD \n" +
+                    $"7. Выйти из программы.");
                 Console.Write("Введите номер меню: ");
-
                 userInput = Console.ReadLine();
-                if (userInput == "1" || userInput == "2" || userInput == "3" ||
-                    userInput == "4" || userInput == "5" || userInput == "6" || userInput == "7")
+
+                if(userInput == "1" || userInput == "2" || userInput == "3" ||
+                   userInput == "4" || userInput == "5" || userInput == "6")
+                    //Условие нужно для того, что если пользователь введет что-то помимо 1-6, то не сработает предложение "Сколько валюты сконвертировать: ".
+                    
+                if (userInput != "7")
                 {
-                    if (userInput != "7")
-                    {
-                        Console.Write("Сколько валюты желаете сконвертировать? ");
-                        transferSum = Convert.ToSingle(Console.ReadLine());
-                    }
-                    switch (userInput)
-                    {
-                        case "1":
-                            rub -= transferSum;
-                            usd += transferSum * exchangeRateUsdRub;
-                            break;
-                        case "2":
-                            rub -= transferSum;
-                            eur += transferSum * exchangeRateEurRub;
-                            break;
-                        case "3":
-                            usd -= transferSum;
-                            rub += transferSum * exchangeRateRubUsd;
-                            break;
-                        case "4":
-                            usd -= transferSum;
-                            eur += transferSum * exchangeRateEurUsd;
-                            break;
-                        case "5":
-                            eur -= transferSum;
-                            rub += transferSum * exchangeRateRubEur;
-                            break;
-                        case "6":
-                            eur -= transferSum;
-                            usd += transferSum * exchangeRateUsdEur;
-                            break;
-                        case "7":
-                            exit = true;
-                            break;
-                    }
+                    Console.Write("Сколько валюты сконвертировать: ");
+                    transferSum = Convert.ToSingle(Console.ReadLine());
+                }
+                switch (userInput)
+                {
+                    case "1":
+                        rub -= transferSum;
+                        usd += transferSum * exchangeRateUsdRub;
+                        break;
+                    case "2":
+                        rub -= transferSum;
+                        eur += transferSum * exchangeRateEurRub;
+                        break;
+                    case "3":
+                        usd -= transferSum;
+                        rub += transferSum * exchangeRateRubUsd;
+                        break;
+                    case "4":
+                        usd -= transferSum;
+                        eur += transferSum * exchangeRateEurUsd;
+                        break;
+                    case "5":
+                        eur -= transferSum;
+                        rub += transferSum * exchangeRateRubEur;
+                        break;
+                    case "6":
+                        eur -= transferSum;
+                        usd += transferSum * exchangeRateUsdEur;
+                        break;
+                    case "7":
+                        exit = true;
+                        break;
                 }
             }
         }
