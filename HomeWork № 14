@@ -1,0 +1,31 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string userName;
+            string symbolLine = "";
+            string showingText;
+            char userSymbol;
+            int symbolLineLength = 2;
+
+            Console.Write("Введите имя: ");
+            userName = Console.ReadLine();
+            Console.Write("Введите символ: ");
+            userSymbol = Convert.ToChar(Console.ReadLine());
+            symbolLineLength += userName.Length;
+
+            for (int i = 0; i < symbolLineLength; i++)
+                symbolLine += userSymbol;
+
+            showingText = $"{symbolLine}\n{userSymbol}{userName}{userSymbol}\n{symbolLine}";
+
+            Console.Clear();
+            Console.WriteLine(showingText);
+            Console.ReadKey();
+        }
+    }
+}
