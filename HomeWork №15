@@ -1,0 +1,33 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string userInput;
+            string password = "123456";
+            string secretMessage = "Хорошего вам настроения =)";
+            int counter = 0;
+
+            while (counter < 3)
+            {
+                Console.Clear();
+                Console.Write("Введите пароль к сообщению: ");
+                userInput = Console.ReadLine();
+
+                if (userInput == password)
+                {
+                    Console.WriteLine(secretMessage);
+                }
+                else
+                {
+                    Console.WriteLine("Пароль не верен! Попробуйте еще раз");
+                    counter++;
+                }
+                Console.ReadKey();
+            }
+        }
+    }
+}
