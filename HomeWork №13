@@ -10,9 +10,9 @@ namespace HomeWork
             string userPassword = "";
 
             string userInput;
-            bool exit = false;
+            bool isExit = false;
 
-            while(exit == false)
+            while (isExit == false)
             {
                 Console.Clear();
                 Console.WriteLine("Да поможет вам help =)");
@@ -32,7 +32,7 @@ namespace HomeWork
                         {
                             Console.Write("Введите пароль от имени пользователя: ");
                             userInput = Console.ReadLine();
-                            if(userInput == userPassword)
+                            if (userInput == userPassword)
                             {
                                 Console.Write("Введите новое имя пользователя: ");
                                 userName = Console.ReadLine();
@@ -46,7 +46,7 @@ namespace HomeWork
                         break;
 
                     case "SetPassword":
-                        if(userPassword != "")
+                        if (userPassword != "")
                         {
                             Console.Write("Создайте пароль пользователя: ");
                         }
@@ -54,7 +54,7 @@ namespace HomeWork
                         {
                             Console.Write("Введите старый пароль пользователя: ");
                             userInput = Console.ReadLine();
-                            if(userInput == userPassword)
+                            if (userInput == userPassword)
                             {
                                 Console.Write("Введите новый пароль пользователя: ");
                             }
@@ -63,7 +63,7 @@ namespace HomeWork
                         break;
 
                     case "ShowName":
-                        if(userName == "")
+                        if (userName == "")
                         {
                             Console.Write("Имя пользователя не установлено.");
                         }
@@ -94,15 +94,15 @@ namespace HomeWork
                         userInput = Console.ReadLine();
                         switch (userInput)
                         {
-                            case "0": Console.BackgroundColor = ConsoleColor.Black;       break;
-                            case "1": Console.BackgroundColor = ConsoleColor.DarkBlue;    break;
-                            case "2": Console.BackgroundColor = ConsoleColor.DarkGreen;   break;
-                            case "3": Console.BackgroundColor = ConsoleColor.DarkCyan;    break;
-                            case "4": Console.BackgroundColor = ConsoleColor.DarkRed;     break;
+                            case "0": Console.BackgroundColor = ConsoleColor.Black; break;
+                            case "1": Console.BackgroundColor = ConsoleColor.DarkBlue; break;
+                            case "2": Console.BackgroundColor = ConsoleColor.DarkGreen; break;
+                            case "3": Console.BackgroundColor = ConsoleColor.DarkCyan; break;
+                            case "4": Console.BackgroundColor = ConsoleColor.DarkRed; break;
                             case "5": Console.BackgroundColor = ConsoleColor.DarkMagenta; break;
-                            case "6": Console.BackgroundColor = ConsoleColor.DarkYellow;  break;
-                            case "7": Console.BackgroundColor = ConsoleColor.DarkGray;    break;
-                            case "8": Console.BackgroundColor = ConsoleColor.White;       break;
+                            case "6": Console.BackgroundColor = ConsoleColor.DarkYellow; break;
+                            case "7": Console.BackgroundColor = ConsoleColor.DarkGray; break;
+                            case "8": Console.BackgroundColor = ConsoleColor.White; break;
                         }
                         break;
 
@@ -121,15 +121,33 @@ namespace HomeWork
                         userInput = Console.ReadLine();
                         switch (userInput)
                         {
-                            case "0": Console.ForegroundColor = ConsoleColor.Black; break;
-                            case "1": Console.ForegroundColor = ConsoleColor.Blue; break;
-                            case "2": Console.ForegroundColor = ConsoleColor.Green; break;
-                            case "3": Console.ForegroundColor = ConsoleColor.Cyan; break;
-                            case "4": Console.ForegroundColor = ConsoleColor.Red; break;
-                            case "5": Console.ForegroundColor = ConsoleColor.Magenta; break;
-                            case "6": Console.ForegroundColor = ConsoleColor.Yellow; break;
-                            case "7": Console.ForegroundColor = ConsoleColor.Gray; break;
-                            case "8": Console.ForegroundColor = ConsoleColor.White; break;
+                            case "0": 
+                                Console.ForegroundColor = ConsoleColor.Black; 
+                                break;
+                            case "1": 
+                                Console.ForegroundColor = ConsoleColor.Blue; 
+                                break;
+                            case "2": 
+                                Console.ForegroundColor = ConsoleColor.Green; 
+                                break;
+                            case "3": 
+                                Console.ForegroundColor = ConsoleColor.Cyan; 
+                                break;
+                            case "4": 
+                                Console.ForegroundColor = ConsoleColor.Red; 
+                                break;
+                            case "5": 
+                                Console.ForegroundColor = ConsoleColor.Magenta; 
+                                break;
+                            case "6": 
+                                Console.ForegroundColor = ConsoleColor.Yellow; 
+                                break;
+                            case "7": 
+                                Console.ForegroundColor = ConsoleColor.Gray; 
+                                break;
+                            case "8": 
+                                Console.ForegroundColor = ConsoleColor.White; 
+                                break;
                         }
                         break;
 
@@ -138,7 +156,7 @@ namespace HomeWork
                         break;
 
                     case "Exit":
-                        exit = true;
+                        isExit = true;
                         continue;
 
                     case "help":
