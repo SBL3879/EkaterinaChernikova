@@ -7,25 +7,24 @@ namespace HomeWork
         static void Main(string[] args)
         {
             Random random = new Random();
-            int N;
-            int minN = 1;
-            int maxN = 28;
-            int divisibleN = 0;
+            int number;
+            int minNumber = 1;
+            int maxNumber = 28;
+            int divisibleNumber = 0;
             int minDivisible = 100;
             int maxDivisible = 1000;
             double divisible;
 
-            N = random.Next(minN, maxN);
+            number = random.Next(minNumber, maxNumber);
 
-            for(double i = minDivisible; i < maxDivisible; i++)
+            for (double i = minDivisible; i < maxDivisible; i++)
             {
-                divisible = Math.IEEERemainder(i, N);
-                //divisible = Math.Sqrt(i);
+                divisible = Math.IEEERemainder(i, number);
                 if (divisible == 0)
-                    divisibleN++;
+                    divisibleNumber++;
             }
 
-            Console.WriteLine($"Кол-во трехзначных чисел краттных {N}: {divisibleN}");
+            Console.WriteLine($"Кол-во трехзначных чисел краттных {number}: {divisibleNumber}");
             Console.ReadKey();
         }
     }
