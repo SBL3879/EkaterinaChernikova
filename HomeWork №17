@@ -1,0 +1,29 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int randomNumber;
+            int minNumber = 10;
+            int maxNumber = 100;
+            int divisibleTwo = 2;
+            int multipleTwo = 2;
+            int divisibleCounter = 1;
+
+            randomNumber = random.Next(minNumber, maxNumber);
+
+            while (divisibleTwo <= randomNumber)
+            {
+                divisibleTwo *= multipleTwo;
+                divisibleCounter++;
+            }
+
+            Console.WriteLine($"Наименьшая степень числа 2 больше {randomNumber}: {divisibleCounter}");
+            Console.ReadKey();
+        }
+    }
+}
