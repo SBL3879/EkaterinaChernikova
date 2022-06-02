@@ -39,15 +39,14 @@ namespace HomeWork
                 Console.Write("Введите номер меню: ");
                 userInput = Console.ReadLine();
 
-                if(userInput == "1" || userInput == "2" || userInput == "3" ||
+                if (userInput == "1" || userInput == "2" || userInput == "3" ||
                    userInput == "4" || userInput == "5" || userInput == "6")
-                    //Условие нужно для того, что если пользователь введет что-то помимо 1-6, то не сработает предложение "Сколько валюты сконвертировать: ".
-                    
-                if (userInput != "7")
+                   
                 {
                     Console.Write("Сколько валюты сконвертировать: ");
                     transferSum = Convert.ToSingle(Console.ReadLine());
                 }
+
                 switch (userInput)
                 {
                     case "1":
