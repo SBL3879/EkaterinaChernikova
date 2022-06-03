@@ -1,0 +1,46 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string text;
+            int depth = 0;
+            int depthMax = 0;
+            int bracketLeft = 0;
+            int bracketRight = 0;
+            bool isCorrect = true;
+
+            text = Console.ReadLine();
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == ')')
+                {
+                    bracketRight++;
+                    depth--;
+                }
+                else if (text[i] == '(')
+                {
+                    bracketLeft++;
+                    depth++;
+                }
+
+                if (depth < 0)
+                    isCorrect = false;
+
+                if (depth > depthMax) 
+                    depthMax = depth;
+            }
+
+            if (bracketRight == bracketLeft && isCorrect == true) 
+                Console.WriteLine($"{text} - корректная строка, глубина вложения: {depthMax}");
+            else
+                Console.WriteLine($"Строка {text} не является корректной");
+
+            Console.ReadKey();
+        }
+    }
+}
