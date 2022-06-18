@@ -6,6 +6,10 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            int summa = 0;
+            int mult = 1;
+            int line = 1;
+            int column = 0;
             int[,] matrix =
             {
                 { 3, 5, 7},
@@ -19,14 +23,21 @@ namespace HomeWork
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     Console.Write(matrix[i, j] + " ");
+                    if(i == line)
+                    {
+                        summa += matrix[i, j];
+                    }
+                    if(j == column)
+                    {
+                        mult *= matrix[i, j];
+                    }
                 }
                 Console.WriteLine();
             }
 
-            Console.WriteLine("\nСумма второй строки:");
-            Console.WriteLine(matrix[1, 0] + matrix[1, 1] + matrix[1, 2]);
-            Console.WriteLine("\nПроизведение первого столбца:");
-            Console.WriteLine(matrix[0, 0] * matrix[1, 0] * matrix[2, 0]);
+            Console.WriteLine($"\nСумма второй строки: {summa}");
+            Console.WriteLine($"\nПроизведение первого столбца: {mult}");
+            Console.ReadLine();
         }
     }
 }
