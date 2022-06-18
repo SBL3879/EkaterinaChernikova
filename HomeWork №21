@@ -10,22 +10,22 @@ namespace HomeWork
 
             int randomMin = 1;
             int randomMax = 11;
-            int maxElement = 0;
+            int maxElement = randomMin;
 
             Console.WriteLine("Исходная матрица: ");
 
-            int[,] A = new int[10, 10];
+            int[,] matrix = new int[10, 10];
 
-            for(int i = 0; i < A.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for(int j = 0; j < A.GetLength(1); j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    A[i, j] = random.Next(randomMin, randomMax);
-                    Console.Write($"{A[i, j], 2}" + " ");
+                    matrix[i, j] = random.Next(randomMin, randomMax);
+                    Console.Write($"{matrix[i, j],2}" + " ");
 
-                    if(A[i, j] > maxElement)
+                    if (matrix[i, j] > maxElement)
                     {
-                        maxElement = A[i, j];
+                        maxElement = matrix[i, j];
                     }
                 }
                 Console.WriteLine();
@@ -34,15 +34,15 @@ namespace HomeWork
             Console.WriteLine($"Наибольший элемент: {maxElement}");
             Console.WriteLine("Итоговая матрица: ");
 
-            for (int i = 0; i < A.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < A.GetLength(1); j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    if (A[i, j] == maxElement)
+                    if (matrix[i, j] == maxElement)
                     {
-                        A[i, j] = 0;
+                        matrix[i, j] = 0;
                     }
-                    Console.Write($"{A[i, j],2}" + " ");
+                    Console.Write($"{matrix[i, j],2}" + " ");
                 }
                 Console.WriteLine();
             }
