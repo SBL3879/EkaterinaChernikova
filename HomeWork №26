@@ -1,0 +1,21 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string text = "Чем умнее человек, тем легче он признает себя дураком. Никогда не ошибается тот, кто ничего не делает. Менее всего просты люди, желающие казаться простыми.";
+
+            string[] words = text.Split(' ');
+
+            foreach(var element in words)
+            {
+                Console.WriteLine(element);
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
