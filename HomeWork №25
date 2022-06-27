@@ -1,0 +1,38 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] numbers = new int[]
+            {
+                1, 4, 11, 15, 22, 27, 2, 5, 33, 7, 2
+            };
+
+            int buffer;
+            bool isSorted = false;
+
+            while(isSorted == false)
+            {
+                isSorted = true;
+                for (int i = 0; i < numbers.Length - 1; i++)
+                {
+                    if (numbers[i] > numbers[i + 1])
+                    {
+                        buffer = numbers[i];
+                        numbers[i] = numbers[i + 1];
+                        numbers[i + 1] = buffer;
+                        isSorted = false;
+                    }
+                }
+            }
+            foreach(var element in numbers)
+            {
+                Console.Write(element + " ");
+            }
+            Console.ReadKey();
+        }
+    }
+}
