@@ -35,9 +35,9 @@ namespace HomeWork
 
             Console.Write("{ ");
 
-            foreach(var el in numbers)
+            foreach(var element in numbers)
             {
-                Console.Write(el + " ");
+                Console.Write(element + " ");
             }
 
             Console.Write("}");
