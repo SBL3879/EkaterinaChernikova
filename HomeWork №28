@@ -1,0 +1,134 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] persons = new string[0];
+            string[] posts = new string[0];
+            string userInput;
+            uint listSize = 0;
+
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+
+                Console.WriteLine(
+               "1. Добавить досье\n" +
+               "2. Вывести все досье\n" +
+               "3. Удалить досье\n" +
+               "4. Поиск по фамилии\n" +
+               "5. Выход\n"
+               );
+                Console.Write("Введите номер меню: ");
+
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        AddPerson(ref listSize, ref persons, ref posts);
+                        break;
+                    case "2":
+                        if(ListCheck(listSize) == true)
+                            PrintInfo(listSize, ref persons, ref posts);
+                        break;
+                    case "3":
+                        if (ListCheck(listSize) == true)
+                            RemowePerson(ref listSize, ref persons, ref posts);
+                        break;
+                    case "4":
+                        if (ListCheck(listSize) == true)
+                        {
+                            Console.Write("Введите фамилию для поиска: ");
+                            userInput = Console.ReadLine();
+                            Search(persons, posts, userInput);
+                        }
+                        break;
+                    case "5":
+                        isExit = true;
+                        break;
+                }
+            }
+        }
+
+        static void AddPerson(ref uint listSize, ref string[] persons, ref string[] posts)
+        {
+            string firstName, secondName, lastName, post;
+            Console.Write("\nВведите имя: ");
+            firstName = Console.ReadLine();
+            Console.Write("\nВведите фамилию: ");
+            secondName = Console.ReadLine();
+            Console.Write("\nВведите отчество: ");
+            lastName = Console.ReadLine();
+            Console.Write("\nВведите должность: ");
+            post = Console.ReadLine();
+
+            listSize ++;
+            ListResize(listSize, ref persons, ref posts);
+
+            persons[listSize - 1] = lastName + " " + firstName + " " + secondName;
+            posts[listSize - 1] = post;
+        }
+
+        static void PrintInfo(uint listSize, ref string[] persons, ref string[] posts)
+        {
+            for (int i = 0; i < listSize; i ++)
+            {
+                Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
+            }
+
+            Console.ReadLine();
+        }
+
+        static void RemowePerson(ref uint listSize, ref string[] persons, ref string[] posts)
+        {
+            Console.Write("Введите порядковый номер из списка для удаления: ");
+            int index = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = index - 1; i < listSize - 1; i ++)
+            {
+                persons[i] = persons[i + 1];
+                posts[i] = posts[i + 1];
+            }
+
+            listSize--;
+            ListResize(listSize, ref persons, ref posts);
+        }
+
+        static void Search(string[] persons, string[] posts, string userInpit)
+        {
+            string[] splitSpring;
+            for (int i = 0; 0 < persons.Length; i++)
+            {
+                splitSpring = persons[i].Split(' ');
+                if(splitSpring[0] == userInpit)
+                {
+                    Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
+                    break;
+                }
+            }
+            Console.ReadKey();
+        }
+        static bool ListCheck(uint listSize)
+        {
+            if (listSize == 0)
+            {
+                Console.WriteLine("Список пуст.");
+                Console.ReadKey();
+                return false;
+            }
+            return true;
+        }
+
+        static void ListResize(uint listSize, ref string[] persons, ref string[] posts)
+        {
+            Array.Resize(ref persons, (int)listSize);
+            Array.Resize(ref posts, (int)listSize);
+        }
+    }
+}
