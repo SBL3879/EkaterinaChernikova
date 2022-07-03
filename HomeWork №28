@@ -10,13 +10,11 @@ namespace HomeWork
             string[] posts = new string[0];
             string userInput;
             uint listSize = 0;
-
             bool isExit = false;
 
             while (isExit == false)
             {
                 Console.Clear();
-
                 Console.WriteLine(
                "1. Добавить досье\n" +
                "2. Вывести все досье\n" +
@@ -27,27 +25,19 @@ namespace HomeWork
                 Console.Write("Введите номер меню: ");
 
                 userInput = Console.ReadLine();
-
                 switch (userInput)
                 {
                     case "1":
                         AddPerson(ref listSize, ref persons, ref posts);
                         break;
                     case "2":
-                        if(ListCheck(listSize) == true)
-                            PrintInfo(listSize, ref persons, ref posts);
+                        PrintInfo(listSize, ref persons, ref posts);
                         break;
                     case "3":
-                        if (ListCheck(listSize) == true)
-                            RemowePerson(ref listSize, ref persons, ref posts);
+                        RemowePerson(ref listSize, ref persons, ref posts);
                         break;
                     case "4":
-                        if (ListCheck(listSize) == true)
-                        {
-                            Console.Write("Введите фамилию для поиска: ");
-                            userInput = Console.ReadLine();
-                            Search(persons, posts, userInput);
-                        }
+                        Search(persons, posts, listSize);
                         break;
                     case "5":
                         isExit = true;
@@ -68,8 +58,8 @@ namespace HomeWork
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            listSize ++;
-            ListResize(listSize, ref persons, ref posts);
+            listSize++;
+            ResizeList(listSize, ref persons, ref posts);
 
             persons[listSize - 1] = lastName + " " + firstName + " " + secondName;
             posts[listSize - 1] = post;
@@ -77,36 +67,39 @@ namespace HomeWork
 
         static void PrintInfo(uint listSize, ref string[] persons, ref string[] posts)
         {
-            for (int i = 0; i < listSize; i ++)
-            {
+            if (CheckList(listSize) == false)
+                return;
+            for (int i = 0; i < listSize; i++)
                 Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
-            }
-
             Console.ReadLine();
         }
 
         static void RemowePerson(ref uint listSize, ref string[] persons, ref string[] posts)
         {
+            if (CheckList(listSize) == false)
+                return;
             Console.Write("Введите порядковый номер из списка для удаления: ");
             int index = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = index - 1; i < listSize - 1; i ++)
+            for (int i = index - 1; i < listSize - 1; i++)
             {
                 persons[i] = persons[i + 1];
                 posts[i] = posts[i + 1];
             }
-
             listSize--;
-            ListResize(listSize, ref persons, ref posts);
+            ResizeList(listSize, ref persons, ref posts);
         }
 
-        static void Search(string[] persons, string[] posts, string userInpit)
+        static void Search(string[] persons, string[] posts, uint listSize)
         {
-            string[] splitSpring;
-            for (int i = 0; 0 < persons.Length; i++)
+            if (CheckList(listSize) == false)
+                return;
+            Console.Write("Введите фамилию для поиска: ");
+            string userInput = Console.ReadLine();
+            string[] splitString = new string[3];
+            for (int i = 0; i < persons.Length; i++)
             {
-                splitSpring = persons[i].Split(' ');
-                if(splitSpring[0] == userInpit)
+                splitString = persons[i].Split(' ');
+                if (splitString[0] == userInput)
                 {
                     Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
                     break;
@@ -114,7 +107,8 @@ namespace HomeWork
             }
             Console.ReadKey();
         }
-        static bool ListCheck(uint listSize)
+
+        static bool CheckList(uint listSize)
         {
             if (listSize == 0)
             {
@@ -125,7 +119,7 @@ namespace HomeWork
             return true;
         }
 
-        static void ListResize(uint listSize, ref string[] persons, ref string[] posts)
+        static void ResizeList(uint listSize, ref string[] persons, ref string[] posts)
         {
             Array.Resize(ref persons, (int)listSize);
             Array.Resize(ref posts, (int)listSize);
