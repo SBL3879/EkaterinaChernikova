@@ -6,14 +6,13 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-
             int healthPercent = 10, maxHealth = 10;
             int manaPercent = 5, maxMana = 10;
      
             while (true)
             {
-                DrawBar(healthPercent, maxHealth, ConsoleColor.Red, 0, '#');
-                DrawBar(manaPercent, maxMana, ConsoleColor.Blue, 1, '@');
+                DrawBar(healthPercent, maxHealth, 0, '#');
+                DrawBar(manaPercent, maxMana, 1, '@');
      
                 Console.SetCursorPosition(0, 3);
      
@@ -27,9 +26,8 @@ namespace HomeWork
             }
         }
      
-        static void DrawBar(int percent, int maxValie, ConsoleColor color, int position, char symbol = ' ')
+        static void DrawBar(int percent, int maxValie, int position, char symbol = ' ')
         {
-            ConsoleColor defaultColor = Console.BackgroundColor;
             string bar = "";
             int value = percent / maxValie;
             for(int i = 0; i < value; i++)
@@ -39,9 +37,7 @@ namespace HomeWork
 
             Console.SetCursorPosition(0, position);
             Console.Write('[');
-            Console.BackgroundColor = color;
             Console.Write(bar);
-            Console.BackgroundColor = defaultColor;
      
             bar = "";
      
