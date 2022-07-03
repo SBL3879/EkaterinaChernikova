@@ -1,0 +1,35 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int convertedNumber;
+            ConvertInput(out convertedNumber);
+            Console.WriteLine("Число успешно конвертировано: " + convertedNumber);
+            Console.ReadKey();
+        }
+
+        static void ConvertInput(out int convertedNumber)
+        {
+            bool isParsed = false;
+            string userInput = "";
+            while (isParsed == false)
+            {
+                Console.Write("Введите число: ");
+                userInput = Console.ReadLine();
+                isParsed = int.TryParse(userInput, out convertedNumber);
+
+                if (isParsed == false)
+                {
+                    Console.WriteLine("Конвертирование не удалось, повторите ввод.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+            }
+            convertedNumber = int.Parse(userInput);
+        }
+    }
+}
