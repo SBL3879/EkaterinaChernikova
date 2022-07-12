@@ -6,10 +6,9 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            string[] persons = new string[0];
+            string[] fullNames = new string[0];
             string[] posts = new string[0];
             string userInput;
-            uint listSize = 0;
             bool isExit = false;
 
             while (isExit == false)
@@ -28,16 +27,16 @@ namespace HomeWork
                 switch (userInput)
                 {
                     case "1":
-                        AddPerson(ref listSize, ref persons, ref posts);
+                        AddPerson(ref fullNames, ref posts);
                         break;
                     case "2":
-                        PrintInfo(listSize, ref persons, ref posts);
+                        PrintInfo(fullNames, posts);
                         break;
                     case "3":
-                        RemowePerson(ref listSize, ref persons, ref posts);
+                        RemowePerson(ref fullNames, ref posts);
                         break;
                     case "4":
-                        Search(persons, posts, listSize);
+                        Search(fullNames, posts);
                         break;
                     case "5":
                         isExit = true;
@@ -46,7 +45,7 @@ namespace HomeWork
             }
         }
 
-        static void AddPerson(ref uint listSize, ref string[] persons, ref string[] posts)
+        static void AddPerson(ref string[] fullNames, ref string[] posts)
         {
             string firstName, secondName, lastName, post;
             Console.Write("\nВведите имя: ");
@@ -58,57 +57,68 @@ namespace HomeWork
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            listSize++;
-            ResizeList(listSize, ref persons, ref posts);
+            ChangeSize(ref fullNames, true);
+            fullNames[fullNames.Length - 1] = lastName + " " + firstName + " " + secondName;
 
-            persons[listSize - 1] = lastName + " " + firstName + " " + secondName;
-            posts[listSize - 1] = post;
+            ChangeSize(ref posts , true);
+            posts[posts.Length - 1] = post;
         }
 
-        static void PrintInfo(uint listSize, ref string[] persons, ref string[] posts)
+        static void PrintInfo(string[] fullNames, string[] posts)
         {
-            if (CheckList(listSize) == false)
+            if (isEmpty(fullNames.Length) == false)
                 return;
-            for (int i = 0; i < listSize; i++)
-                Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
+
+            for (int i = 0; i < fullNames.Length; i++)
+                Console.WriteLine($"{i + 1} - {fullNames[i]} - {posts[i]}");
+
             Console.ReadLine();
         }
 
-        static void RemowePerson(ref uint listSize, ref string[] persons, ref string[] posts)
+        static void RemowePerson(ref string[] fullNames, ref string[] posts)
         {
-            if (CheckList(listSize) == false)
+            if (isEmpty(fullNames.Length) == false)
                 return;
+
             Console.Write("Введите порядковый номер из списка для удаления: ");
             int index = Convert.ToInt32(Console.ReadLine());
-            for (int i = index - 1; i < listSize - 1; i++)
+
+            if (index >= 0 && index <= fullNames.Length)
             {
-                persons[i] = persons[i + 1];
-                posts[i] = posts[i + 1];
+                for (int i = index - 1; i < fullNames.Length - 1; i++)
+                {
+                    fullNames[i] = fullNames[i + 1];
+                    posts[i] = posts[i + 1];
+                }
+
+                ChangeSize(ref fullNames, false);
+                ChangeSize(ref posts, false);
             }
-            listSize--;
-            ResizeList(listSize, ref persons, ref posts);
         }
 
-        static void Search(string[] persons, string[] posts, uint listSize)
+        static void Search(string[] fullNames, string[] posts)
         {
-            if (CheckList(listSize) == false)
+            if (isEmpty(fullNames.Length) == false)
                 return;
+
             Console.Write("Введите фамилию для поиска: ");
             string userInput = Console.ReadLine();
-            string[] splitString = new string[3];
-            for (int i = 0; i < persons.Length; i++)
+            string[] splitString;
+
+            for (int i = 0; i < fullNames.Length; i++)
             {
-                splitString = persons[i].Split(' ');
+                splitString = fullNames[i].Split(' ');
+
                 if (splitString[0] == userInput)
                 {
-                    Console.WriteLine($"{i + 1} - {persons[i]} - {posts[i]}");
+                    Console.WriteLine($"{i + 1} - {fullNames[i]} - {posts[i]}");
                     break;
                 }
             }
             Console.ReadKey();
         }
 
-        static bool CheckList(uint listSize)
+        static bool isEmpty(int listSize)
         {
             if (listSize == 0)
             {
@@ -119,10 +129,31 @@ namespace HomeWork
             return true;
         }
 
-        static void ResizeList(uint listSize, ref string[] persons, ref string[] posts)
+        static void ChangeSize(ref string[] massive, bool isIncrease)
         {
-            Array.Resize(ref persons, (int)listSize);
-            Array.Resize(ref posts, (int)listSize);
+            int oldSize = massive.Length;
+            int newSize;
+            int index;
+            string[] buffer;
+
+            if (isIncrease == true)
+            {
+                newSize = oldSize + 1;
+                buffer = new string[newSize];
+                index = massive.Length - 1;
+            }
+            else
+            {
+                newSize = oldSize - 1;
+                buffer = new string[newSize];
+                index = buffer.Length - 1;
+            }
+
+            for (int i = 0; i <= index; i++)
+            {
+                buffer[i] = massive[i];
+            }
+            massive = buffer;
         }
     }
 }
