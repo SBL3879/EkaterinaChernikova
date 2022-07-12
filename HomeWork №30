@@ -6,16 +6,16 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            int convertedNumber;
-            ConvertInput(out convertedNumber);
-            Console.WriteLine("Число успешно конвертировано: " + convertedNumber);
+            int convertedNumber = 0;
+            Console.WriteLine("Число успешно конвертировано: " + ProcessingInput(convertedNumber));
             Console.ReadKey();
         }
 
-        static void ConvertInput(out int convertedNumber)
+        static int ProcessingInput(int convertedNumber)
         {
             bool isParsed = false;
             string userInput = "";
+
             while (isParsed == false)
             {
                 Console.Write("Введите число: ");
@@ -29,7 +29,7 @@ namespace HomeWork
                     Console.Clear();
                 }
             }
-            convertedNumber = int.Parse(userInput);
+            return convertedNumber;
         }
     }
 }
