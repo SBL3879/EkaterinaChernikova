@@ -6,31 +6,70 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            int healthPercent = 10, maxHealth = 10;
-            int manaPercent = 5, maxMana = 10;
-     
-            while (true)
+            int healthPercent = 10, maxHealth = 20;
+            int manaPercent = 5, maxMana = 8;
+            int barLength = 20;
+            bool isExit = false;
+            bool isFirstStart = true;
+            string userInput;
+
+            while (isExit == false)
             {
-                DrawBar(healthPercent, maxHealth, 0, '#');
-                DrawBar(manaPercent, maxMana, 1, '@');
-     
+                DrawBar(healthPercent, maxHealth, 0, barLength, '#');
+                DrawBar(manaPercent, maxMana, 1, barLength, '@');
+
                 Console.SetCursorPosition(0, 3);
-     
+
+                if (isFirstStart == false)
+                {
+                    Console.Write("Продолжить? (Yes/No): ");
+                    userInput = Console.ReadLine();
+
+                    switch (userInput)
+                    {
+                        case "Yes":
+                            break;
+                        case "No":
+                            isExit = true;
+                            continue;
+                        default:
+                            continue;
+                    }
+                }
+                else
+                {
+                    isFirstStart = false;
+                }
+
                 Console.Write("Введите процент, на который изменится жизни: ");
                 healthPercent += Convert.ToInt32(Console.ReadLine());
                 Console.Write("Введите процент, на который изменится мана: ");
                 manaPercent += Convert.ToInt32(Console.ReadLine());
-     
-                Console.ReadKey();
+
                 Console.Clear();
             }
         }
-     
-        static void DrawBar(int percent, int maxValie, int position, char symbol = ' ')
+
+        static void DrawBar(int percent, int maxValue, int position, int barLength, char symbol = ' ')
         {
             string bar = "";
-            int value = percent / maxValie;
-            for(int i = 0; i < value; i++)
+            float onePercentValue = (float)maxValue / 100f;
+            float onePercentBarLength = (float)barLength / 100f;
+            float normalizeCorficient = onePercentValue / onePercentBarLength;
+
+            if (percent < 0)
+            {
+                percent = 0;
+            }
+            else if (percent > 100)
+            {
+                percent = 100;
+            }
+
+            int value = (int)Math.Ceiling(percent * onePercentValue);
+            int filledValue = (int)Math.Ceiling(value * (onePercentBarLength / onePercentValue));
+
+            for (int i = 0; i < filledValue; i++)
             {
                 bar += symbol;
             }
@@ -38,14 +77,14 @@ namespace HomeWork
             Console.SetCursorPosition(0, position);
             Console.Write('[');
             Console.Write(bar);
-     
+
             bar = "";
-     
-            for(int i = value; i < maxValie; i++)
+
+            for (int i = filledValue; i < barLength; i++)
             {
                 bar += '_';
             }
             Console.Write(bar + ']' + $" {percent}%");
         }
     }
- }
+}
