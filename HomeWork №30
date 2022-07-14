@@ -6,23 +6,23 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            int convertedNumber = 0;
-            Console.WriteLine("Число успешно конвертировано: " + ParsingNumber(convertedNumber));
+            Console.WriteLine("Число успешно конвертировано: " + RequestNumberInput());
             Console.ReadKey();
         }
 
-        static int ParsingNumber(int convertedNumber)
+        static int RequestNumberInput()
         {
-            bool isParsed = false;
+            int convertedNumber = 0;
+            bool isNumber = false;
             string userInput = "";
 
-            while (isParsed == false)
+            while (isNumber == false)
             {
                 Console.Write("Введите число: ");
                 userInput = Console.ReadLine();
-                isParsed = int.TryParse(userInput, out convertedNumber);
+                isNumber = int.TryParse(userInput, out convertedNumber);
 
-                if (isParsed == false)
+                if (isNumber == false)
                 {
                     Console.WriteLine("Конвертирование не удалось, повторите ввод.");
                     Console.ReadKey();
