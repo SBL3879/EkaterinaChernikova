@@ -25,15 +25,15 @@ namespace HomeWork
                     Console.Write("Продолжить? (Yes/No): ");
                     userInput = Console.ReadLine();
 
-                    switch (userInput)
+                    if(userInput == "No")
                     {
-                        case "Yes":
-                            break;
-                        case "No":
-                            isExit = true;
-                            continue;
-                        default:
-                            continue;
+                        isExit = true;
+                        continue;
+                    }
+                    else if(userInput != "Yes" && userInput != "No")
+                    {
+                        Console.Clear();
+                        continue;
                     }
                 }
                 else
