@@ -7,9 +7,7 @@ namespace HomeWork
         static void Main(string[] args)
         {
             int healthPercent = 10;
-            int maxHealth = 20;
             int manaPercent = 5;
-            int maxMana = 8;
             int barLength = 20;
             bool isExit = false;
             bool isFirstStart = true;
@@ -17,8 +15,8 @@ namespace HomeWork
 
             while (isExit == false)
             {
-                DrawBar(healthPercent, maxHealth, 0, barLength, '#');
-                DrawBar(manaPercent, maxMana, 1, barLength, '@');
+                DrawBar(healthPercent, 0, barLength, '#');
+                DrawBar(manaPercent, 1, barLength, '@');
 
                 Console.SetCursorPosition(0, 3);
 
@@ -52,14 +50,12 @@ namespace HomeWork
             }
         }
 
-        static void DrawBar(int percent, int maxValue, int position, int barLength, char symbol = ' ')
+        static void DrawBar(int percent, int position, int barLength, char symbol = ' ')
         {
             int minPercent = 0;
             int maxPercent = 100;
             string bar = "";
-            float onePercentValue = (float)maxValue / maxPercent;
             float onePercentBarLength = (float)barLength / maxPercent;
-            float normalizeCoefficient = onePercentBarLength / onePercentValue;
 
             if (percent < minPercent)
             {
@@ -70,8 +66,7 @@ namespace HomeWork
                 percent = maxPercent;
             }
 
-            int value = (int)Math.Ceiling(percent * onePercentValue);
-            int filledValue = (int)Math.Ceiling(value * normalizeCoefficient);
+            int filledValue = (int)Math.Ceiling(percent * onePercentBarLength);
 
             for (int i = 0; i < filledValue; i++)
             {
