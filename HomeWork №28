@@ -57,16 +57,16 @@ namespace HomeWork
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            ChangeSize(ref fullNames, true);
+            IncreaseSize(ref fullNames);
             fullNames[fullNames.Length - 1] = lastName + " " + firstName + " " + secondName;
 
-            ChangeSize(ref posts , true);
+            IncreaseSize(ref posts);
             posts[posts.Length - 1] = post;
         }
 
         static void PrintInfo(string[] fullNames, string[] posts)
         {
-            if (isEmpty(fullNames.Length) == false)
+            if (IsEmpty(fullNames.Length) == false)
                 return;
 
             for (int i = 0; i < fullNames.Length; i++)
@@ -77,7 +77,7 @@ namespace HomeWork
 
         static void RemowePerson(ref string[] fullNames, ref string[] posts)
         {
-            if (isEmpty(fullNames.Length) == false)
+            if (IsEmpty(fullNames.Length) == false)
                 return;
 
             Console.Write("Введите порядковый номер из списка для удаления: ");
@@ -91,14 +91,14 @@ namespace HomeWork
                     posts[i] = posts[i + 1];
                 }
 
-                ChangeSize(ref fullNames, false);
-                ChangeSize(ref posts, false);
+                DecreaseSize(ref fullNames);
+                DecreaseSize(ref posts);
             }
         }
 
         static void Search(string[] fullNames, string[] posts)
         {
-            if (isEmpty(fullNames.Length) == false)
+            if (IsEmpty(fullNames.Length) == false)
                 return;
 
             Console.Write("Введите фамилию для поиска: ");
@@ -118,7 +118,7 @@ namespace HomeWork
             Console.ReadKey();
         }
 
-        static bool isEmpty(int listSize)
+        static bool IsEmpty(int listSize)
         {
             if (listSize == 0)
             {
@@ -129,30 +129,31 @@ namespace HomeWork
             return true;
         }
 
-        static void ChangeSize(ref string[] massive, bool isIncrease)
+        static void DecreaseSize(ref string[] massive)
         {
-            int oldSize = massive.Length;
-            int newSize;
-            int index;
-            string[] buffer;
+            string[] buffer = new string[massive.Length - 1];
 
-            if (isIncrease == true)
-            {
-                newSize = oldSize + 1;
-                buffer = new string[newSize];
-                index = massive.Length - 1;
-            }
-            else
-            {
-                newSize = oldSize - 1;
-                buffer = new string[newSize];
-                index = buffer.Length - 1;
-            }
-
-            for (int i = 0; i <= index; i++)
+            for(int i = 0; i < buffer.Length; i++)
             {
                 buffer[i] = massive[i];
             }
+
+            massive = buffer;
+        }
+
+        static void IncreaseSize(ref string[] massive)
+        {
+            int oldSize = massive.Length;
+            string[] buffer = new string[massive.Length + 1];
+
+            if(massive.Length > 0)
+            {
+                for (int i = 0; i < massive.Length; i++)
+                {
+                    buffer[i] = massive[i];
+                }
+            }
+
             massive = buffer;
         }
     }
