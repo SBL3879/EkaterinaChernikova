@@ -7,11 +7,11 @@ namespace HomeWork
         static void Main(string[] args)
         {
             int convertedNumber = 0;
-            Console.WriteLine("Число успешно конвертировано: " + ProcessingInput(convertedNumber));
+            Console.WriteLine("Число успешно конвертировано: " + ParsingNumber(convertedNumber));
             Console.ReadKey();
         }
 
-        static int ProcessingInput(int convertedNumber)
+        static int ParsingNumber(int convertedNumber)
         {
             bool isParsed = false;
             string userInput = "";
