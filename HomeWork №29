@@ -6,8 +6,10 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            int healthPercent = 10, maxHealth = 20;
-            int manaPercent = 5, maxMana = 8;
+            int healthPercent = 10;
+            int maxHealth = 20;
+            int manaPercent = 5;
+            int maxMana = 8;
             int barLength = 20;
             bool isExit = false;
             bool isFirstStart = true;
@@ -52,22 +54,24 @@ namespace HomeWork
 
         static void DrawBar(int percent, int maxValue, int position, int barLength, char symbol = ' ')
         {
+            int minPercent = 0;
+            int maxPercent = 100;
             string bar = "";
-            float onePercentValue = (float)maxValue / 100f;
-            float onePercentBarLength = (float)barLength / 100f;
-            float normalizeCorficient = onePercentValue / onePercentBarLength;
+            float onePercentValue = (float)maxValue / maxPercent;
+            float onePercentBarLength = (float)barLength / maxPercent;
+            float normalizeCoefficient = onePercentBarLength / onePercentValue;
 
-            if (percent < 0)
+            if (percent < minPercent)
             {
-                percent = 0;
+                percent = minPercent;
             }
-            else if (percent > 100)
+            else if (percent > maxPercent)
             {
-                percent = 100;
+                percent = maxPercent;
             }
 
             int value = (int)Math.Ceiling(percent * onePercentValue);
-            int filledValue = (int)Math.Ceiling(value * (onePercentBarLength / onePercentValue));
+            int filledValue = (int)Math.Ceiling(value * normalizeCoefficient);
 
             for (int i = 0; i < filledValue; i++)
             {
