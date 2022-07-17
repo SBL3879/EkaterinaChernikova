@@ -46,9 +46,14 @@ namespace HomeWork
                     "\nСтолкновение со стеной вернет вас в начало. " +
                     "\nПриятной игры )\n");
 
-                Move(map, '@', ref userY, ref userX, ref isFinished);
+                Move(map, '@', ref userY, ref userX, ref isFinished, ref isExit);
                 Console.SetCursorPosition(0, 0);
                 System.Threading.Thread.Sleep(200);
+
+                if(isExit == true)
+                {
+                    Console.SetCursorPosition(0, 25);
+                }
             }
         }
             
@@ -64,13 +69,13 @@ namespace HomeWork
             }
         }
         
-        static void Move(char[,] map, char symbol, ref int userY, ref int userX, ref bool isFinished)
+        static void Move(char[,] map, char symbol, ref int userY, ref int userX, ref bool isFinished, ref bool isExit)
         {
             Console.SetCursorPosition(userX, userY);
             Console.Write(symbol);
             ConsoleKeyInfo charKey = Console.ReadKey();
 
-            switch(charKey.Key)
+            switch (charKey.Key)
             {
                 case ConsoleKey.UpArrow:
                     userY--;
@@ -83,7 +88,10 @@ namespace HomeWork
                     break;
                 case ConsoleKey.RightArrow:
                     userX++;
-                    break;  
+                    break;
+                case ConsoleKey.Q:
+                    isExit = true;
+                    break;
             }
 
             switch(map[userY, userX])
