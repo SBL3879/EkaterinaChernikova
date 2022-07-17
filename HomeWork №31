@@ -1,0 +1,101 @@
+using System;
+
+namespace HomeWork
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            char[,] map =
+            {
+                {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
+                {'#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', ' ', ' ', '#'},
+                {'#', '#', '#', '#', '#', '#', ' ', '#', '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', '#', '#'},
+                {'#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', '#', ' ', '#', '#', '#'},
+                {'#', '#', '#', '#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', '#', ' ', '#'},
+                {'#', '#', '#', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', ' ', '#'},
+                {'#', '#', '#', ' ', '#', '#', '#', ' ', '#', '#', '#', '#', '#', '#', ' ', '#', '#', '#', '#', ' ', '#'},
+                {'#', '#', ' ', ' ', '#', '#', '#', ' ', ' ', ' ', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#'},
+                {'#', '#', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
+                {'#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
+                {'#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#'},
+                {'#', ' ', ' ', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', '$', '#'},
+                {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
+            };
+
+            Console.CursorVisible = false;
+            int userX = 1, userY = 1;
+            bool isExit = false;
+            bool isFinished = false;
+       
+            while(isExit == false)
+            {
+                DrawMap(map);
+
+                if (isFinished == true)
+                {
+                    isExit = true;
+                    Console.SetCursorPosition(0, 20);
+                    Console.WriteLine("\n\nСтранно, но вы прошли..");
+                    Console.ReadKey();
+                }
+
+                Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. \nВаше местоположение - @. " +
+                    "\nДля перемещения: используйте стрелки на клавиатуре." +
+                    "\nНажмите Q для выхода из игры." +
+                    "\nСтолкновение со стеной вернет вас в начало. " +
+                    "\nПриятной игры )\n");
+
+                Move(map, '@', ref userY, ref userX, ref isFinished);
+                Console.SetCursorPosition(0, 0);
+                System.Threading.Thread.Sleep(200);
+            }
+        }
+            
+        static void DrawMap(char[,] map)
+        {
+            for(int i = 0; i < map.GetLength(0); i++)
+            {
+                for(int j = 0; j < map.GetLength(1); j++)
+                {
+                    Console.Write(map[i,j]);
+                }
+                Console.WriteLine();
+            }
+        }
+        
+        static void Move(char[,] map, char symbol, ref int userY, ref int userX, ref bool isFinished)
+        {
+            Console.SetCursorPosition(userX, userY);
+            Console.Write(symbol);
+            ConsoleKeyInfo charKey = Console.ReadKey();
+
+            switch(charKey.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    userY--;
+                    break;
+                case ConsoleKey.DownArrow:
+                    userY++;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    userX--;
+                    break;
+                case ConsoleKey.RightArrow:
+                    userX++;
+                    break;  
+            }
+
+            switch(map[userY, userX])
+            {
+                case '#':
+                    userY = 1; 
+                    userX = 1;
+                    break;
+                case '$':
+                    isFinished = true;
+                    break;
+            }
+        }
+    }
+}
