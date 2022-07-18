@@ -22,34 +22,40 @@ namespace HomeWork
                 {'#', ' ', ' ', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', '$', '#'},
                 {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
             };
-
+     
             Console.CursorVisible = false;
-            int userX = 1, userY = 1;
+            int userX = 1;
+            int userY = 1;
+            char playerSymbol = '@';
             bool isExit = false;
             bool isFinished = false;
        
             while(isExit == false)
             {
                 DrawMap(map);
+                DrawPlayer(playerSymbol, userY, userX);
 
                 if (isFinished == true)
                 {
                     isExit = true;
-                    Console.SetCursorPosition(0, 20);
+                    Console.SetCursorPosition(0, 21);
                     Console.WriteLine("\n\nСтранно, но вы прошли..");
                     Console.ReadKey();
                 }
 
+                Console.SetCursorPosition(0, 15);
                 Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. \nВаше местоположение - @. " +
                     "\nДля перемещения: используйте стрелки на клавиатуре." +
                     "\nНажмите Q для выхода из игры." +
                     "\nСтолкновение со стеной вернет вас в начало. " +
                     "\nПриятной игры )\n");
 
-                Move(map, '@', ref userY, ref userX, ref isFinished, ref isExit);
+                ConsoleKeyInfo charKey = Console.ReadKey();
+                ChangePositon(ref userY, ref userX, charKey);
+                DetectCollision(map, ref isFinished, ref userY, ref userX);
                 Console.SetCursorPosition(0, 0);
                 System.Threading.Thread.Sleep(200);
-
+     
                 if(isExit == true)
                 {
                     Console.SetCursorPosition(0, 25);
@@ -57,7 +63,7 @@ namespace HomeWork
             }
         }
             
-        static void DrawMap(char[,] map)
+        static void DrawMap(char[,] map) //отрисовка карты (вывод двумерного массива поэлементно)
         {
             for(int i = 0; i < map.GetLength(0); i++)
             {
@@ -68,14 +74,16 @@ namespace HomeWork
                 Console.WriteLine();
             }
         }
-        
-        static void Move(char[,] map, char symbol, ref int userY, ref int userX, ref bool isFinished, ref bool isExit)
+
+        static void DrawPlayer(char symbol, int userY, int userX)
         {
             Console.SetCursorPosition(userX, userY);
             Console.Write(symbol);
-            ConsoleKeyInfo charKey = Console.ReadKey();
+        }
 
-            switch (charKey.Key)
+        static void ChangePositon(ref int userY, ref int userX, ConsoleKeyInfo charKey)
+        {
+            switch (charKey.Key) //проверка нажатия кнопки
             {
                 case ConsoleKey.UpArrow:
                     userY--;
@@ -89,15 +97,15 @@ namespace HomeWork
                 case ConsoleKey.RightArrow:
                     userX++;
                     break;
-                case ConsoleKey.Q:
-                    isExit = true;
-                    break;
             }
-
-            switch(map[userY, userX])
+        }
+     
+        static void DetectCollision(char[,] map, ref bool isFinished, ref int userY, ref int userX)
+        {
+            switch (map[userY, userX]) //проверка, чем является элемент массива, на который мы перемещаемся
             {
                 case '#':
-                    userY = 1; 
+                    userY = 1;
                     userX = 1;
                     break;
                 case '$':
