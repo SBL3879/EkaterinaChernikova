@@ -24,8 +24,8 @@ namespace HomeWork
             };
      
             Console.CursorVisible = false;
-            int userX = 1;
-            int userY = 1;
+            int userPositionX = 1;
+            int userPositionY = 1;
             char playerSymbol = '@';
             bool isExit = false;
             bool isFinished = false;
@@ -33,29 +33,23 @@ namespace HomeWork
             while(isExit == false)
             {
                 DrawMap(map);
-                DrawPlayer(playerSymbol, userY, userX);
-
-                if (isFinished == true)
-                {
-                    isExit = true;
-                    Console.SetCursorPosition(0, 21);
-                    Console.WriteLine("\n\nСтранно, но вы прошли..");
-                    Console.ReadKey();
-                }
-
-                Console.SetCursorPosition(0, 15);
-                Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. \nВаше местоположение - @. " +
-                    "\nДля перемещения: используйте стрелки на клавиатуре." +
-                    "\nНажмите Q для выхода из игры." +
-                    "\nСтолкновение со стеной вернет вас в начало. " +
-                    "\nПриятной игры )\n");
+                DrawPlayer(playerSymbol, userPositionY, userPositionX);
+                EndingGameCheck(isFinished, ref isExit);
+                DrawMenu();
 
                 ConsoleKeyInfo charKey = Console.ReadKey();
-                ChangePositon(ref userY, ref userX, charKey);
-                DetectCollision(map, ref isFinished, ref userY, ref userX);
+
+                ChangePositon(ref userPositionY, ref userPositionX, charKey);
+                DetectCollision(map, ref isFinished, ref userPositionY, ref userPositionX);
+
                 Console.SetCursorPosition(0, 0);
                 System.Threading.Thread.Sleep(200);
-     
+                
+                if(charKey.Key == ConsoleKey.Q)
+                {
+                    isExit = true;
+                }
+
                 if(isExit == true)
                 {
                     Console.SetCursorPosition(0, 25);
@@ -63,7 +57,7 @@ namespace HomeWork
             }
         }
             
-        static void DrawMap(char[,] map)
+        static void DrawMap(char[,] map) 
         {
             for(int i = 0; i < map.GetLength(0); i++)
             {
@@ -75,42 +69,63 @@ namespace HomeWork
             }
         }
 
-        static void DrawPlayer(char symbol, int userY, int userX)
+        static void DrawMenu()
         {
-            Console.SetCursorPosition(userX, userY);
+            Console.SetCursorPosition(0, 15);
+            Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. \nВаше местоположение - @. " +
+                "\nДля перемещения: используйте стрелки на клавиатуре." +
+                "\nНажмите Q для выхода из игры." +
+                "\nСтолкновение со стеной вернет вас в начало. " +
+                "\nПриятной игры )\n");
+        }
+
+        static void DrawPlayer(char symbol, int userPositionY, int userPositionX)
+        {
+            Console.SetCursorPosition(userPositionX, userPositionY);
             Console.Write(symbol);
         }
 
-        static void ChangePositon(ref int userY, ref int userX, ConsoleKeyInfo charKey)
+        static void ChangePositon(ref int userPositionY, ref int userPositionX, ConsoleKeyInfo charKey)
         {
-            switch (charKey.Key) //проверка нажатия кнопки
+            switch (charKey.Key)
             {
                 case ConsoleKey.UpArrow:
-                    userY--;
+                    userPositionY--;
                     break;
                 case ConsoleKey.DownArrow:
-                    userY++;
+                    userPositionY++;
                     break;
                 case ConsoleKey.LeftArrow:
-                    userX--;
+                    userPositionX--;
                     break;
                 case ConsoleKey.RightArrow:
-                    userX++;
+                    userPositionX++;
                     break;
             }
         }
      
-        static void DetectCollision(char[,] map, ref bool isFinished, ref int userY, ref int userX)
+        static void DetectCollision(char[,] map, ref bool isFinished, ref int userPositionY, ref int userPositionX)
         {
-            switch (map[userY, userX])
+            switch (map[userPositionY, userPositionX]) 
             {
                 case '#':
-                    userY = 1;
-                    userX = 1;
+                    userPositionY = 1;
+                    userPositionX = 1;
                     break;
                 case '$':
                     isFinished = true;
                     break;
+            }
+        }
+
+        static void EndingGameCheck(bool isFinished, ref bool isExit)
+        {
+            if (isFinished == true)
+            {
+                isExit = true;
+                Console.SetCursorPosition(0, 21);
+                Console.WriteLine("\n\nСтранно, но вы прошли..");
+                Console.ReadKey();
             }
         }
     }
