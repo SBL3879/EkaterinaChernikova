@@ -33,11 +33,11 @@ namespace HomeWork_1
         {
             Random random = new Random();
             int shuffleTimes = numbers.Length;
-            int buffer = 0; // временное хранение данных отдельного элемента массива при переносе или взаимозамены значений с другим элементом массива.
+            int buffer = 0; 
             int randomIndex1 = 0;
             int randomIndex2 = 0;
     
-            while(shuffleTimes > 0) //пока кол-во повторений не будет равно нулю - цикл продолжается
+            while(shuffleTimes > 0) 
             {
                 randomIndex1 = random.Next(0, numbers.Length);
                 randomIndex2 = random.Next(0, numbers.Length);
