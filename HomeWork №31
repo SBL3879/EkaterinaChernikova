@@ -34,7 +34,7 @@ namespace HomeWork
             {
                 DrawMap(map);
                 DrawPlayer(playerSymbol, userPositionY, userPositionX);
-                EndingGameCheck(isFinished, ref isExit);
+                FinishTheGame(isFinished, ref isExit);
                 DrawMenu();
 
                 ConsoleKeyInfo charKey = Console.ReadKey();
@@ -72,7 +72,8 @@ namespace HomeWork
         static void DrawMenu()
         {
             Console.SetCursorPosition(0, 15);
-            Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. \nВаше местоположение - @. " +
+            Console.Write("\nЯ хочу сыграть с тобой в игру. \nЧтобы выйти из лабиринта нужно добраться до символа - $. " +
+                "\nВаше местоположение - @. " +
                 "\nДля перемещения: используйте стрелки на клавиатуре." +
                 "\nНажмите Q для выхода из игры." +
                 "\nСтолкновение со стеной вернет вас в начало. " +
@@ -87,7 +88,7 @@ namespace HomeWork
 
         static void ChangePositon(ref int userPositionY, ref int userPositionX, ConsoleKeyInfo charKey)
         {
-            switch (charKey.Key)
+            switch (charKey.Key) 
             {
                 case ConsoleKey.UpArrow:
                     userPositionY--;
@@ -118,7 +119,7 @@ namespace HomeWork
             }
         }
 
-        static void EndingGameCheck(bool isFinished, ref bool isExit)
+        static void FinishTheGame(bool isFinished, ref bool isExit)
         {
             if (isFinished == true)
             {
