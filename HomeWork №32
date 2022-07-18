@@ -18,7 +18,7 @@ namespace HomeWork_1
                 Console.Write(numbers[i] + " ");
             }
     
-            Shuffle(ref numbers);
+            Shuffle(numbers);
             Console.WriteLine("\nМассив после перемешивания: ");
     
             for (int i = 0; i < numbers.Length; i++)
@@ -29,11 +29,11 @@ namespace HomeWork_1
             Console.ReadKey();
         }
     
-        static void Shuffle(ref int[] numbers)
+        static void Shuffle(int[] numbers)
         {
             Random random = new Random();
             int shuffleTimes = numbers.Length;
-            int buffer = 0; 
+            int buffer = 0;
             int randomIndex1 = 0;
             int randomIndex2 = 0;
     
