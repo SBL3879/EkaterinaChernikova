@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> numbers = new List<int>();
+            string userInput;
+            int sum = 0;
+            int userNumber = 0;
+            bool isExit = false;
+
+            while(isExit == false)
+            {
+                userInput = Console.ReadLine();
+
+                if(userInput == "sum" && numbers.Count > 0)
+                {
+                    foreach(var number in numbers)
+                    {
+                        sum += number;
+                    }
+
+                    Console.WriteLine("Сумма чисел: " + sum);
+                    sum = 0;
+                }
+
+                if(userInput == "exit")
+                {
+                    isExit = true;
+                    continue;
+                }
+
+                if (int.TryParse(userInput, out userNumber))
+                {
+                    numbers.Add(userNumber);
+                }
+            }
+        }
+    }
+}
