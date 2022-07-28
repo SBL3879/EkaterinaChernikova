@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] numbers1 =
+            {
+                "1", "3", "5", "7", "13", "1", "2", "15", "32", "50",
+            };
+
+            Console.WriteLine("Первый массив: ");
+            PrintMassive(numbers1);
+
+            string[] numbers2 =
+            {
+                "2", "6", "4", "3", "11", "17", "20", "12", "28", "9", "21", "32", "44", "50",
+            };
+
+            Console.WriteLine("\nВторой массив: ");
+            PrintMassive(numbers2);
+
+            string[] totalNumbers = new string[1]; 
+            UniteMassives(numbers1, numbers2, ref totalNumbers);
+            Console.WriteLine("\nОбъединенный массив: ");
+            PrintMassive(totalNumbers);
+            Console.ReadKey();
+        }
+
+        static void PrintMassive(string[] massive)
+        {
+            for(int i = 0; i < massive.Length; i++)
+            {
+                Console.Write(massive[i] + " ");
+            }
+        }
+
+        static void UniteMassives(string[] massive1, string[] massive2, ref string[] unitedMassive)
+        {
+            unitedMassive[0] = massive1[0];
+            bool isDouble = false;
+
+            for (int i = 0; i < massive1.Length; i++)
+            {
+                for (int j = 0; j < unitedMassive.Length; j++)
+                {
+                    if (massive1[i] == unitedMassive[j])
+                    {
+                        isDouble = true;
+                        break;
+                    }
+                }
+
+                if (isDouble == false)
+                {
+                    unitedMassive = IncreaseMassiveSize(unitedMassive);
+                    unitedMassive[unitedMassive.Length - 1] = massive1[i];
+                }
+
+                isDouble = false;
+            }
+
+            for (int i = 0; i < massive2.Length; i++)
+            {
+                for (int j = 0; j < unitedMassive.Length; j++)
+                {
+                    if (massive2[i] == unitedMassive[j])
+                    {
+                        isDouble = true;
+                        break;
+                    }
+                }
+
+                if (isDouble == false)
+                {
+                    unitedMassive = IncreaseMassiveSize(unitedMassive);
+                    unitedMassive[unitedMassive.Length - 1] = massive2[i];
+                }
+
+                isDouble = false;
+            }
+        }
+
+        static string[] IncreaseMassiveSize(string[] massive)
+        {
+            string[] buffer = new string[massive.Length + 1];
+
+            for(int i = 0; i < massive.Length; i++)
+            {
+                buffer[i] = massive[i];
+            }
+            return buffer;
+        }
+    }
+}
