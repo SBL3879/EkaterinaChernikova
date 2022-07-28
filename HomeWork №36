@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> personalList = new Dictionary<string, string>();
+            string userInput;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine(
+               "1. Добавить досье\n" +
+               "2. Вывести все досье\n" +
+               "3. Удалить досье\n" +
+               "4. Выход\n"
+               );
+                Console.Write("Введите номер меню: ");
+
+                userInput = Console.ReadLine();
+                switch (userInput)
+                {
+                    case "1":
+                        AddPerson(personalList);
+                        break;
+                    case "2":
+                        PrintInfo(personalList);
+                        break;
+                    case "3":
+                        RemowePerson(personalList);
+                        break;
+                    case "4":
+                        isExit = true;
+                        break;
+                }
+            }
+        }
+
+        static void AddPerson(Dictionary<string, string> personalList)
+        {
+            string firstName, secondName, lastName, post;
+            Console.Write("\nВведите имя: ");
+            firstName = Console.ReadLine();
+            Console.Write("\nВведите фамилию: ");
+            secondName = Console.ReadLine();
+            Console.Write("\nВведите отчество: ");
+            lastName = Console.ReadLine();
+            Console.Write("\nВведите должность: ");
+            post = Console.ReadLine();
+
+            personalList.Add(post, lastName + " " + firstName + " " + secondName);
+        }
+
+        static void PrintInfo(Dictionary<string, string> personalList)
+        {
+            if (IsEmpty(personalList.Count) == false)
+                return;
+
+            int count = 1;
+
+            foreach(var person in personalList)
+            {
+                Console.WriteLine($"{count} - {person.Value} - {person.Key}");
+                count++;
+            }
+            Console.ReadLine();
+        }
+
+        static void RemowePerson(Dictionary<string, string> personalList)
+        {
+            if (IsEmpty(personalList.Count) == false)
+                return;
+
+            Console.Write("Введите порядковый номер из списка для удаления: ");
+            int index = Convert.ToInt32(Console.ReadLine());
+
+            int count = 1;
+
+            foreach(var person in personalList)
+            {
+                if(index == count)
+                {
+                    personalList.Remove(person.Key);
+                    break;
+                }
+                count++;
+            }
+        }
+
+        static bool IsEmpty(int listSize)
+        {
+            if (listSize == 0)
+            {
+                Console.WriteLine("Список пуст.");
+                Console.ReadKey();
+                return false;
+            }
+            return true;
+        }
+    }
+}
