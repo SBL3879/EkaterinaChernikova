@@ -44,7 +44,11 @@ namespace HomeWork_1
 
         static void AddPerson(Dictionary<string, string> personalList)
         {
-            string firstName, secondName, lastName, post;
+            string firstName;
+            string secondName;
+            string lastName;
+            string post;
+
             Console.Write("\nВведите имя: ");
             firstName = Console.ReadLine();
             Console.Write("\nВведите фамилию: ");
@@ -54,7 +58,15 @@ namespace HomeWork_1
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            personalList.Add(lastName + " " + firstName + " " + secondName, post);
+            if(personalList.ContainsKey(lastName + " " + firstName + " " + secondName) == false)
+            {
+                personalList.Add(lastName + " " + firstName + " " + secondName, post);
+            }
+            else
+            {
+                Console.WriteLine("Такой сотрудник уже добавлен");
+                Console.ReadKey();
+            }
         }
 
         static void PrintInfo(Dictionary<string, string> personalList)
