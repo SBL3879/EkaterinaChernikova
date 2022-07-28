@@ -54,7 +54,7 @@ namespace HomeWork_1
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            personalList.Add(post, lastName + " " + firstName + " " + secondName);
+            personalList.Add(lastName + " " + firstName + " " + secondName, post);
         }
 
         static void PrintInfo(Dictionary<string, string> personalList)
@@ -64,9 +64,9 @@ namespace HomeWork_1
 
             int count = 1;
 
-            foreach(var person in personalList)
+            foreach (var person in personalList)
             {
-                Console.WriteLine($"{count} - {person.Value} - {person.Key}");
+                Console.WriteLine($"{count} - {person.Key} - {person.Value}");
                 count++;
             }
             Console.ReadLine();
@@ -77,19 +77,17 @@ namespace HomeWork_1
             if (IsEmpty(personalList.Count) == false)
                 return;
 
-            Console.Write("Введите порядковый номер из списка для удаления: ");
-            int index = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Введите ФИО из списка для удаления: ");
+            string userInput = Console.ReadLine();
 
-            int count = 1;
-
-            foreach(var person in personalList)
+            if (personalList.ContainsKey(userInput))
             {
-                if(index == count)
-                {
-                    personalList.Remove(person.Key);
-                    break;
-                }
-                count++;
+                personalList.Remove(userInput);
+            }
+            else
+            {
+                Console.WriteLine("\nТакого сотрудника не найдено.");
+                Console.ReadKey();
             }
         }
 
