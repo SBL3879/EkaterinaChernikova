@@ -44,13 +44,13 @@ namespace HomeWork_1
             }
         }
 
-        static void UniteArray(string[] array1, string[] array2,  List<string> unitedarray)
+        static void UniteArray(string[] array1, string[] array2, List<string> unitedarray)
         {
-            AddToUniteList(array1, ref unitedarray);
-            AddToUniteList(array2, ref unitedarray);
+            AddToUniteList(array1,  unitedarray);
+            AddToUniteList(array2,  unitedarray);
         }
 
-        static void AddToUniteList(string[] array, ref List<string> uniteList)
+        static void AddToUniteList(string[] array,  List<string> uniteList)
         {
             for (int i = 0; i < array.Length; i++)
             {
