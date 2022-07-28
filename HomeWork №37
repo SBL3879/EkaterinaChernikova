@@ -25,7 +25,7 @@ namespace HomeWork_1
             PrintArray(numbers2);
 
             List<string> totalNumbers = new List<string>();
-            UniteArray(numbers1, numbers2, ref totalNumbers);
+            UniteArray(numbers1, numbers2, totalNumbers);
             Console.WriteLine("\nОбъединенный массив: ");
 
             foreach (var number in totalNumbers)
@@ -44,7 +44,7 @@ namespace HomeWork_1
             }
         }
 
-        static void UniteArray(string[] array1, string[] array2, ref List<string> unitedarray)
+        static void UniteArray(string[] array1, string[] array2,  List<string> unitedarray)
         {
             AddToUniteList(array1, ref unitedarray);
             AddToUniteList(array2, ref unitedarray);
