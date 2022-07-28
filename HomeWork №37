@@ -9,12 +9,12 @@ namespace HomeWork_1
         static void Main(string[] args)
         {
             string[] numbers1 =
-            {
+             {
                 "1", "3", "5", "7", "13", "1", "2", "15", "32", "50",
             };
 
             Console.WriteLine("Первый массив: ");
-            PrintMassive(numbers1);
+            PrintArray(numbers1);
 
             string[] numbers2 =
             {
@@ -22,78 +22,43 @@ namespace HomeWork_1
             };
 
             Console.WriteLine("\nВторой массив: ");
-            PrintMassive(numbers2);
+            PrintArray(numbers2);
 
-            string[] totalNumbers = new string[1]; 
-            UniteMassives(numbers1, numbers2, ref totalNumbers);
+            List<string> totalNumbers = new List<string>();
+            UniteArray(numbers1, numbers2, ref totalNumbers);
             Console.WriteLine("\nОбъединенный массив: ");
-            PrintMassive(totalNumbers);
+
+            foreach (var number in totalNumbers)
+            {
+                Console.Write(number + " ");
+            }
+
             Console.ReadKey();
         }
 
-        static void PrintMassive(string[] massive)
+        static void PrintArray(string[] array)
         {
-            for(int i = 0; i < massive.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                Console.Write(massive[i] + " ");
+                Console.Write(array[i] + " ");
             }
         }
 
-        static void UniteMassives(string[] massive1, string[] massive2, ref string[] unitedMassive)
+        static void UniteArray(string[] array1, string[] array2, ref List<string> unitedarray)
         {
-            unitedMassive[0] = massive1[0];
-            bool isDouble = false;
-
-            for (int i = 0; i < massive1.Length; i++)
-            {
-                for (int j = 0; j < unitedMassive.Length; j++)
-                {
-                    if (massive1[i] == unitedMassive[j])
-                    {
-                        isDouble = true;
-                        break;
-                    }
-                }
-
-                if (isDouble == false)
-                {
-                    unitedMassive = IncreaseMassiveSize(unitedMassive);
-                    unitedMassive[unitedMassive.Length - 1] = massive1[i];
-                }
-
-                isDouble = false;
-            }
-
-            for (int i = 0; i < massive2.Length; i++)
-            {
-                for (int j = 0; j < unitedMassive.Length; j++)
-                {
-                    if (massive2[i] == unitedMassive[j])
-                    {
-                        isDouble = true;
-                        break;
-                    }
-                }
-
-                if (isDouble == false)
-                {
-                    unitedMassive = IncreaseMassiveSize(unitedMassive);
-                    unitedMassive[unitedMassive.Length - 1] = massive2[i];
-                }
-
-                isDouble = false;
-            }
+            AddToUniteList(array1, ref unitedarray);
+            AddToUniteList(array2, ref unitedarray);
         }
 
-        static string[] IncreaseMassiveSize(string[] massive)
+        static void AddToUniteList(string[] array, ref List<string> uniteList)
         {
-            string[] buffer = new string[massive.Length + 1];
-
-            for(int i = 0; i < massive.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                buffer[i] = massive[i];
+                if (uniteList.Contains(array[i]) == false)
+                {
+                    uniteList.Add(array[i]);
+                }
             }
-            return buffer;
         }
     }
 }
