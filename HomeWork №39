@@ -18,13 +18,13 @@ namespace HomeWork_1
     class Player
     {
         private char _symbol = '@';
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public int PositionX { get; private set; }
+        public int PositionY { get; private set; }
 
-        public Player(int x, int y)
+        public Player(int positionX, int positionY)
         {
-            X = x;
-            Y = y;
+            PositionX = positionX;
+            PositionY = positionY;
         }
 
         public char GetPlayerSymbol()
@@ -37,7 +37,7 @@ namespace HomeWork_1
     {
         public static void DrawPlayer(Player player)
         {
-            Console.SetCursorPosition(player.X, player.Y);
+            Console.SetCursorPosition(player.PositionX, player.PositionY);
             Console.Write(player.GetPlayerSymbol());
         }
     }
