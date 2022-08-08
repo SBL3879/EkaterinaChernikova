@@ -12,6 +12,7 @@ namespace HomeWork_1
             DataBase dataBase = new DataBase();
             bool isExit = false;
             string userInput;
+            int totalId = 100;
 
             while (isExit == false)
             {
@@ -23,7 +24,7 @@ namespace HomeWork_1
                 switch (userInput)
                 {
                     case "1":
-                        dataBase.AddPlayer();
+                        dataBase.AddPlayer(totalId++);
                         break;
                     case "2":
                         dataBase.RemovePlayer();
@@ -46,24 +47,23 @@ namespace HomeWork_1
 
     class Player
     {
+        public int _id { get; private set; }
         private string _nickName;
         private int _level;
-        public int _id { get; private set; }
         private bool _isBanned;
-        private static int _totalId = 100;
 
-        public Player(string nickName, int level)
+        public Player(string nickName, int level, int id)
         {
             _nickName = nickName;
             _level = level;
-            _id = _totalId++;
+            _id = id;
         }
 
         public void ShowInfo()
         {
             Console.WriteLine($"Игрок - {_nickName} {_level} lv  \nУникальный номер - {_id}");
 
-            if(_isBanned == true)
+            if (_isBanned)
             {
                 Console.WriteLine("Статус: забанен.");
             }
@@ -88,32 +88,13 @@ namespace HomeWork_1
     {
         private List<Player> _players = new List<Player>();
 
-        public void AddPlayer()
+        public void AddPlayer(int id)
         {
             Console.Write("Введите ник - ");
             string nickName = Console.ReadLine();
             Console.Write("Укажите уровень -");
             int level = Convert.ToInt32(Console.ReadLine());
-            _players.Add(new Player(nickName, level));
-        }
-
-        private bool isEmpty()
-        {
-            return _players.Count == 0;
-        }
-
-        private Player Search(int id)
-        {
-            int playerListId = 0;
-
-            for (int i = 0; i < _players.Count; i++)
-            {
-                if(_players[i]._id == id)
-                {
-                    playerListId = i;
-                }
-            }
-            return _players[playerListId];
+            _players.Add(new Player(nickName, level, id));
         }
 
         public void RemovePlayer()
@@ -124,7 +105,7 @@ namespace HomeWork_1
 
         public void ShowList()
         {
-            if (isEmpty() == false)
+            if (GetIsEmpty() == false)
             {
                 foreach (var player in _players)
                 {
@@ -147,6 +128,25 @@ namespace HomeWork_1
         {
             Console.Write("Введите id чтобы разбанить: ");
             Search(Convert.ToInt32(Console.ReadLine())).UnBan();
+        }
+
+        private bool GetIsEmpty()
+        {
+            return _players.Count == 0;
+        }
+
+        private Player Search(int id)
+        {
+            int playerListId = 0;
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if (_players[i]._id == id)
+                {
+                    playerListId = i;
+                }
+            }
+            return _players[playerListId];
         }
     }
 }
