@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Player player = new Player("Иван", "Иванович", "Иванов", 25, "Россия");
+            player.ShowInfo();
+            Console.ReadKey();
+        }
+    }
+
+    class Player
+    {
+        private string _firstName;
+        private string _secondName;
+        private string _lastName;
+        private int _age;
+        private string _country;
+
+        public Player(string firstName, string secondName, string lastName, int age, string country)
+        {
+            _firstName = firstName;
+            _secondName = secondName;
+            _lastName = lastName;
+            _age = age;
+            _country = country;
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"ФИО игрока - {_lastName} {_firstName} {_secondName} \nВозраст игрока - {_age} \nСтрана - {_country}");
+        }
+    }
+}
