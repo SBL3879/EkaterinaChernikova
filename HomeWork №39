@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Player player = new Player(25, 15);
+            Drawer.DrawPlayer(player);
+            Console.ReadKey();
+        }
+    }
+
+    class Player
+    {
+        private char _symbol = '@';
+        public int X { get; private set; }
+        public int Y { get; private set; }
+
+        public Player(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public char GetPlayerSymbol()
+        {
+            return _symbol;
+        }
+    }
+
+    class Drawer
+    {
+        public static void DrawPlayer(Player player)
+        {
+            Console.SetCursorPosition(player.X, player.Y);
+            Console.Write(player.GetPlayerSymbol());
+        }
+    }
+}
