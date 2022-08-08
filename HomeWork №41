@@ -13,11 +13,11 @@ namespace HomeWork_1
             string userInput;
             bool isExit = false;
 
-            while(isExit == false)
+            while (isExit == false)
             {
                 Console.Clear();
-                Console.WriteLine($"Карт в колоде: {player.deckOfCards.cards.Count}");
-                Console.WriteLine($"Карт в руке: {player.cards.Count}");
+                Console.WriteLine($"Карт в колоде: {player.GetCardsNumberInDeck()}");
+                Console.WriteLine($"Карт в руке: {player.GetCardsNumberInHand()}");
                 Console.Write("\n1 - Взять карту. \n2 - Посмотреть карты в руке. \n3 - Уйти. \n\nВаш выбор: ");
 
                 userInput = Console.ReadLine();
@@ -40,9 +40,9 @@ namespace HomeWork_1
 
     class Player
     {
-        public DeckOfCards deckOfCards { get; private set; }
-        public List<Card> cards = new List<Card>();
-        
+        private DeckOfCards deckOfCards;
+        private List<Card> cards = new List<Card>();
+
         public Player()
         {
             deckOfCards = new DeckOfCards();
@@ -51,17 +51,27 @@ namespace HomeWork_1
         public void TakeCard()
         {
             Random random = new Random();
-            cards.Add(deckOfCards.GetCard(random.Next(0, deckOfCards.cards.Count)));
+            cards.Add(deckOfCards.GetCard(random.Next(0, deckOfCards.GetCardsNumber())));
         }
 
         public void ShowHand()
         {
             foreach (var card in cards)
             {
-                card.ShowCard();
+                card.ShowInfo();
             }
 
             Console.ReadKey();
+        }
+
+        public int GetCardsNumberInDeck()
+        {
+            return deckOfCards.GetCardsNumber();
+        }
+
+        public int GetCardsNumberInHand()
+        {
+            return cards.Count;
         }
     }
 
@@ -76,7 +86,7 @@ namespace HomeWork_1
             _suit = suit;
         }
 
-        public void ShowCard()
+        public void ShowInfo()
         {
             Console.WriteLine(_value + _suit);
         }
@@ -84,14 +94,14 @@ namespace HomeWork_1
 
     class DeckOfCards
     {
-        public List<Card> cards { get; private set; }
-
+        private List<Card> cards;
         private string[] values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
-        private char[] suits = {'♥', '♣', '♦', '♠' };
+        private char[] suits = { '♥', '♣', '♦', '♠' };
 
         public DeckOfCards()
         {
             cards = new List<Card>();
+
             for (int i = 0; i < suits.Length; i++)
             {
                 for (int j = 0; j < values.Length; j++)
@@ -106,6 +116,11 @@ namespace HomeWork_1
             Card randomCard = cards[randomCardId];
             cards.Remove(cards[randomCardId]);
             return randomCard;
+        }
+
+        public int GetCardsNumber()
+        {
+            return cards.Count;
         }
     }
 }
