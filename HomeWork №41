@@ -95,18 +95,18 @@ namespace HomeWork_1
     class DeckOfCards
     {
         private List<Card> _cards;
-        private string[] values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
-        private char[] suits = { '♥', '♣', '♦', '♠' };
+        private string[] _values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+        private char[] _suits = { '♥', '♣', '♦', '♠' };
 
         public DeckOfCards()
         {
             _cards = new List<Card>();
 
-            for (int i = 0; i < suits.Length; i++)
+            for (int i = 0; i < _suits.Length; i++)
             {
-                for (int j = 0; j < values.Length; j++)
+                for (int j = 0; j < _values.Length; j++)
                 {
-                    _cards.Add(new Card(values[j], suits[i]));
+                    _cards.Add(new Card(_values[j], _suits[i]));
                 }
             }
         }
