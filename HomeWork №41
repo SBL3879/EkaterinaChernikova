@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Player player = new Player();
+            string userInput;
+            bool isExit = false;
+
+            while(isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"Карт в колоде: {player.deckOfCards.cards.Count}");
+                Console.WriteLine($"Карт в руке: {player.cards.Count}");
+                Console.Write("\n1 - Взять карту. \n2 - Посмотреть карты в руке. \n3 - Уйти. \n\nВаш выбор: ");
+
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        player.TakeCard();
+                        break;
+                    case "2":
+                        player.ShowHand();
+                        break;
+                    case "3":
+                        isExit = true;
+                        break;
+                }
+            }
+        }
+    }
+
+    class Player
+    {
+        public DeckOfCards deckOfCards { get; private set; }
+        public List<Card> cards = new List<Card>();
+        
+        public Player()
+        {
+            deckOfCards = new DeckOfCards();
+        }
+
+        public void TakeCard()
+        {
+            Random random = new Random();
+            cards.Add(deckOfCards.GetCard(random.Next(0, deckOfCards.cards.Count)));
+        }
+
+        public void ShowHand()
+        {
+            foreach (var card in cards)
+            {
+                card.ShowCard();
+            }
+
+            Console.ReadKey();
+        }
+    }
+
+    class Card
+    {
+        private string _value;
+        private char _suit;
+
+        public Card(string value, char suit)
+        {
+            _value = value;
+            _suit = suit;
+        }
+
+        public void ShowCard()
+        {
+            Console.WriteLine(_value + _suit);
+        }
+    }
+
+    class DeckOfCards
+    {
+        public List<Card> cards { get; private set; }
+
+        private string[] values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+        private char[] suits = {'♥', '♣', '♦', '♠' };
+
+        public DeckOfCards()
+        {
+            cards = new List<Card>();
+            for (int i = 0; i < suits.Length; i++)
+            {
+                for (int j = 0; j < values.Length; j++)
+                {
+                    cards.Add(new Card(values[j], suits[i]));
+                }
+            }
+        }
+
+        public Card GetCard(int randomCardId)
+        {
+            Card randomCard = cards[randomCardId];
+            cards.Remove(cards[randomCardId]);
+            return randomCard;
+        }
+    }
+}
