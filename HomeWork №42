@@ -1,0 +1,202 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Repository repository = new Repository();
+            string userInput;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"Количество книг в хранилище: {repository.GetBooksCount()} ");
+                Console.Write("\n1 - Добавить книгу. \n2 - Убрать книгу. \n3 - Показать все книги. \n4 - Показать книги по указанному параметру. \n5 - Выйти.\n\nВаш ввод: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        repository.AddBook();
+                        break;
+                    case "2":
+                        repository.RemoveBook();
+                        break;
+                    case "3":
+                        repository.ShowAllBooks();
+                        break;
+                    case "4":
+                        SearchForBook(repository);
+                        break;
+                    case "5":
+                        isExit = true;
+                        break;
+
+                }
+            }
+        }
+
+        public static void SearchForBook(Repository repository)
+        {
+            string userInput;
+            bool isExit = false;
+
+            while(isExit == false)
+            {
+                Console.Clear();
+                Console.Write("\n1 - Поиск по названию книги.  \n2 - Поиск по автору.  \n3 - Поиск по году издания. \n4 - Выйти. \n\nВаш ввод: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case"1":
+                        repository.ShowBooksByTitle();
+                        break;
+                    case "2":
+                        repository.ShowBooksByAutor();
+                        break;
+                    case "3":
+                        repository.ShowBooksByYear();
+                        break;
+                    case "4":
+                        isExit = true;
+                        continue;
+                }
+
+                Console.ReadKey();
+            }
+        }
+    }
+ 
+    class Book
+    {
+        private string _title;
+        private string _author;
+        private int _year;
+ 
+        public Book(string title, string author, int year)
+        {
+            _title = title;
+            _author = author;
+            _year = year;
+        }
+ 
+        public string GetTitle()
+        {
+            return _title;
+        }
+ 
+        public string GetAutor()
+        {
+            return _author;
+        }
+ 
+        public int GetYear()
+        {
+            return _year;
+        }
+ 
+        public void ShowInfo()
+        {
+            Console.WriteLine($"Название книги - {_title}, автор - {_author}, год выпуска - {_year}");
+        }
+    }
+ 
+    class Repository
+    {
+        private List<Book> _books = new List<Book>();
+
+        public int GetBooksCount()
+        {
+            return _books.Count;
+        }
+ 
+        public void AddBook()
+        {
+            Console.Write("Добавить название книги: ");
+            string title = Console.ReadLine();
+            Console.Write("Добавить автора книги: ");
+            string author = Console.ReadLine();
+            Console.Write("Добавить год издания книги: ");
+            int year = Convert.ToInt32(Console.ReadLine());
+
+            _books.Add(new Book(title, author, year));
+        }
+ 
+        public void RemoveBook()
+        {
+            Console.Write("Укажите название книги: ");
+            string title = Console.ReadLine();
+            Console.Write("Укажите автора книги: ");
+            string author = Console.ReadLine();
+            Console.Write("Укажите год издания книги: ");
+            int year = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < _books.Count; i++)
+            {
+                if (_books[i].GetTitle() == title && _books[i].GetAutor() == author && _books[i].GetYear() == year)
+                {
+                    _books.Remove(_books[i]);
+                }
+            }
+        }
+ 
+        public void ShowAllBooks()
+        {
+            foreach (var book in _books)
+            {
+                book.ShowInfo();
+            }
+
+            Console.ReadKey();
+        }
+ 
+        public void ShowBooksByTitle()
+        {
+            Console.Write("Введите название книги: ");
+            string userInput = Console.ReadLine();
+
+            foreach (var book in _books)
+            {
+                if (book.GetTitle() == userInput)
+                {
+                    book.ShowInfo();
+                }
+            }
+        }
+ 
+        public void ShowBooksByAutor()
+        {
+            Console.Write("Введите автора книги: ");
+            string userInput = Console.ReadLine();
+
+            foreach (var book in _books)
+            {
+                if (book.GetAutor() == userInput)
+                {
+                    book.ShowInfo();
+                }
+            }
+        }
+
+        public void ShowBooksByYear()
+        {
+            Console.Write("Введите год издания: ");
+            string userInput = Console.ReadLine();
+
+            foreach (var book in _books)
+            {
+                if (book.GetYear() == Convert.ToInt32(userInput))
+                {
+                    book.ShowInfo();
+                }
+            }
+        }
+    }
+}
