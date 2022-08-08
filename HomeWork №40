@@ -1,0 +1,152 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DataBase dataBase = new DataBase();
+            bool isExit = false;
+            string userInput;
+
+            while (isExit == false)
+            {
+                Console.WriteLine("Список игроков: ");
+                dataBase.ShowList();
+                Console.Write("\n1 - Добавить игрока. \n2 - Удалить игрока. \n3 - Забанить игрока. \n4 - Разбанить игрока. \n5 - Выход. \n\nВаш ввод: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        dataBase.AddPlayer();
+                        break;
+                    case "2":
+                        dataBase.RemovePlayer();
+                        break;
+                    case "3":
+                        dataBase.BanPlayer();
+                        break;
+                    case "4":
+                        dataBase.UnBanPlayer();
+                        break;
+                    case "5":
+                        isExit = true;
+                        break;
+                }
+
+                Console.Clear();
+            }
+        }
+    }
+
+    class Player
+    {
+        private string _nickName;
+        private int _level;
+        public int _id { get; private set; }
+        private bool _isBanned;
+        private static int _totalId = 100;
+
+        public Player(string nickName, int level)
+        {
+            _nickName = nickName;
+            _level = level;
+            _id = _totalId++;
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"Игрок - {_nickName} {_level} lv  \nУникальный номер - {_id}");
+
+            if(_isBanned == true)
+            {
+                Console.WriteLine("Статус: забанен.");
+            }
+            else
+            {
+                Console.WriteLine("Статус: пока не забанен.");
+            }
+        }
+
+        public void Ban()
+        {
+            _isBanned = true;
+        }
+
+        public void UnBan()
+        {
+            _isBanned = false;
+        }
+    }
+
+    class DataBase
+    {
+        private List<Player> _players = new List<Player>();
+
+        public void AddPlayer()
+        {
+            Console.Write("Введите ник - ");
+            string nickName = Console.ReadLine();
+            Console.Write("Укажите уровень -");
+            int level = Convert.ToInt32(Console.ReadLine());
+            _players.Add(new Player(nickName, level));
+        }
+
+        private bool isEmpty()
+        {
+            return _players.Count == 0;
+        }
+
+        private Player Search(int id)
+        {
+            int playerListId = 0;
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                if(_players[i]._id == id)
+                {
+                    playerListId = i;
+                }
+            }
+            return _players[playerListId];
+        }
+
+        public void RemovePlayer()
+        {
+            Console.Write("Введите id для удаления: ");
+            _players.Remove(Search(Convert.ToInt32(Console.ReadLine())));
+        }
+
+        public void ShowList()
+        {
+            if (isEmpty() == false)
+            {
+                foreach (var player in _players)
+                {
+                    player.ShowInfo();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Список пуст.");
+            }
+        }
+
+        public void BanPlayer()
+        {
+            Console.Write("Введите id чтобы забанить: ");
+            Search(Convert.ToInt32(Console.ReadLine())).Ban();
+        }
+
+        public void UnBanPlayer()
+        {
+            Console.Write("Введите id чтобы разбанить: ");
+            Search(Convert.ToInt32(Console.ReadLine())).UnBan();
+        }
+    }
+}
