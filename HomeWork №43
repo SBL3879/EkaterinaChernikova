@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Trader trader = new Trader();
+            Customer customer = new Customer(2500);
+
+            string userInput;
+            int goodNumber;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine("Список товаров продавца: ");
+                trader.ShowInfo();
+                Console.WriteLine($"\nДеньги покупателя: {customer.Money}");
+                Console.SetCursorPosition(0, 22);
+                customer.ShowInfo();
+                Console.SetCursorPosition(0, 19);
+                Console.Write("\nКупить товар номер (Q - выйти): ");
+                userInput = Console.ReadLine();
+
+                if (userInput == "Q")
+                {
+                    isExit = true;
+                    continue;
+                }
+
+                int.TryParse(userInput, out goodNumber);
+                customer.BuyGood(trader.SellGood(goodNumber, customer.Pay(trader.Goods[goodNumber].Price)));
+            }
+        }
+    }
+
+    class Good
+    {
+        public string Name { get; private set; }
+        public int Price { get; private set; }
+
+        public Good(string name, int price)
+        {
+            Name = name;
+            Price = price;
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"Наименование: {Name, 10}      цена: {Price, 5}");
+        }
+    }
+
+    class Trader
+    {
+        public List<Good> Goods { get; private set; } = new List<Good>();
+        private int _money;
+
+        public Trader()
+        {
+            Goods.Add(new Good("Колбаска", 200));
+            Goods.Add(new Good("Сырочек", 150));
+            Goods.Add(new Good("Хлебушек",40 ));
+            Goods.Add(new Good("Яички", 90));
+            Goods.Add(new Good("Молочко", 90));
+            Goods.Add(new Good("Булочка", 40));
+            Goods.Add(new Good("Картошечка", 50));
+            Goods.Add(new Good("Сахарочек", 120));
+            Goods.Add(new Good("Рыбка", 350));
+            Goods.Add(new Good("Грибочки", 200));
+            Goods.Add(new Good("Курочка", 300));
+            Goods.Add(new Good("Сосисочки", 250));
+            Goods.Add(new Good("Салатик", 85));
+            Goods.Add(new Good("Мороженка", 70));
+            Goods.Add(new Good("Маслице", 100));
+            Goods.Add(new Good("Сметанище", 400));
+        }
+
+        public Good SellGood(int goodNumber, int money)
+        {
+            if (money == 0) 
+            {
+                return null;
+            }
+
+            _money += money;
+            return Goods[goodNumber];
+        }
+
+        public void ShowInfo()
+        {
+            for (int i = 0; i < Goods.Count; i++)
+            {
+                Console.Write($"Товар № {i, 2} ");
+                Goods[i].ShowInfo();
+            }
+        }
+    }
+
+    class Customer
+    {
+        public List<Good> Goods { get; private set; } = new List<Good>(); 
+        public int Money { get; private set; }
+
+        public Customer(int money)
+        {
+            Money = money;
+        }
+
+        public void BuyGood(Good good)
+        {
+            if (good != null)
+            {
+                Goods.Add(good);
+            }
+        }
+
+        public int Pay(int price)
+        {
+            if (Money >= price)
+            {
+                Money -= price;
+                return price;
+            }
+            return 0;
+        }
+        public void ShowInfo()
+        {
+            Console.WriteLine("Список купленного: ");
+
+            foreach (var good in Goods)
+            {
+                good.ShowInfo();
+            }
+        }
+    }
+}
