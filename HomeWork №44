@@ -1,0 +1,277 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Train> trains = new List<Train>();
+            
+
+            string UserInput;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"{"№", 2}{"Направление", 25}{"Кол-во пасс.", 25}{"Вместимость", 15}{"Кол-во ваг.", 15}{"Статус", 15}");
+                
+                if(trains.Count == 0)
+                {
+                    Console.WriteLine("Список пуст.");
+                }
+                else
+                {
+                    for (int i = 0; i < trains.Count; i++)
+                    {
+                        Console.Write($"{i, 2}");
+                        trains[i].ShowInfo();
+                    }
+                }
+
+                Console.Write("\n1 - Составить рейс. \n2 - Отправить поезд. \n3 - Выйти. \nВаш ввод: ");
+                UserInput = Console.ReadLine();
+
+                switch (UserInput)
+                {
+                    case "1":
+                        trains.Add(AssambleTrain());
+                        break;
+                    case "2":
+                        SendTrain(trains);
+                        break;
+                    case "3":
+                        isExit = true;
+                        break;
+                }
+            }
+        }
+
+        private static Train AssambleTrain()
+        {
+            int userInputParse;
+            int minPassengers = 40;
+            int maxPessengers = 150;
+            int passengerCount;
+            int vagonSize;
+            int trainCapacity = 0;
+            int bigVagonCapacity = 25;
+            int mediumVagonCapacity = 12;
+            int smallVagonCapacity = 4;
+            string userInput;
+            string departurePoint = "";
+            string arrivalPoint = "";
+            Random random = new Random();
+            bool isExit = false;
+
+            List<Vagon> vagons = new List<Vagon>();
+
+            List<string> travelPoints = new List<string>()
+            {
+                "Жужжалово",
+                "Богомолово",
+                "Мтищи",
+                "Заплуталово",
+                "Грязьмут",
+                "Задротово",
+                "Депрессуево",
+                "Сднапостукаево",
+                "Отчуждалово",
+                "Мемасово",
+                "Помойнишево",
+                "Потеряево",
+                "Понивилль",
+            };
+
+            while (isExit == false)
+            {
+                Console.Clear();
+
+                for (int i = 0; i < travelPoints.Count; i++)
+                {
+                    Console.WriteLine($"№ {i,2} - {travelPoints[i]}");
+                }
+
+                Console.Write("\nВыберите пункт отправления: ");
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out userInputParse) == true && userInputParse >= 0 && userInputParse < travelPoints.Count)
+                {
+                    departurePoint = travelPoints[userInputParse];
+                }
+                else
+                {
+                    continue;
+                }
+
+                Console.Write("Выберите пункт прибытия: ");
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out userInputParse) == true && userInputParse >= 0 && userInputParse < travelPoints.Count)
+                {
+                    arrivalPoint = travelPoints[userInputParse];
+                }
+                else
+                {
+                    continue;
+                }
+
+                isExit = true;
+            }
+
+            isExit = false;
+
+            passengerCount = random.Next(minPassengers, maxPessengers);
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"Расчетное кол-во пассажиров в данном направлении: {passengerCount} \n" +
+                    $"Вместимость поезда: {trainCapacity} \nКол-во вагонов: {vagons.Count} " +
+                    $"\nПодберите необходимое кол-во вагонов к данному числу пассажиров.");
+                Console.Write($"\nВ наличае есть вагоны: \n1 - большой вагон({bigVagonCapacity} человек). " +
+                    $"\n2 - средний вагон({mediumVagonCapacity} человек). \n3 - малый вагон({smallVagonCapacity} человека). \nВаш ввод: ");
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out vagonSize) == true)
+                {
+                    switch (vagonSize)
+                    {
+                        case 1:
+                            vagons.Add(new Vagon(bigVagonCapacity));
+                            break;
+                        case 2:
+                            vagons.Add(new Vagon(mediumVagonCapacity));
+                            break;
+                        case 3:
+                            vagons.Add(new Vagon(smallVagonCapacity));
+                            break;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+                trainCapacity = 0;
+
+                foreach (var vagon in vagons)
+                {
+                    trainCapacity += vagon.GetCapasity();
+                }
+
+                if(trainCapacity <= passengerCount)
+                {
+                    continue;
+                }
+                else
+                {
+                    Console.WriteLine("Необходимое кол-во вагонов набрано.");
+                    Console.ReadKey();
+                }
+
+                isExit = true;
+            }
+
+            Direction direction = new Direction(departurePoint, arrivalPoint);
+            return new Train(direction, passengerCount, vagons); 
+        }
+
+        private static void SendTrain(List<Train> trains)
+        {
+            if (trains.Count == 0)
+            {
+                return;
+            }
+
+            int trainNumber;
+            string userInput;
+            Console.Write("\nВведите номер поезда: ");
+            userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out trainNumber))
+            {
+                trains[trainNumber].SetStatus(2);
+            }
+        }
+    }
+
+    class Train
+    {
+        private Direction _direction;
+        private int _passengerCount;
+        private int _trainCapasity;
+        private string _status;
+        private List<Vagon> _vagons = new List<Vagon>();
+
+        public Train(Direction direction, int passengerCount, List<Vagon> vagons)
+        {
+            _direction = direction;
+            _passengerCount = passengerCount;
+            _vagons = vagons;
+            _status = "Ожидает";
+        }
+
+        public void SetStatus(int statusCode)
+        {
+            switch (statusCode)
+            {
+                case 1:
+                    _status = "Ожидает";
+                    break;
+                case 2:
+                    _status = "В пути";
+                    break;
+            }
+        }
+
+        public void ShowInfo()
+        {
+            _trainCapasity = 0;
+
+            foreach (var vagon in _vagons)
+            {
+                _trainCapasity += vagon.GetCapasity();
+            }
+
+            _direction.ShowInfo();
+            Console.WriteLine($" {_passengerCount, 13}{_trainCapasity, 15}{_vagons.Count, 15}{_status, 17}");
+        }
+    }
+
+    class Vagon
+    {
+        private int _capasity;
+        
+        public Vagon(int size)
+        {
+            _capasity = size;
+        }
+
+        public int GetCapasity()
+        {
+            return _capasity;
+        }
+    }
+
+    class Direction
+    {
+        private string _pointTheArrival;
+        private string _pointTheDeparture;
+
+        public Direction(string pointA, string pointB)
+        {
+            _pointTheDeparture = pointA;
+            _pointTheArrival = pointB;
+        }
+
+        public void ShowInfo()
+        {
+            Console.Write($"{_pointTheDeparture, 15} -> {_pointTheArrival, 15}");
+        }
+    }
+}
