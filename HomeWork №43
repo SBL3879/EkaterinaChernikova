@@ -11,9 +11,12 @@ namespace HomeWork_1
         {
             Trader trader = new Trader();
             Customer customer = new Customer(2500);
+            Product product;
 
             string userInput;
-            int goodNumber;
+            string quitCommand = "Q";
+            int productNumber;
+            int productPrice;
             bool isExit = false;
 
             while (isExit == false)
@@ -23,35 +26,77 @@ namespace HomeWork_1
                 trader.ShowInfo();
                 Console.WriteLine($"\nДеньги покупателя: {customer.GetMoneyCount()}");
                 Console.SetCursorPosition(0, 22);
+                Console.WriteLine("Список купленных товаров: ");
                 customer.ShowInfo();
                 Console.SetCursorPosition(0, 19);
-                Console.Write("\nКупить товар номер (Q - выйти): ");
+                Console.Write($"\nКупить товар номер ({quitCommand} - выйти): ");
                 userInput = Console.ReadLine();
 
-                if (userInput == "Q")
+                if (userInput == quitCommand)
                 {
                     isExit = true;
                     continue;
                 }
 
-                int.TryParse(userInput, out goodNumber);
-                customer.BuyGood(trader.SellGood(goodNumber, customer.Pay(trader.GetPrice(goodNumber))));
+                if(int.TryParse(userInput, out productNumber) == false || trader.GetInventorySize() <= productNumber || productNumber < 0)
+                {
+                    continue;
+                }
+
+                productPrice = trader.GetPrice(productNumber);
+
+                if (customer.GetMoneyCount() >= productPrice)
+                {
+                    customer.MakeOutcome(productPrice);
+                    trader.MakeIncome(productPrice);
+                    product = trader.GiveProduct(productNumber);
+                    customer.TakeProduct(product);
+                }
             }
         }
     }
 
-    class Shop
+    class Persona
     {
-        protected List<Good> Goods = new List<Good>();
+        protected List<Product> Inventory = new List<Product>();
         protected int Money;
+
+        public void MakeIncome(int income)
+        {
+            Money += income;
+        }
+
+        public void MakeOutcome(int outcome)
+        {
+            Money -= outcome;
+        }
+
+        public int GetMoneyCount()
+        {
+            return Money;
+        }
+
+        public int GetInventorySize()
+        {
+            return Inventory.Count;
+        }
+
+        public void ShowInfo() 
+        {
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                Console.Write($"{i, 2} ");
+                Inventory[i].ShowInfo();
+            }
+        }
     }
 
-    class Good
+    class Product
     {
         public string Name { get; private set; }
         public int Price { get; private set; }
 
-        public Good(string name, int price)
+        public Product(string name, int price)
         {
             Name = name;
             Price = price;
@@ -63,91 +108,49 @@ namespace HomeWork_1
         }
     }
 
-    class Trader : Shop
+    class Trader : Persona
     {
         public Trader()
         {
-            Goods.Add(new Good("Колбаска", 200));
-            Goods.Add(new Good("Сырочек", 150));
-            Goods.Add(new Good("Хлебушек", 40));
-            Goods.Add(new Good("Яички", 90));
-            Goods.Add(new Good("Молочко", 90));
-            Goods.Add(new Good("Булочка", 40));
-            Goods.Add(new Good("Картошечка", 50));
-            Goods.Add(new Good("Сахарочек", 120));
-            Goods.Add(new Good("Рыбка", 350));
-            Goods.Add(new Good("Грибочки", 200));
-            Goods.Add(new Good("Курочка", 300));
-            Goods.Add(new Good("Сосисочки", 250));
-            Goods.Add(new Good("Салатик", 85));
-            Goods.Add(new Good("Мороженка", 70));
-            Goods.Add(new Good("Маслице", 100));
-            Goods.Add(new Good("Сметанище", 400));
+            Inventory.Add(new Product("Колбаска", 200));
+            Inventory.Add(new Product("Сырочек", 150));
+            Inventory.Add(new Product("Хлебушек", 40));
+            Inventory.Add(new Product("Яички", 90));
+            Inventory.Add(new Product("Молочко", 90));
+            Inventory.Add(new Product("Булочка", 40));
+            Inventory.Add(new Product("Картошечка", 50));
+            Inventory.Add(new Product("Сахарочек", 120));
+            Inventory.Add(new Product("Рыбка", 350));
+            Inventory.Add(new Product("Грибочки", 200));
+            Inventory.Add(new Product("Курочка", 300));
+            Inventory.Add(new Product("Сосисочки", 250));
+            Inventory.Add(new Product("Салатик", 85));
+            Inventory.Add(new Product("Мороженка", 70));
+            Inventory.Add(new Product("Маслице", 100));
+            Inventory.Add(new Product("Сметанище", 400));
         }
 
-        public int GetPrice(int goodNNumber)
+        public int GetPrice(int productNNumber)
         {
-            return Goods[goodNNumber].Price;
-        }
-        public Good SellGood(int goodNumber, int money)
-        {
-            if (money == 0)
-            {
-                return null;
-            }
-
-            Money += money;
-            return Goods[goodNumber];
+            return Inventory[productNNumber].Price;
         }
 
-        public void ShowInfo()
+        public Product GiveProduct(int productNumber)
         {
-            for (int i = 0; i < Goods.Count; i++)
-            {
-                Console.Write($"Товар № {i,2} ");
-                Goods[i].ShowInfo();
-            }
+            return Inventory[productNumber];
         }
     }
 
-    class Customer: Shop
+    class Customer : Persona
     {
         public Customer(int money)
         {
             Money = money;
         }
 
-        public int GetMoneyCount()
+        public void TakeProduct(Product product)
         {
-            return Money;
-        }
-
-        public void BuyGood(Good good)
-        {
-            if (good != null)
-            {
-                Goods.Add(good);
-            }
-        }
-
-        public int Pay(int price)
-        {
-            if (Money >= price)
-            {
-                Money -= price;
-                return price;
-            }
-            return 0;
-        }
-
-        public void ShowInfo()
-        {
-            Console.WriteLine("Список купленного: ");
-
-            foreach (var good in Goods)
-            {
-                good.ShowInfo();
-            }
+            Inventory.Add(product);
         }
     }
 }
