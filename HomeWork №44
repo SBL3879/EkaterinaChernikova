@@ -10,17 +10,15 @@ namespace HomeWork_1
         static void Main(string[] args)
         {
             List<Train> trains = new List<Train>();
-            
-
             string UserInput;
             bool isExit = false;
 
             while (isExit == false)
             {
                 Console.Clear();
-                Console.WriteLine($"{"№", 2}{"Направление", 25}{"Кол-во пасс.", 25}{"Вместимость", 15}{"Кол-во ваг.", 15}{"Статус", 15}");
-                
-                if(trains.Count == 0)
+                Console.WriteLine($"{"№",2}{"Направление",25}{"Кол-во пасс.",25}{"Вместимость",15}{"Кол-во ваг.",15}{"Статус",15}");
+
+                if (trains.Count == 0)
                 {
                     Console.WriteLine("Список пуст.");
                 }
@@ -28,7 +26,7 @@ namespace HomeWork_1
                 {
                     for (int i = 0; i < trains.Count; i++)
                     {
-                        Console.Write($"{i, 2}");
+                        Console.Write($"{i,2}");
                         trains[i].ShowInfo();
                     }
                 }
@@ -53,22 +51,21 @@ namespace HomeWork_1
 
         private static Train AssambleTrain()
         {
-            int userInputParse;
             int minPassengers = 40;
             int maxPessengers = 150;
             int passengerCount;
-            int vagonSize;
-            int trainCapacity = 0;
-            int bigVagonCapacity = 25;
-            int mediumVagonCapacity = 12;
-            int smallVagonCapacity = 4;
-            string userInput;
+            Random random = new Random();
+            Direction direction = SetDirection();
+            passengerCount = random.Next(minPassengers, maxPessengers);
+            List<Vagon> vagons = SetVagonCount(passengerCount);
+            return new Train(direction, passengerCount, vagons);
+        }
+
+        private static Direction SetDirection()
+        {
             string departurePoint = "";
             string arrivalPoint = "";
-            Random random = new Random();
             bool isExit = false;
-
-            List<Vagon> vagons = new List<Vagon>();
 
             List<string> travelPoints = new List<string>()
             {
@@ -97,25 +94,11 @@ namespace HomeWork_1
                 }
 
                 Console.Write("\nВыберите пункт отправления: ");
-                userInput = Console.ReadLine();
-
-                if (int.TryParse(userInput, out userInputParse) == true && userInputParse >= 0 && userInputParse < travelPoints.Count)
-                {
-                    departurePoint = travelPoints[userInputParse];
-                }
-                else
-                {
-                    continue;
-                }
-
+                departurePoint = SetTravelPoint(travelPoints);
                 Console.Write("Выберите пункт прибытия: ");
-                userInput = Console.ReadLine();
+                arrivalPoint = SetTravelPoint(travelPoints);
 
-                if (int.TryParse(userInput, out userInputParse) == true && userInputParse >= 0 && userInputParse < travelPoints.Count)
-                {
-                    arrivalPoint = travelPoints[userInputParse];
-                }
-                else
+                if (departurePoint == "" || arrivalPoint == "")
                 {
                     continue;
                 }
@@ -123,9 +106,31 @@ namespace HomeWork_1
                 isExit = true;
             }
 
-            isExit = false;
+            return new Direction(departurePoint, arrivalPoint);
+        }
 
-            passengerCount = random.Next(minPassengers, maxPessengers);
+        private static string SetTravelPoint(List<string> travelPoints)
+        {
+            string userInput = Console.ReadLine();
+            int userInputParse;
+
+            if (int.TryParse(userInput, out userInputParse) == true && userInputParse >= 0 && userInputParse < travelPoints.Count)
+            {
+                return travelPoints[userInputParse];
+            }
+            return "";
+        }
+
+        private static List<Vagon> SetVagonCount(int passengerCount)
+        {
+            List<Vagon> vagons = new List<Vagon>();
+            int vagonSize;
+            int trainCapacity = 0;
+            int bigVagonCapacity = 25;
+            int mediumVagonCapacity = 12;
+            int smallVagonCapacity = 4;
+            string userInput;
+            bool isExit = false;
 
             while (isExit == false)
             {
@@ -164,7 +169,7 @@ namespace HomeWork_1
                     trainCapacity += vagon.GetCapasity();
                 }
 
-                if(trainCapacity <= passengerCount)
+                if (trainCapacity <= passengerCount)
                 {
                     continue;
                 }
@@ -177,8 +182,7 @@ namespace HomeWork_1
                 isExit = true;
             }
 
-            Direction direction = new Direction(departurePoint, arrivalPoint);
-            return new Train(direction, passengerCount, vagons); 
+            return vagons;
         }
 
         private static void SendTrain(List<Train> trains)
@@ -239,14 +243,14 @@ namespace HomeWork_1
             }
 
             _direction.ShowInfo();
-            Console.WriteLine($" {_passengerCount, 13}{_trainCapasity, 15}{_vagons.Count, 15}{_status, 17}");
+            Console.WriteLine($" {_passengerCount,13}{_trainCapasity,15}{_vagons.Count,15}{_status,17}");
         }
     }
 
     class Vagon
     {
         private int _capasity;
-        
+
         public Vagon(int size)
         {
             _capasity = size;
@@ -271,7 +275,7 @@ namespace HomeWork_1
 
         public void ShowInfo()
         {
-            Console.Write($"{_pointTheDeparture, 15} -> {_pointTheArrival, 15}");
+            Console.Write($"{_pointTheDeparture,15} -> {_pointTheArrival,15}");
         }
     }
 }
