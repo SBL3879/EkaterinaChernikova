@@ -47,10 +47,9 @@ namespace HomeWork_1
 
                 if (customer.GetMoneyCount() >= productPrice)
                 {
-                    customer.MakeOutcome(productPrice);
-                    trader.MakeIncome(productPrice);
                     product = trader.GiveProduct(productNumber);
                     customer.TakeProduct(product);
+                    trader.MakeIncome(productPrice);
                 }
             }
         }
@@ -150,6 +149,7 @@ namespace HomeWork_1
 
         public void TakeProduct(Product product)
         {
+            Money -= product.Price;
             Inventory.Add(product);
         }
     }
