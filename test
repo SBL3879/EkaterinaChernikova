@@ -1,0 +1,502 @@
+Persona persona1 = new Persona();
+            Persona persona2 = new Persona();
+            string usserInput;
+           
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine(
+                    $"\n Боец 1 - {persona1.ShowClassName()}" +
+                    $"\n Боец 2 - {persona2.ShowClassName()}");
+                Console.Write("\n1 - Выбрать бойцов \n2 - Начать бой \n3 - Выйти \n\nВаш выбор: ");
+                usserInput = Console.ReadLine();
+
+                switch (usserInput)
+                {
+                    case "1":
+                        persona1 = ChooseFighter();
+                        persona2 = ChooseFighter();
+                        break;
+                    case "2":
+                        Fight(persona1, persona2);
+                        break;
+                    case "3":
+                        isExit = true;
+                        break;
+                    default:
+                        continue;
+                }
+            }
+        }
+
+        private static Persona ChooseFighter()
+        {
+            Persona persona = new Persona();
+            string userInput;
+            bool isExit = false;
+
+            while(isExit == false)
+            {
+                Console.Clear();
+                Console.Write("Выберите бойца из списка: " +
+                    $"\n1 - {"Варвар", 9}    6 - {"Охотник", 7}   11 - {"Маг", 12}" +
+                    $"\n2 - {"Рыцарь", 9}    7 - {"Плут", 7}   12 - {"Шаман", 12}" +
+                    $"\n3 - {"Гладиатор", 9}    8 - {"Монах", 7}   13 - {"Чернокнижник", 12}" +
+                    $"\n4 - {"Паладин", 9}    9 - {"Убийца", 7}   14 - {"Жрец", 12}" +
+                    $"\n5 - {"Берсерк", 9}   10 - {"Трюкач", 7}   15 - {"Призыватель", 12}" +
+                    $"\n\nВаш выбор: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        persona = new Barbarian();
+                        break;
+                    case "2":
+                        persona = new Knight();
+                        break;
+                    case "3":
+                        persona = new Gladiator();
+                        break;
+                    case "4":
+                        persona = new Paladin();
+                        break;
+                    case "5":
+                        persona = new Berserk();
+                        break;
+                    case "6":
+                        persona = new Hunter();
+                        break;
+                    case "7":
+                        persona = new Rogue();
+                        break;
+                    case "8":
+                        persona = new Monk();
+                        break;
+                    case "9":
+                        persona = new Assasin();
+                        break;
+                    case "10":
+                        persona = new Trickster();
+                        break;
+                    case "11":
+                        persona = new Mage();
+                        break;
+                    case "12":
+                        persona = new Shaman();
+                        break;
+                    case "13":
+                        persona = new Warlock();
+                        break;
+                    case "14":
+                        persona = new Priest();
+                        break;
+                    case "15":
+                        persona = new Summoner();
+                        break;
+                    default:
+                        continue;
+                }
+
+                isExit = true;
+            }
+
+            return persona;
+        }
+
+        private static void Fight(Persona persona1, Persona persona2)
+        {
+            int initiativePersona1;
+            int initiativePersona2;
+            int round = 1;
+            bool isExit = false;
+
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"Ход боя: {round}\n");
+                persona1.ShowInfo();
+                persona2.ShowInfo();
+                initiativePersona1 = persona1.RollInitiative(persona1);
+                initiativePersona2 = persona2.RollInitiative(persona2);
+                Console.WriteLine("\nИнициатива бойцов: " +
+                    $"\n{persona1.ShowClassName()} - {initiativePersona1}" +
+                    $"\n{persona2.ShowClassName()} - {initiativePersona2}\n");
+
+                if(initiativePersona1 == 0)
+                {
+                    Console.WriteLine($"Первым атакует: {persona2.ShowClassName()}" +
+                        $"{persona1.ShowClassName()} провал инициативы, пропускает ход.");
+                    StartAttackStage(persona2, persona1);
+                }
+                else if(initiativePersona2 == 0)
+                {
+                    Console.WriteLine($"Первым атакует: {persona1.ShowClassName()}" +
+                        $"{persona2.ShowClassName()} провал инициативы, пропускает ход.");
+                    StartAttackStage(persona1, persona2);
+                }
+                else if(initiativePersona1 > initiativePersona2)
+                {
+                    Console.WriteLine($"Первым атакует: {persona1.ShowClassName()}");
+                    StartAttackStage(persona1, persona2);
+                    StartAttackStage(persona2, persona1);
+                }
+                else if(initiativePersona2 > initiativePersona1)
+                {
+                    Console.WriteLine($"Первым атакует: {persona2.ShowClassName()}");
+                    StartAttackStage(persona2, persona1);
+                    StartAttackStage(persona1, persona2);
+                }
+                else
+                {
+                    continue;
+                }
+
+                Console.WriteLine("\nИтог хода: \n");
+                persona1.ShowInfo();
+                persona2.ShowInfo();
+
+                if (persona1.IsDead() == true && persona2.IsDead() == false)
+                {
+                    isExit = true;
+                    Console.WriteLine($"Победитель: {persona2.ShowClassName()}");
+                }
+                else if(persona2.IsDead() == true && persona1.IsDead() == false)
+                {
+                    isExit = true;
+                    Console.WriteLine($"Победитель: {persona1.ShowClassName()}");
+                }
+                else if(persona1.IsDead() == true && persona2.IsDead() == true)
+                {
+                    isExit = true;
+                    Console.WriteLine($"Ничья");
+                }
+                Console.Write("Нажмите любую кнопку, чтобы продолжить....");
+                Console.ReadKey();
+                round++;
+            }
+            Console.ReadKey();
+        }
+
+        private static void StartAttackStage(Persona persona1, Persona persona2)
+        {
+            string hit;
+            int damage;
+
+            hit = persona1.MakeHit(persona1, persona2);
+            persona1.LoseEvasioneCheck(persona1, hit);
+            damage = persona1.MakeDamage(persona1, hit);
+
+            if (damage != 0)
+            {
+                persona2.TakeDamage(persona2, damage);
+            }
+        }
+    }
+
+    class Persona
+    {
+        protected string ClassName = "None";
+        protected int HealthPoint = 100;
+        protected int EnergyPoint = 0;
+        protected int ArmorProtection = 0;
+        protected int Evasione = 10;
+        protected int AttackBonus = 0;
+        protected int CritChance = 20;
+        protected int CritRate = 2;
+        protected int CritFail = 1;
+        protected int BaseDamage = 5;
+        protected int Initiative = 0;
+        protected int MinRoll = 1;
+        protected int MaxRoll = 21;
+        protected int LostEvasione;
+        protected Random random = new Random();
+
+        public string MakeHit(Persona persona1, Persona persona2)
+        {
+            int DiceRoll = Roll(MinRoll, MaxRoll);
+            int TotalRoll = DiceRoll + persona1.AttackBonus;
+
+            if (DiceRoll <= CritFail)
+            {
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} - критический промах");
+                return "CritFail";
+            }
+            else if(DiceRoll >= CritChance)
+            {
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} - критическое попадание");
+                return "CritHit";
+            }
+
+            if (persona2.Evasione < TotalRoll)
+            {
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.AttackBonus} = {TotalRoll} > {persona2.ClassName} уклонение: {persona2.Evasione} - попадание");
+                return "Hit";
+            }
+            else if (persona2.Evasione >= TotalRoll)
+            {
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.AttackBonus} = {TotalRoll} <= {persona2.ClassName} уклонение: {persona2.Evasione} - промах");
+                return "Fail";
+            }
+
+            return "";
+        }
+
+        public int MakeDamage(Persona persona, string hit)
+        {
+            if(hit == "Hit")
+            {
+                Console.WriteLine($"{persona.ClassName} наносит {persona.BaseDamage} урона");
+                return persona.BaseDamage;
+            }
+            else if (hit == "CritHit")
+            {
+                Console.WriteLine($"{persona.ClassName} наносит: {persona.BaseDamage} * {persona.CritRate} = {persona.BaseDamage * persona.CritRate} урона");
+                return persona.BaseDamage * persona.CritRate;
+            }
+
+            return 0;
+        }
+
+        public void TakeDamage(Persona persona, int takenDamage)
+        {
+            Console.WriteLine($"{persona.ClassName} поглощает {persona.ArmorProtection} урона и получает {takenDamage - persona.ArmorProtection} урона");
+            persona.HealthPoint -= (takenDamage - persona.ArmorProtection);
+        }
+
+        public int RollInitiative(Persona persona)
+        {
+            int DiceRoll = Roll(MinRoll, MaxRoll);
+            return DiceRoll + persona.Initiative;
+        }
+
+        public int Roll(int minRoll, int maxRoll)
+        {
+            return random.Next(minRoll, maxRoll);
+        }
+
+        public bool IsDead()
+        {
+            if(HealthPoint <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void LoseEvasioneCheck(Persona persona, string hit)
+        {
+            if(persona.Evasione != 0 && hit == "CritFail")
+            {
+                Console.WriteLine($"{persona.ShowClassName()} подставился под удар, уклонение = 0 до следующего хода");
+                persona.LostEvasione = persona.Evasione;
+                persona.Evasione = 0;
+            }
+            else if(persona.Evasione == 0 && hit != "CritFail")
+            {
+                persona.Evasione = persona.LostEvasione;
+            }
+        }
+
+        public string ShowClassName()
+        {
+            return ClassName;
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{ClassName}\nЗдоровье: {HealthPoint} \nЭнергия: {EnergyPoint} \n");
+
+        }
+    }
+
+    class Barbarian : Persona
+    {
+        public Barbarian()
+        {
+            ClassName = "Варвар";
+            HealthPoint += 50;
+            BaseDamage += 5;
+            CritRate += 1;
+            AttackBonus -= 2;
+            Initiative -= 1;
+        }
+    }
+
+    class Knight : Persona
+    {
+        public Knight()
+        {
+            ClassName = "Рыцарь";
+            HealthPoint += 20;
+            ArmorProtection += 4;
+            Evasione -= 2;
+            Initiative -= 2;
+        }
+    }
+
+    class Gladiator : Persona
+    {
+        public Gladiator()
+        {
+            ClassName = "Гладиатор";
+            HealthPoint += 30;
+            ArmorProtection += 2;
+            BaseDamage += 2;
+        }
+    }
+
+    class Paladin : Persona
+    {
+        public Paladin()
+        {
+            ClassName = "Паладин";
+            HealthPoint += 20;
+            ArmorProtection += 3;
+            AttackBonus += 1;
+            BaseDamage += 3;
+            Initiative -= 1;
+        }
+    }
+
+    class Berserk : Persona
+    {
+        public Berserk()
+        {
+            ClassName = "Берсерк";
+            HealthPoint += 15;
+            ArmorProtection += 1;
+            BaseDamage += 8;
+            Evasione -= 3;
+            Initiative += 1;
+        }
+    }
+
+    class Hunter : Persona
+    {
+        public Hunter()
+        {
+            ClassName = "Охотник";
+            ArmorProtection += 1;
+            BaseDamage += 1;
+            CritChance -= 1;
+            CritRate += 1;
+            Evasione += 2;
+            AttackBonus += 2;
+            Initiative += 1;
+        }
+    }
+
+    class Rogue : Persona
+    {
+        public Rogue()
+        {
+            ClassName = "Плут";
+            HealthPoint -= 20;
+            Evasione += 6;
+            BaseDamage -= 1;
+            CritChance -= 2;
+            CritRate += 2;
+            AttackBonus += 3;
+            Initiative += 3;
+        }
+    }
+
+    class Monk : Persona
+    {
+        public Monk()
+        {
+            ClassName = "Монах";
+            Evasione += 8;
+            AttackBonus += 5;
+            Initiative += 4;
+        }
+    }
+
+    class Assasin : Persona
+    {
+        public Assasin()
+        {
+            ClassName = "Убийца";
+            HealthPoint += 10;
+            ArmorProtection += 1;
+            BaseDamage -= 1;
+            Evasione += 5;
+            CritRate += 4;
+            CritChance -= 5;
+            Initiative += 2;
+        }
+    }
+
+    class Trickster : Persona
+    {
+        public Trickster()
+        {
+            ClassName = "Трюкач";
+            ArmorProtection += 1;
+            Evasione += 3;
+            AttackBonus += 3;
+            Initiative += 4;
+        }
+    }
+
+    class Mage : Persona
+    {
+        public Mage()
+        {
+            ClassName = "Маг";
+            HealthPoint -= 30;
+            EnergyPoint += 50;
+            BaseDamage -= 3;
+        }
+    }
+
+    class Shaman : Persona
+    {
+        public Shaman()
+        {
+            ClassName = "Шаман";
+            HealthPoint += 15;
+            EnergyPoint += 30;
+            AttackBonus += 1;
+            Evasione += 1;
+            Initiative -= 1;
+        }
+    }
+
+    class Warlock : Persona
+    {
+        public Warlock()
+        {
+            ClassName = "Чернокнижник";
+            HealthPoint -= 30;
+            EnergyPoint += 50;
+            BaseDamage -= 3;
+        }
+    }
+
+    class Priest : Persona
+    {
+        public Priest()
+        {
+            ClassName = "Жрец";
+            HealthPoint += 15;
+            EnergyPoint += 20;
+            ArmorProtection += 2;
+            AttackBonus += 2;
+            BaseDamage += 1;
+        }
+    }
+
+    class Summoner : Persona
+    {
+        public Summoner()
+        {
+            ClassName = "Призыватель";
+            HealthPoint -= 20;
+            EnergyPoint += 40;
+            ArmorProtection += 2;
+            BaseDamage -= 2;
