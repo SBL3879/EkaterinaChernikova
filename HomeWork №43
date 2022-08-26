@@ -24,7 +24,7 @@ namespace HomeWork_1
                 Console.Clear();
                 Console.WriteLine("Список товаров продавца: ");
                 trader.ShowInfo();
-                Console.WriteLine($"\nДеньги покупателя: {customer.GetMoneyCount()}");
+                Console.WriteLine($"\nДеньги покупателя: {customer.Money}");
                 Console.SetCursorPosition(0, 22);
                 Console.WriteLine("Список купленных товаров: ");
                 customer.ShowInfo();
@@ -38,14 +38,14 @@ namespace HomeWork_1
                     continue;
                 }
 
-                if(int.TryParse(userInput, out productNumber) == false || trader.GetInventorySize() <= productNumber || productNumber < 0)
+                if (int.TryParse(userInput, out productNumber) == false || trader.Inventory.Count <= productNumber || productNumber < 0)
                 {
                     continue;
                 }
 
                 productPrice = trader.GetPrice(productNumber);
 
-                if (customer.GetMoneyCount() >= productPrice)
+                if (customer.Money >= productPrice)
                 {
                     product = trader.GiveProduct(productNumber);
                     customer.TakeProduct(product);
@@ -57,8 +57,8 @@ namespace HomeWork_1
 
     class Persona
     {
-        protected List<Product> Inventory = new List<Product>();
-        protected int Money;
+        public List<Product> Inventory { get; private set; } = new List<Product>();
+        public int Money { get; protected set; }
 
         public void MakeIncome(int income)
         {
@@ -70,21 +70,11 @@ namespace HomeWork_1
             Money -= outcome;
         }
 
-        public int GetMoneyCount()
-        {
-            return Money;
-        }
-
-        public int GetInventorySize()
-        {
-            return Inventory.Count;
-        }
-
-        public void ShowInfo() 
+        public void ShowInfo()
         {
             for (int i = 0; i < Inventory.Count; i++)
             {
-                Console.Write($"{i, 2} ");
+                Console.Write($"{i,2} ");
                 Inventory[i].ShowInfo();
             }
         }
