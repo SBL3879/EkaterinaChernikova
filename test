@@ -1,7 +1,19 @@
-Persona persona1 = new Persona();
-            Persona persona2 = new Persona();
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Player persona1 = new Player();
+            Player persona2 = new Player();
+
             string usserInput;
-           
+          
             bool isExit = false;
 
             while (isExit == false)
@@ -31,9 +43,9 @@ Persona persona1 = new Persona();
             }
         }
 
-        private static Persona ChooseFighter()
+        private static Player ChooseFighter()
         {
-            Persona persona = new Persona();
+            Player persona = new Player();
             string userInput;
             bool isExit = false;
 
@@ -106,13 +118,12 @@ Persona persona1 = new Persona();
             return persona;
         }
 
-        private static void Fight(Persona persona1, Persona persona2)
+        private static void Fight(Player persona1, Player persona2)
         {
-            int initiativePersona1;
-            int initiativePersona2;
+            int initiativePlayer1;
+            int initiativePlayer2;
             int round = 1;
             bool isExit = false;
-
 
             while (isExit == false)
             {
@@ -120,33 +131,33 @@ Persona persona1 = new Persona();
                 Console.WriteLine($"Ход боя: {round}\n");
                 persona1.ShowInfo();
                 persona2.ShowInfo();
-                initiativePersona1 = persona1.RollInitiative(persona1);
-                initiativePersona2 = persona2.RollInitiative(persona2);
+                initiativePlayer1 = persona1.RollInitiative(persona1);
+                initiativePlayer2 = persona2.RollInitiative(persona2);
                 Console.WriteLine("\nИнициатива бойцов: " +
-                    $"\n{persona1.ShowClassName()} - {initiativePersona1}" +
-                    $"\n{persona2.ShowClassName()} - {initiativePersona2}\n");
+                    $"\n{persona1.ShowClassName()} - {initiativePlayer1}" +
+                    $"\n{persona2.ShowClassName()} - {initiativePlayer2}\n");
 
-                if(initiativePersona1 == 0)
+                if(initiativePlayer1 == 0)
                 {
                     Console.WriteLine($"Первым атакует: {persona2.ShowClassName()}" +
-                        $"{persona1.ShowClassName()} провал инициативы, пропускает ход.");
+                        $"\n{persona1.ShowClassName()} провал инициативы, пропускает ход.");
                     StartAttackStage(persona2, persona1);
                 }
-                else if(initiativePersona2 == 0)
+                else if(initiativePlayer2 == 0)
                 {
                     Console.WriteLine($"Первым атакует: {persona1.ShowClassName()}" +
-                        $"{persona2.ShowClassName()} провал инициативы, пропускает ход.");
+                        $"\n{persona2.ShowClassName()} провал инициативы, пропускает ход.");
                     StartAttackStage(persona1, persona2);
                 }
-                else if(initiativePersona1 > initiativePersona2)
+                else if(initiativePlayer1 > initiativePlayer2)
                 {
-                    Console.WriteLine($"Первым атакует: {persona1.ShowClassName()}");
+                    Console.WriteLine($"Первым ходит: {persona1.ShowClassName()}");
                     StartAttackStage(persona1, persona2);
                     StartAttackStage(persona2, persona1);
                 }
-                else if(initiativePersona2 > initiativePersona1)
+                else if(initiativePlayer2 > initiativePlayer1)
                 {
-                    Console.WriteLine($"Первым атакует: {persona2.ShowClassName()}");
+                    Console.WriteLine($"Первым ходит: {persona2.ShowClassName()}");
                     StartAttackStage(persona2, persona1);
                     StartAttackStage(persona1, persona2);
                 }
@@ -181,30 +192,34 @@ Persona persona1 = new Persona();
             Console.ReadKey();
         }
 
-        private static void StartAttackStage(Persona persona1, Persona persona2)
+        private static void StartAttackStage(Player persona1, Player persona2)
         {
             string hit;
             int damage;
 
+            persona1.UseSpecialAbility(persona1, persona2);
             hit = persona1.MakeHit(persona1, persona2);
             persona1.LoseEvasioneCheck(persona1, hit);
-            damage = persona1.MakeDamage(persona1, hit);
 
-            if (damage != 0)
+            if(hit == "Fail" || hit == "CritFail")
             {
-                persona2.TakeDamage(persona2, damage);
+                return;
             }
+
+            damage = persona1.MakeDamage(persona1, hit);
+            persona2.TakeDamage(persona2, damage);
         }
     }
 
-    class Persona
+    class Player
     {
-        protected string ClassName = "None";
+        public string ClassName { get; private set; }
         protected int HealthPoint = 100;
         protected int EnergyPoint = 0;
+        protected int MaxHealthPoint;
         protected int ArmorProtection = 0;
         protected int Evasione = 10;
-        protected int AttackBonus = 0;
+        protected int Accuracy = 0;
         protected int CritChance = 20;
         protected int CritRate = 2;
         protected int CritFail = 1;
@@ -212,13 +227,96 @@ Persona persona1 = new Persona();
         protected int Initiative = 0;
         protected int MinRoll = 1;
         protected int MaxRoll = 21;
-        protected int LostEvasione;
+        protected int LostEvasione = 10;
+        protected bool IsEvaseoneLost = false;
         protected Random random = new Random();
 
-        public string MakeHit(Persona persona1, Persona persona2)
+        protected bool IsMeleeAbilityUser = false;
+        protected bool IsTrickAbilityUser = false;
+        protected bool IsMagicAbilityUser = false;
+
+        protected Ability PlayerAbility;
+        protected string MeleeAbilityName;
+        protected string MeleeAbilityDescription;
+        protected int MeleeAbilityRecharge;
+        protected int MeleeAbilityDuration;
+        protected int MeleeCurrentRecharge = 0;
+        protected int MeleeCurrentDuration = 0;
+        protected bool IsAbilityActive = false;
+
+        protected Trick PlayerTrick;
+        protected string TrickAbilityName;
+        protected string TrickAbilityDescription;
+        protected int TrickAbilityRecharge;
+        protected int TrickAbilityDuration;
+        protected int TrickDamage = 0;
+        protected int TrickCurrentRecharge = 0;
+        protected int TrickCurrentDuration = 0;
+        protected bool IsCloseCombat = false;
+
+        protected Magic PlayerMagic;
+        protected string MagicName;
+        protected string MagicDescription;
+        protected string MagicTargetType;
+        protected string MagicType;
+        protected int MagicPower;
+        protected int EnergyCost;
+        protected int MagicRecharge;
+        protected int MagicDuration;
+        protected int MagicCurrentRecharge = 0;
+        protected int MagicCurrentDuration = 0;
+        protected bool IsMagicActive = false;
+        protected bool IsMagicUsed = false;
+
+        protected int ArmorProtectionBonus = 0;
+        protected int EvasioneBonus = 0;
+        protected int AccuracyBonus = 0;
+        protected int CritChanceBonus = 0;
+        protected int CritRateBonus = 0;
+        protected int BaseDamageBonus = 0;
+        protected int InitiativeBonus = 0;
+
+        public Player(string className = "None")
+        {
+            ClassName = className;
+        }
+
+        public int GetParametr(Player player, int parametrNumber)
+        {
+            switch (parametrNumber)
+            {
+                case 1:
+                    return player.HealthPoint;
+                case 2:
+                    return player.MaxHealthPoint;
+                case 3:
+                    return player.EnergyPoint;
+            }
+            return 0;
+        }
+
+        public void UseSpecialAbility(Player user, Player target)
+        {
+            if (user.IsMeleeAbilityUser == true)
+            {
+                user.PlayerAbility.Use(user);
+            }
+
+            if (user.IsTrickAbilityUser == true)
+            {
+                user.PlayerTrick.Use(user, target);
+            }
+
+            if (user.IsMagicAbilityUser == true)
+            {
+                 user.PlayerMagic.Use(user, target);
+            }
+        }
+
+        public string MakeHit(Player persona1, Player persona2)
         {
             int DiceRoll = Roll(MinRoll, MaxRoll);
-            int TotalRoll = DiceRoll + persona1.AttackBonus;
+            int TotalRoll = DiceRoll + persona1.Accuracy;
 
             if (DiceRoll <= CritFail)
             {
@@ -233,21 +331,26 @@ Persona persona1 = new Persona();
 
             if (persona2.Evasione < TotalRoll)
             {
-                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.AttackBonus} = {TotalRoll} > {persona2.ClassName} уклонение: {persona2.Evasione} - попадание");
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.Accuracy} = {TotalRoll} > {persona2.ClassName} уклонение: {persona2.Evasione} - попадание");
                 return "Hit";
             }
             else if (persona2.Evasione >= TotalRoll)
             {
-                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.AttackBonus} = {TotalRoll} <= {persona2.ClassName} уклонение: {persona2.Evasione} - промах");
+                Console.WriteLine($"{persona1.ClassName} - Атака: {DiceRoll} + {persona1.Accuracy} = {TotalRoll} <= {persona2.ClassName} уклонение: {persona2.Evasione} - промах");
                 return "Fail";
             }
 
             return "";
         }
 
-        public int MakeDamage(Persona persona, string hit)
+        public int MakeDamage(Player persona, string hit)
         {
-            if(hit == "Hit")
+            if (BaseDamage <= 0)
+            {
+                return 0;
+            }
+
+            if (hit == "Hit")
             {
                 Console.WriteLine($"{persona.ClassName} наносит {persona.BaseDamage} урона");
                 return persona.BaseDamage;
@@ -261,13 +364,62 @@ Persona persona1 = new Persona();
             return 0;
         }
 
-        public void TakeDamage(Persona persona, int takenDamage)
+        public void TakeDamage(Player persona, int takenDamage)
         {
-            Console.WriteLine($"{persona.ClassName} поглощает {persona.ArmorProtection} урона и получает {takenDamage - persona.ArmorProtection} урона");
-            persona.HealthPoint -= (takenDamage - persona.ArmorProtection);
+            int totalDamage = takenDamage - persona.ArmorProtection;
+
+            if(totalDamage <= 0)
+            {
+                totalDamage = 0;
+            }
+
+            Console.WriteLine($"{persona.ClassName} поглощает {persona.ArmorProtection} урона и получает {totalDamage} урона");
+            persona.HealthPoint -= totalDamage;
         }
 
-        public int RollInitiative(Persona persona)
+        public bool TakeHeal(Player target, int healCount)
+        {
+            int lostHealth = target.MaxHealthPoint - target.HealthPoint;
+
+            if (lostHealth >= healCount)
+            {
+                target.HealthPoint += healCount;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ExpendEnergy(Player player, int energyCost)
+        {
+            player.EnergyPoint -= energyCost;
+        }
+
+        public void ChangeStats(int[] changes, bool isIncreace)
+        {
+            if(isIncreace == true)
+            {
+                ArmorProtection += changes[0];
+                Evasione += changes[1];
+                Accuracy += changes[2];
+                CritChance += changes[3];
+                CritRate += changes[4];
+                BaseDamage += changes[5];
+                Initiative += changes[6];
+            }
+            else
+            {
+                ArmorProtection -= changes[0];
+                Evasione -= changes[1];
+                Accuracy -= changes[2];
+                CritChance -= changes[3];
+                CritRate -= changes[4];
+                BaseDamage -= changes[5];
+                Initiative -= changes[6];
+            }
+        }
+
+    public int RollInitiative(Player persona)
         {
             int DiceRoll = Roll(MinRoll, MaxRoll);
             return DiceRoll + persona.Initiative;
@@ -287,17 +439,18 @@ Persona persona1 = new Persona();
             return false;
         }
 
-        public void LoseEvasioneCheck(Persona persona, string hit)
+        public void LoseEvasioneCheck(Player persona, string hit)
         {
-            if(persona.Evasione != 0 && hit == "CritFail")
+            if(hit == "CritFail" && IsEvaseoneLost == false)
             {
-                Console.WriteLine($"{persona.ShowClassName()} подставился под удар, уклонение = 0 до следующего хода");
-                persona.LostEvasione = persona.Evasione;
-                persona.Evasione = 0;
+                Console.WriteLine($"{persona.ShowClassName()} подставился под удар, уклонение -{LostEvasione} до следующего хода");
+                persona.Evasione -= LostEvasione;
+                IsEvaseoneLost = true;
             }
-            else if(persona.Evasione == 0 && hit != "CritFail")
+            else if(hit != "CritFail" && IsEvaseoneLost == true)
             {
-                persona.Evasione = persona.LostEvasione;
+                persona.Evasione += LostEvasione;
+                IsEvaseoneLost = false;
             }
         }
 
@@ -309,118 +462,497 @@ Persona persona1 = new Persona();
         public void ShowInfo()
         {
             Console.WriteLine($"{ClassName}\nЗдоровье: {HealthPoint} \nЭнергия: {EnergyPoint} \n");
-
         }
     }
 
-    class Barbarian : Persona
+    class Ability
     {
-        public Barbarian()
+        private string AbilityName;
+        private string AbilityDescription;
+        private int AbilityRecharge;
+        private int AbilityDuration;
+        private int CurrentRecharge = 0;
+        private int CurrentDuration = 0;
+        private bool IsAbilityActive = false;
+
+        private int[] BonusStats = new int[7];
+
+        public Ability(string abilityName, int abilityRecharge, int abilityDuration, 
+                       int armorProtectionBonus, int evasioneBonus, int accuracyBonus, int critChanceBonus, int critRateBonus,
+                       int baseDamageBonus, int initiativeBonus, string abilityDescription)
         {
-            ClassName = "Варвар";
+            AbilityName = abilityName;
+            AbilityDescription = abilityDescription;
+            AbilityRecharge = abilityRecharge;
+            AbilityDuration = abilityDuration;
+            BonusStats[0] = armorProtectionBonus;
+            BonusStats[1] = evasioneBonus;
+            BonusStats[2] = accuracyBonus;
+            BonusStats[3] = critChanceBonus;
+            BonusStats[4] = critRateBonus;
+            BonusStats[5] = baseDamageBonus;
+            BonusStats[6] = initiativeBonus;
+        }
+
+        public void Use(Player user)
+        {
+            if (CurrentDuration > 0)
+            {
+                IsAbilityActive = true;
+                CurrentDuration--;
+            }
+            else if (CurrentDuration == 0 && IsAbilityActive == true)
+            {
+                user.ChangeStats(BonusStats, false);
+                IsAbilityActive = false;
+            }
+
+            if (CurrentRecharge == 0)
+            {
+                CurrentRecharge = AbilityRecharge;
+                CurrentDuration = AbilityDuration;
+
+                Console.WriteLine($"{user.ClassName} использует {AbilityName} и получает: {AbilityDescription}");
+                
+                user.ChangeStats(BonusStats, true);
+                IsAbilityActive = true;
+            }
+            else if (CurrentRecharge > 0 && CurrentRecharge <= AbilityRecharge)
+            {
+                CurrentRecharge--;
+            }
+        }
+    }
+
+    class Trick
+    {
+        private string TrickName;
+        private string TrickDescription;
+        private int TrickRecharge;
+        private int TrickDuration;
+        private int CurrentRecharge = 0;
+        private int CurrentDuration = 0;
+        private int TrickDamage = 0;
+        private bool IsTrickActive = false;
+
+        private int[] FineStats = new int[7];
+
+        public Trick(string trickName, int trickRecharge, int trickDuration, int trickDamage,
+                       int armorProtectionFine, int evasioneFine, int accuracyFine, int critChanceFine, int critRateFine,
+                       int baseDamageFine, int initiativeFine, string trickDescription)
+        {
+            TrickName = trickName;
+            TrickDescription = trickDescription;
+            TrickRecharge = trickRecharge;
+            TrickDuration = trickDuration;
+            TrickDamage = trickDamage;
+            FineStats[0] = armorProtectionFine;
+            FineStats[1] = evasioneFine;
+            FineStats[2] = accuracyFine;
+            FineStats[3] = critChanceFine;
+            FineStats[4] = critRateFine;
+            FineStats[5] = baseDamageFine;
+            FineStats[6] = initiativeFine;
+        }
+
+        public void Use(Player user, Player target)
+        {
+            if (CurrentDuration > 0)
+            {
+                IsTrickActive = true;
+                CurrentDuration--;
+            }
+            else if (CurrentDuration == 0 && IsTrickActive == true)
+            {
+                target.ChangeStats(FineStats, true);
+                IsTrickActive = false;
+            }
+
+            if (CurrentRecharge == 0)
+            {
+                CurrentRecharge = TrickRecharge;
+                CurrentDuration = TrickDuration;
+
+                Console.WriteLine($"{user.ClassName} использует {TrickName}, {target.ClassName} получает: {TrickDescription}");
+
+                if(TrickDamage > 0)
+                {
+                    target.TakeDamage(target, TrickDamage);
+                }
+
+                target.ChangeStats(FineStats, false);
+                IsTrickActive = true;
+            }
+            else if (CurrentRecharge > 0 && CurrentRecharge <= TrickRecharge)
+            {
+                CurrentRecharge--;
+            }
+        }
+    }
+
+    class Magic
+    {
+        private string MagicName;
+        private string MagicDescription;
+        private string MagicTargetType;
+        private string MagicType;
+        private int MagicPower;
+        private int EnergyCost;
+        private int MagicRecharge;
+        private int MagicDuration;
+        private int MagicCurrentRecharge = 0;
+        private int MagicCurrentDuration = 0;
+        private bool IsMagicActive = false;
+        private bool IsMagicUsed = false;
+        private bool IsEnergyEnough = false;
+
+        public Magic(string magicName, string magicTargetType, string magicType, int magicPower, int energyCost, int magicRecharge, 
+                     int magicDuration, string magicDescription)
+        {
+            MagicName = magicName;
+            MagicDescription = magicDescription;
+            MagicTargetType = magicTargetType;
+            MagicType = magicType;
+            MagicPower = magicPower;
+            EnergyCost = energyCost;
+            MagicRecharge = magicRecharge;
+            MagicDuration = magicDuration;
+        }
+
+        public void Use(Player user, Player target)
+        {
+            if (user.GetParametr(user, 3) >= EnergyCost)
+            {
+                IsEnergyEnough = true;
+            }
+            else
+            {
+                IsEnergyEnough = false;
+            }
+
+            if (MagicCurrentDuration > 0)
+            {
+                MagicCurrentDuration--;
+            }
+
+            if (MagicCurrentRecharge > 0)
+            {
+                MagicCurrentRecharge--;
+            }
+            else
+            {
+                MagicCurrentRecharge = MagicRecharge;
+                IsMagicUsed = false;
+            }
+
+            if (MagicTargetType == "На себя" && IsMagicUsed == false)
+            {
+                if (MagicType == "Лечение")
+                {
+                    if (IsEnergyEnough == true && user.TakeHeal(user, MagicPower) == true)
+                    {
+                        user.ExpendEnergy(user, EnergyCost);
+                        IsMagicUsed = true;
+                    }
+                }
+
+                if (MagicType == "Усиление")
+                {
+                    if (IsEnergyEnough == true && MagicCurrentDuration == 0 && IsMagicActive == false)
+                    {
+                        user.ChangeStats(new int[7] { MagicPower, MagicPower, 0, 0, 0, 0, 0 }, true);
+                        user.ExpendEnergy(user, EnergyCost);
+                        MagicCurrentDuration = MagicDuration;
+                        IsMagicActive = true;
+                    }
+                    else if (MagicCurrentDuration == 0 && IsMagicActive == true)
+                    {
+                        user.ChangeStats(new int[7] { MagicPower, MagicPower, 0, 0, 0, 0, 0 }, false);
+                        IsMagicActive = false;
+                    }
+                }
+            }
+
+            if (MagicTargetType == "На врага") 
+            {
+                if (IsEnergyEnough == true && MagicType == "Урон" && IsMagicUsed == false)
+                {
+                    target.TakeDamage(target, MagicPower);
+                    user.ExpendEnergy(user, EnergyCost);
+                    IsMagicUsed = true;
+                }
+
+                if (MagicType == "Ослабление" && IsMagicUsed == false)
+                {
+                    if (IsEnergyEnough == true && MagicCurrentDuration == 0 && IsMagicActive == false)
+                    {
+                        target.ChangeStats(new int[7] { 0, MagicPower, MagicPower, -MagicPower, MagicPower, MagicPower, MagicPower }, false);
+                        user.ExpendEnergy(user, EnergyCost);
+                        MagicCurrentDuration = MagicDuration;
+                        IsMagicActive = true;
+                    }
+                    else if (MagicCurrentDuration == 0 && IsMagicActive == true)
+                    {
+                        target.ChangeStats(new int[7] { 0, MagicPower, MagicPower, -MagicPower, MagicPower, MagicPower, MagicPower }, true);
+                        IsMagicActive = false;
+                    }
+                }
+            }
+
+            if (IsEnergyEnough == true && MagicCurrentRecharge == MagicRecharge && IsMagicUsed == true)
+            {
+                Console.WriteLine($"{user.ClassName} использует {MagicName}, цель получает: {MagicDescription}.");
+            }
+        }
+    }
+
+    class Barbarian : Player
+    {
+        public Barbarian() : base("Варвар")
+        {
             HealthPoint += 50;
             BaseDamage += 5;
             CritRate += 1;
-            AttackBonus -= 2;
+            Accuracy -= 2;
             Initiative -= 1;
+
+            IsMeleeAbilityUser = true;
+                        
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Ярость",
+                MeleeAbilityRecharge = 10,
+                MeleeAbilityDuration = 5,
+                ArmorProtectionBonus = 2, 
+                EvasioneBonus = 0, 
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 5, 
+                InitiativeBonus = 0,
+                MeleeAbilityDescription = $"+{BaseDamageBonus} к урону и +{ArmorProtectionBonus} к броне на {MeleeAbilityDuration} ходов, перезарядка {MeleeAbilityRecharge} ходов.");
         }
     }
 
-    class Knight : Persona
+    class Knight : Player
     {
-        public Knight()
+        public Knight() : base("Рыцарь")
         {
-            ClassName = "Рыцарь";
             HealthPoint += 20;
             ArmorProtection += 4;
             Evasione -= 2;
             Initiative -= 2;
+
+            IsMeleeAbilityUser = true;
+
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Стена щитов",
+                MeleeAbilityRecharge = 5,
+                MeleeAbilityDuration = 3,
+                ArmorProtectionBonus = 16,
+                EvasioneBonus = -8,
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 0,
+                MeleeAbilityDescription = $"+{ArmorProtectionBonus} к броне и {EvasioneBonus} к уклонению на {MeleeAbilityDuration} ходов, перезарядка {MeleeAbilityRecharge} ходов.");
         }
     }
 
-    class Gladiator : Persona
+    class Gladiator : Player
     {
-        public Gladiator()
+        public Gladiator() : base("Гладиатор")
         {
-            ClassName = "Гладиатор";
             HealthPoint += 30;
             ArmorProtection += 2;
             BaseDamage += 2;
+
+            IsMeleeAbilityUser = true;
+
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Боевой клич",
+                MeleeAbilityRecharge = 8,
+                MeleeAbilityDuration = 4,
+                ArmorProtectionBonus = ArmorProtection,
+                EvasioneBonus = 0,
+                AccuracyBonus = 5,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = BaseDamage,
+                InitiativeBonus = 0,
+                MeleeAbilityDescription = $"удваивает свой урон и броню, получает +{AccuracyBonus} к точности, на {MeleeAbilityDuration} ходов, перезарядка {MeleeAbilityRecharge} ходов.");
         }
     }
 
-    class Paladin : Persona
+    class Paladin : Player
     {
-        public Paladin()
+        public Paladin() : base("Паладин")
         {
-            ClassName = "Паладин";
             HealthPoint += 20;
+            MaxHealthPoint = HealthPoint;
+            EnergyPoint += 25;
             ArmorProtection += 3;
-            AttackBonus += 1;
+            Accuracy += 1;
             BaseDamage += 3;
             Initiative -= 1;
+
+            IsMeleeAbilityUser = true;
+            IsMagicAbilityUser = true;
+
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Кара",
+                MeleeAbilityRecharge = 5,
+                MeleeAbilityDuration = 1,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 0,
+                AccuracyBonus = 5,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 25,
+                InitiativeBonus = 0,
+                MeleeAbilityDescription = $"+{BaseDamageBonus} урона и +{AccuracyBonus} к следующей атаке, перезарядка {MeleeAbilityRecharge} ходов.");
+
+            PlayerMagic = new Magic(
+                MagicName = "Возложение рук",
+                MagicTargetType = "На себя",
+                MagicType = "Лечение",
+                MagicPower = 6,
+                EnergyCost = 1,
+                MagicRecharge = 2,
+                MagicDuration = 0,
+                MagicDescription = $"Лечит себя на {MagicPower} хитов, перезарядка {MagicRecharge} ходов."
+                );
         }
     }
 
-    class Berserk : Persona
+    class Berserk : Player
     {
-        public Berserk()
+        public Berserk() : base("Берсерк")
         {
-            ClassName = "Берсерк";
             HealthPoint += 15;
             ArmorProtection += 1;
             BaseDamage += 8;
             Evasione -= 3;
             Initiative += 1;
+
+            IsMeleeAbilityUser = true;
+
+            MeleeAbilityName = "Боевое безумие";
+            BaseDamageBonus = 10;
+            InitiativeBonus = 5;
+            AccuracyBonus = -2;
+            MeleeAbilityRecharge = 4;
+            MeleeAbilityDuration = 3;
+            MeleeAbilityDescription = $"+{BaseDamageBonus} урона, +{InitiativeBonus} к инициативе, {AccuracyBonus} к точности, перезарядка {MeleeAbilityRecharge} ходов, длительность {MeleeAbilityDuration} ходов.";
         }
     }
 
-    class Hunter : Persona
+    class Hunter : Player
     {
-        public Hunter()
+        public Hunter() : base("Охотник")
         {
-            ClassName = "Охотник";
             ArmorProtection += 1;
             BaseDamage += 1;
             CritChance -= 1;
             CritRate += 1;
             Evasione += 2;
-            AttackBonus += 2;
+            Accuracy += 2;
             Initiative += 1;
+
+            IsTrickAbilityUser = true;
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Капкан",
+                TrickAbilityRecharge = 6,
+                TrickAbilityDuration = 1,
+                TrickDamage = 15,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 5,
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 5,
+                TrickAbilityDescription = $"{TrickDamage} урона, -{EvasioneBonus} уклонения, -{InitiativeBonus} инициативы на один ход, перезарядка {TrickAbilityRecharge} ходов.");
         }
     }
 
-    class Rogue : Persona
+    class Rogue : Player
     {
-        public Rogue()
+        public Rogue() : base("Плут")
         {
-            ClassName = "Плут";
             HealthPoint -= 20;
             Evasione += 6;
             BaseDamage -= 1;
             CritChance -= 2;
             CritRate += 2;
-            AttackBonus += 3;
+            Accuracy += 3;
             Initiative += 3;
+
+            IsTrickAbilityUser = true;
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Грязь в лицо",
+                TrickAbilityRecharge = 3,
+                TrickAbilityDuration = 1,
+                TrickDamage = 0,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 5,
+                AccuracyBonus = 5,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 5,
+                TrickAbilityDescription = $"-{EvasioneBonus} уклонения, -{AccuracyBonus} точность, -{InitiativeBonus} инициативы и морального унижения на 1 ход, перезарядка {TrickAbilityRecharge} ходов.");
         }
     }
 
-    class Monk : Persona
+    class Monk : Player
     {
-        public Monk()
+        public Monk() : base("Монах")
         {
-            ClassName = "Монах";
             Evasione += 8;
-            AttackBonus += 5;
+            Accuracy += 5;
             Initiative += 4;
+
+            IsMeleeAbilityUser = true;
+            IsTrickAbilityUser = true;
+
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Стойка дракона",
+                MeleeAbilityRecharge = 1,
+                MeleeAbilityDuration = 1,
+                ArmorProtectionBonus = 2,
+                EvasioneBonus = 0,
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 2,
+                InitiativeBonus = 0,
+                MeleeAbilityDescription = $"+{ArmorProtectionBonus} брони, +{BaseDamageBonus} урона."
+                );
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Унижающая мудрость",
+                TrickAbilityRecharge = 2,
+                TrickAbilityDuration = 1,
+                TrickDamage = 0,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 1,
+                AccuracyBonus = 1,
+                CritChanceBonus = -1,
+                CritRateBonus = 1,
+                BaseDamageBonus = 1,
+                InitiativeBonus = 1,
+                TrickAbilityDescription = "Моральное унижение (все параметры -1)."
+                );
         }
     }
 
-    class Assasin : Persona
+    class Assasin : Player
     {
-        public Assasin()
+        public Assasin() : base("Убийца")
         {
-            ClassName = "Убийца";
             HealthPoint += 10;
             ArmorProtection += 1;
             BaseDamage -= 1;
@@ -428,75 +960,224 @@ Persona persona1 = new Persona();
             CritRate += 4;
             CritChance -= 5;
             Initiative += 2;
+
+            IsTrickAbilityUser = true;
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Подлая атака скрытым оружием",
+                TrickAbilityRecharge = 5,
+                TrickAbilityDuration = 1,
+                TrickDamage = BaseDamage * CritRate,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 0,
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 0,
+                TrickAbilityDescription = $"{TrickDamage} урона."
+                );
         }
     }
 
-    class Trickster : Persona
+    class Trickster : Player
     {
-        public Trickster()
+        public Trickster() : base("Трюкач")
         {
-            ClassName = "Трюкач";
             ArmorProtection += 1;
             Evasione += 3;
-            AttackBonus += 3;
+            Accuracy += 3;
             Initiative += 4;
+
+            IsTrickAbilityUser = true;
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Гипнотические часы",
+                TrickAbilityRecharge = 6,
+                TrickAbilityDuration = 2,
+                TrickDamage = 0,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 10,
+                AccuracyBonus = 10,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 0,
+                TrickAbilityDescription = $"-{EvasioneBonus} уклонения, -{AccuracyBonus} точности, на {TrickAbilityDuration} ходов, перезарядка {TrickAbilityRecharge} ходов."
+                );
         }
     }
 
-    class Mage : Persona
+    class Mage : Player
     {
-        public Mage()
+        public Mage() : base("Маг")
         {
-            ClassName = "Маг";
             HealthPoint -= 30;
             EnergyPoint += 50;
             BaseDamage -= 3;
+
+            IsMagicAbilityUser = true;
+
+            PlayerMagic = new Magic(
+                MagicName = "Шар огня",
+                MagicTargetType = "На врага",
+                MagicType = "Урон",
+                MagicPower = 40,
+                EnergyCost = 10,
+                MagicRecharge = 3,
+                MagicDuration = 0,
+                MagicDescription = $"{MagicPower} урона, перезарядка {MagicRecharge} ходов."
+                );
         }
     }
 
-    class Shaman : Persona
+    class Shaman : Player
     {
-        public Shaman()
+        public Shaman() : base("Шаман")
         {
-            ClassName = "Шаман";
             HealthPoint += 15;
             EnergyPoint += 30;
-            AttackBonus += 1;
+            Accuracy += 1;
             Evasione += 1;
             Initiative -= 1;
+
+            IsMagicAbilityUser = true;
+            
+            PlayerMagic = new Magic(
+                MagicName = "Духовный оберег",
+                MagicTargetType = "На себя",
+                MagicType = "Усиление",
+                MagicPower = 5,
+                EnergyCost = 6,
+                MagicRecharge = 3,
+                MagicDuration = 3,
+                MagicDescription = $"+{MagicPower} к броне и уклонению, на {MagicDuration} ходов, перезарядка {MagicRecharge} ходов."
+                );
         }
     }
 
-    class Warlock : Persona
+    class Warlock : Player
     {
-        public Warlock()
+        public Warlock() : base("Чернокнижник")
         {
-            ClassName = "Чернокнижник";
             HealthPoint -= 30;
             EnergyPoint += 50;
             BaseDamage -= 3;
+
+            IsTrickAbilityUser = true;
+            IsMagicAbilityUser = true;
+
+            PlayerTrick = new Trick(
+                TrickAbilityName = "Атака фамильяра",
+                TrickAbilityRecharge = 0,
+                TrickAbilityDuration = 0,
+                TrickDamage = 8,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 0,
+                AccuracyBonus = 0,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 0,
+                InitiativeBonus = 0,
+                TrickAbilityDescription = $"{TrickDamage} урона наносит фамильяр."
+                );
+
+            PlayerMagic = new Magic(
+                MagicName = "Проклятье",
+                MagicTargetType = "На врага",
+                MagicType = "Ослабление",
+                MagicPower = 10,
+                EnergyCost = 10,
+                MagicRecharge = 5,
+                MagicDuration = 5,
+                MagicDescription = $"{MagicPower} штраф к характеристикам на {MagicDuration} ходов, перезарядка {MagicRecharge} ходов."
+                );
         }
     }
 
-    class Priest : Persona
+    class Priest : Player
     {
-        public Priest()
+        public Priest() : base("Жрец")
         {
-            ClassName = "Жрец";
             HealthPoint += 15;
+            MaxHealthPoint = HealthPoint;
             EnergyPoint += 20;
             ArmorProtection += 2;
-            AttackBonus += 2;
+            Accuracy += 2;
             BaseDamage += 1;
+
+            IsMeleeAbilityUser = true;
+            IsMagicAbilityUser = true;
+
+            PlayerAbility = new Ability(
+                MeleeAbilityName = "Bonk",
+                MeleeAbilityRecharge = 2,
+                MeleeAbilityDuration = 0,
+                ArmorProtectionBonus = 0,
+                EvasioneBonus = 0,
+                AccuracyBonus = 5,
+                CritChanceBonus = 0,
+                CritRateBonus = 0,
+                BaseDamageBonus = 25,
+                InitiativeBonus = 2,
+                MeleeAbilityDescription = $"+{BaseDamageBonus} урона и +{AccuracyBonus} к следующей атаке, перезарядка {MeleeAbilityRecharge} ходов.");
+
+            PlayerMagic = new Magic(
+                MagicName = "Слово лечения",
+                MagicTargetType = "На себя",
+                MagicType = "Лечение",
+                MagicPower = 20,
+                EnergyCost = 4,
+                MagicRecharge = 3,
+                MagicDuration = 0,
+                MagicDescription = $"Лечит себя на {MagicPower} хитов, перезарядка {MagicRecharge} ходов."
+                );
         }
     }
 
-    class Summoner : Persona
+    class Summoner : Player
     {
-        public Summoner()
+        public Summoner() : base("Призыватель")
         {
-            ClassName = "Призыватель";
             HealthPoint -= 20;
             EnergyPoint += 40;
             ArmorProtection += 2;
             BaseDamage -= 2;
+
+            PlayerMagic = new Magic(
+                MagicName = "Призыв пауков",
+                MagicTargetType = "На врага",
+                MagicType = "Призыв",
+                MagicPower = 10,
+                EnergyCost = 10,
+                MagicRecharge = 5,
+                MagicDuration = 5,
+                MagicDescription = $"{MagicPower} штраф к характеристикам на {MagicDuration} ходов, перезарядка {MagicRecharge} ходов."
+                );
+        }
+    }
+}
+
+
+
+//user.IsMagicUsed = false;
+//
+//switch (user.MagicType)
+//{
+//    case "Лечение":
+//        user.IsMagicUsed = target.TakeHeal(target, user.MagicPower);
+//        break;
+//    case "":
+//        break;
+//}
+//
+//if (user.EnergyPoint >= user.EnergyCost && user.IsMagicUsed == true)
+//{
+//    Console.WriteLine($"{user.ClassName} использует магию {user.MagicAbilityName}: {user.MagicAbilityDescription}");
+//    user.EnergyPoint -= user.EnergyCost;
+//}
+//else
+//{
+//    return;
+//}
+
