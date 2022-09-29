@@ -699,6 +699,33 @@ namespace HomeWork_1
                 }
             }
 
+            if(MagicTargetType == "На область")
+            {
+                if(MagicType == "Призыв")
+                {
+                    if(IsMagicActive == true && MagicCurrentDuration == 0)
+                    {
+                        IsMagicActive = false;
+                        Console.WriteLine("Время призыва паука закончилось.");
+                    }
+
+                    if(IsMagicActive == true && MagicCurrentDuration > 0)
+                    {
+                        Console.WriteLine($"Паук наносит: {MagicPower} единиц урона.");
+                        target.TakeDamage(target, MagicPower);
+                    }
+
+                    if(IsEnergyEnough == true && IsMagicActive == false && MagicCurrentDuration == 0)
+                    {
+                        MagicCurrentDuration = MagicDuration;
+                        MagicCurrentRecharge = MagicRecharge;
+                        user.ExpendEnergy(user, EnergyCost);
+                        IsMagicUsed = true;
+                        IsMagicActive = true;
+                    }
+                }
+            }
+
             if (IsEnergyEnough == true && MagicCurrentRecharge == MagicRecharge && IsMagicUsed == true)
             {
                 Console.WriteLine($"{user.ClassName} использует {MagicName}, цель получает: {MagicDescription}.");
@@ -1144,40 +1171,18 @@ namespace HomeWork_1
             ArmorProtection += 2;
             BaseDamage -= 2;
 
+            IsMagicAbilityUser = true;
+
             PlayerMagic = new Magic(
-                MagicName = "Призыв пауков",
-                MagicTargetType = "На врага",
+                MagicName = "Призыв паука",
+                MagicTargetType = "На область",
                 MagicType = "Призыв",
-                MagicPower = 10,
-                EnergyCost = 10,
-                MagicRecharge = 5,
+                MagicPower = 13,
+                EnergyCost = 5,
+                MagicRecharge = 1,
                 MagicDuration = 5,
-                MagicDescription = $"{MagicPower} штраф к характеристикам на {MagicDuration} ходов, перезарядка {MagicRecharge} ходов."
+                MagicDescription = $"Призван паук с уроном в {MagicPower} ед. на {MagicDuration} ходов."
                 );
         }
     }
 }
-
-
-
-//user.IsMagicUsed = false;
-//
-//switch (user.MagicType)
-//{
-//    case "Лечение":
-//        user.IsMagicUsed = target.TakeHeal(target, user.MagicPower);
-//        break;
-//    case "":
-//        break;
-//}
-//
-//if (user.EnergyPoint >= user.EnergyCost && user.IsMagicUsed == true)
-//{
-//    Console.WriteLine($"{user.ClassName} использует магию {user.MagicAbilityName}: {user.MagicAbilityDescription}");
-//    user.EnergyPoint -= user.EnergyCost;
-//}
-//else
-//{
-//    return;
-//}
-
