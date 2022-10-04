@@ -7,68 +7,57 @@ namespace HomeWork_1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
-            Trader trader = new Trader();
-            Customer customer = new Customer(2500);
-            Product product;
+                Trader trader = new Trader();
+                Customer customer = new Customer(2500);
 
-            string userInput;
-            string quitCommand = "Q";
-            int productNumber;
-            int productPrice;
-            bool isExit = false;
+                string userInput;
+                string quitCommand = "Q";
+                int costomerChoose;
+                bool isExit = false;
 
-            while (isExit == false)
-            {
-                Console.Clear();
-                Console.WriteLine("Список товаров продавца: ");
-                trader.ShowInfo();
-                Console.WriteLine($"\nДеньги покупателя: {customer.Money}");
-                Console.SetCursorPosition(0, 22);
-                Console.WriteLine("Список купленных товаров: ");
-                customer.ShowInfo();
-                Console.SetCursorPosition(0, 19);
-                Console.Write($"\nКупить товар номер ({quitCommand} - выйти): ");
-                userInput = Console.ReadLine();
-
-                if (userInput == quitCommand)
+                while (isExit == false)
                 {
-                    isExit = true;
-                    continue;
-                }
+                    Console.Clear();
+                    Console.WriteLine("Список товаров продавца: ");
+                    trader.ShowInfo();
+                    Console.WriteLine($"\nДеньги покупателя: {customer.Money}");
+                    Console.SetCursorPosition(0, 22);
+                    Console.WriteLine("Список купленных товаров: ");
+                    customer.ShowInfo();
+                    Console.SetCursorPosition(0, 19);
+                    Console.Write($"\nКупить товар номер ({quitCommand} - выйти): ");
+                    userInput = Console.ReadLine();
 
-                if (int.TryParse(userInput, out productNumber) == false || trader.Inventory.Count <= productNumber || productNumber < 0)
-                {
-                    continue;
-                }
+                    if (userInput == quitCommand)
+                    {
+                        isExit = true;
+                        continue;
+                    }
 
-                productPrice = trader.GetPrice(productNumber);
+                    if (int.TryParse(userInput, out costomerChoose) == false || trader.ShowInventorySize() <= costomerChoose || costomerChoose < 0)
+                    {
+                        continue;
+                    }
 
-                if (customer.Money >= productPrice)
-                {
-                    product = trader.GiveProduct(productNumber);
-                    customer.TakeProduct(product);
-                    trader.MakeIncome(productPrice);
+                    if (customer.Money >= trader.GetPrice(costomerChoose))
+                    {
+                        Product product = trader.GiveProduct(costomerChoose);
+                        int price = trader.GetPrice(costomerChoose);
+
+                        customer.TakeProduct(product);
+                        customer.Pay(price);
+                        trader.TakeMoney(price);
+                    }
                 }
             }
         }
-    }
 
     class Persona
     {
-        public List<Product> Inventory { get; private set; } = new List<Product>();
+        protected List<Product> Inventory = new List<Product>();
         public int Money { get; protected set; }
-
-        public void MakeIncome(int income)
-        {
-            Money += income;
-        }
-
-        public void MakeOutcome(int outcome)
-        {
-            Money -= outcome;
-        }
 
         public void ShowInfo()
         {
@@ -119,14 +108,23 @@ namespace HomeWork_1
             Inventory.Add(new Product("Сметанище", 400));
         }
 
-        public int GetPrice(int productNNumber)
+        public int ShowInventorySize()
         {
-            return Inventory[productNNumber].Price;
+            return Inventory.Count;
+        }
+
+        public int GetPrice(int productNumber)
+        {
+            return Inventory[productNumber].Price;
         }
 
         public Product GiveProduct(int productNumber)
         {
             return Inventory[productNumber];
+        }
+        public void TakeMoney(int income)
+        {
+            Money += income;
         }
     }
 
@@ -139,8 +137,12 @@ namespace HomeWork_1
 
         public void TakeProduct(Product product)
         {
-            Money -= product.Price;
             Inventory.Add(product);
+        }
+
+        public void Pay(int price)
+        {
+            Money -= price;
         }
     }
 }
