@@ -1,0 +1,1497 @@
+using System;
+using System.Collections.Generic;
+
+namespace HomeWork_1
+{
+    class Program
+    {
+        
+        static void Main(string[] args)
+        {
+            Player player1 = null;
+            Player player2 = null;
+
+            Arena arena = new Arena();
+
+            string userInput;
+
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                if (player1 != null && player2 != null)
+                {
+                    Console.WriteLine(
+                         $"\n Боец 1 - {player1.ToString()}" +
+                         $"\n Боец 2 - {player2.ToString()}");
+                }
+
+                const string CommandChooseFighter = "1";
+                const string CommandFight = "2";
+                const string CommandExit = "3";
+
+                Console.Write($"\n{CommandChooseFighter} - Выбрать бойцов " +
+                              $"\n{CommandFight} - Начать бой " +
+                              $"\n{CommandExit} - Выйти \n\nВаш выбор: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case CommandChooseFighter:
+                        player1 = arena.ChooseFighter();
+                        player2 = arena.ChooseFighter();
+                        break;
+                    case CommandFight:
+                        arena.Fight(player1, player2);
+                        break;
+                    case CommandExit:
+                        isExit = true;
+                        break;
+                }                
+            }
+        }
+    }
+
+    class Arena
+    {
+        public Player ChooseFighter()
+        {
+            Player player = null;
+            List<Player> classes = new List<Player>()
+            {
+                new Barbarian(), new Knight(), new Gladiator(), new Paladin(), new Berserk(),
+                new Hunter(), new Rogue(), new Monk(), new Assasin(), new Trickster(),
+                new Mage(), new Shaman(), new Warlock(), new Priest(), new Summoner()
+            };
+
+            string userInput;
+            int userChoose;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                Console.WriteLine("Выберите бойца из списка: ");
+
+                for (int i = 0; i < classes.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {classes[i].ToString()}");
+                }
+
+                Console.Write("\nВаш выбор: ");
+
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out userChoose))
+                {
+                    player = classes[userChoose - 1];
+                }
+                else
+                {
+                    continue;
+                }
+
+                isExit = true;
+            }
+
+            return player;
+        }
+
+        public void Fight(Player player1, Player player2)
+        {
+            int initiativePlayer1;
+            int initiativePlayer2;
+            int round = 1;
+            bool isSomeoneDead = false;
+
+            while (isSomeoneDead == false)
+            {
+                Console.Clear();
+                Console.WriteLine($"Ход боя: {round}\n");
+
+                player1.ShowInfo();
+                player2.ShowInfo();
+
+                do
+                {
+                    initiativePlayer1 = player1.RollInitiative();
+                    initiativePlayer2 = player2.RollInitiative();
+                }
+                while (initiativePlayer1 == initiativePlayer2);
+
+                Console.WriteLine("\nИнициатива бойцов: " +
+                    $"\n{player1.ShowClassName()} - {initiativePlayer1}" +
+                    $"\n{player2.ShowClassName()} - {initiativePlayer2}\n");
+
+                if (initiativePlayer1 == 0)
+                {
+                    Console.WriteLine($"Первым атакует: {player2.ShowClassName()}" +
+                        $"\n{player1.ShowClassName()} провал инициативы, пропускает ход.");
+                    player2.Attack(player1);
+                }
+                else if (initiativePlayer2 == 0)
+                {
+                    Console.WriteLine($"Первым атакует: {player1.ShowClassName()}" +
+                        $"\n{player2.ShowClassName()} провал инициативы, пропускает ход.");
+                    player1.Attack(player2);
+                }
+                else if (initiativePlayer1 > initiativePlayer2)
+                {
+                    Console.WriteLine($"Первым ходит: {player1.ShowClassName()}");
+                    player1.Attack(player2);
+                    player2.Attack(player1);
+                }
+                else if (initiativePlayer2 > initiativePlayer1)
+                {
+                    Console.WriteLine($"Первым ходит: {player2.ShowClassName()}");
+                    player2.Attack(player1);
+                    player1.Attack(player2);
+                }
+                else
+                {
+                    continue;
+                }
+
+                Console.WriteLine("\nИтог хода: \n");
+                player1.ShowInfo();
+                player2.ShowInfo();
+
+                Console.Write("Нажмите любую кнопку, чтобы продолжить....");
+                Console.ReadKey();
+                round++;
+
+                if (player1.IsDead() == true || player2.IsDead() == true)
+                {
+                    isSomeoneDead = true;
+                }
+            }
+
+            Console.Clear();
+
+            if (player1.IsDead() == true && player2.IsDead() == false)
+            {
+                Console.WriteLine($"Победитель: {player2.ShowClassName()}");
+            }
+            else if (player2.IsDead() == true && player1.IsDead() == false)
+            {
+                Console.WriteLine($"Победитель: {player1.ShowClassName()}");
+            }
+            else if (player1.IsDead() == true && player2.IsDead() == true)
+            {
+                Console.WriteLine($"Ничья");
+            }
+
+            Console.ReadKey();
+        }
+    }
+
+    class Player
+    {
+        public string ClassName { get; private set; }
+        protected int HealthPoint = 100;
+        protected int EnergyPoint = 0;
+        protected int MaxHealthPoint;
+        protected int ArmorProtection = 0;
+        protected int Evasione = 10;
+        protected int Accuracy = 0;
+        protected int CritChance = 20;
+        protected int CritRate = 2;
+        protected int CritFail = 1;
+        protected int BaseDamage = 5;
+        protected int Initiative = 0;
+        protected int MinRoll = 1;
+        protected int MaxRoll = 21;
+        protected int LostEvasione = 10;
+        protected bool IsEvaseoneLost = false;
+        protected Random random = new Random();
+               
+        public Player(string className = "None")
+        {
+            ClassName = className;
+        }
+
+        public virtual void Attack(Player target)
+        {
+            string hit;
+            int damage;
+
+            hit = MakeHit(target);
+            LoseEvasioneCheck(hit);
+
+            if (hit == "Fail" || hit == "CritFail")
+            {
+                return;
+            }
+        
+            damage = MakeDamage(hit);
+            target.TakeDamage(damage);
+        }
+
+        public string MakeHit(Player target)
+        {
+            int DiceRoll = Roll(MinRoll, MaxRoll);
+            int TotalRoll = DiceRoll + Accuracy;
+
+            if (DiceRoll <= CritFail)
+            {
+                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} - критический промах");
+                return "CritFail";
+            }
+            else if (DiceRoll >= CritChance)
+            {
+                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} - критическое попадание");
+                return "CritHit";
+            }
+
+            if (target.Evasione < TotalRoll)
+            {
+                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} + {Accuracy} = {TotalRoll} > {target.ClassName} уклонение: {target.Evasione} - попадание");
+                return "Hit";
+            }
+            else if (target.Evasione >= TotalRoll)
+            {
+                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} + {Accuracy} = {TotalRoll} <= {target.ClassName} уклонение: {target.Evasione} - промах");
+                return "Fail";
+            }
+
+            return "";
+        }
+
+        public int MakeDamage(string hit)
+        {
+            if (BaseDamage <= 0)
+            {
+                return 0;
+            }
+
+            if (hit == "Hit")
+            {
+                Console.WriteLine($"{ClassName} наносит {BaseDamage} урона");
+                return BaseDamage;
+            }
+            else if (hit == "CritHit")
+            {
+                Console.WriteLine($"{ClassName} наносит: {BaseDamage} * {CritRate} = {BaseDamage * CritRate} урона");
+                return BaseDamage * CritRate;
+            }
+
+            return 0;
+        }
+
+        public void TakeDamage(int takenDamage)
+        {
+            int totalDamage = takenDamage - ArmorProtection;
+
+            if (totalDamage <= 0)
+            {
+                totalDamage = 0;
+            }
+
+            Console.WriteLine($"{ClassName} поглощает {ArmorProtection} урона и получает {totalDamage} урона");
+            HealthPoint -= totalDamage;
+        }
+
+        public bool TakeHeal(int healCount)
+        {
+            int lostHealth = MaxHealthPoint - HealthPoint;
+
+            if (lostHealth >= healCount)
+            {
+                HealthPoint += healCount;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ExpendEnergy(int energyCost)
+        {
+            EnergyPoint -= energyCost;
+        }
+
+        public void ChangeStats(int[] changes, bool isIncreace)
+        {
+            if (isIncreace == true)
+            {
+                ArmorProtection += changes[0];
+                Evasione += changes[1];
+                Accuracy += changes[2];
+                CritChance += changes[3];
+                CritRate += changes[4];
+                BaseDamage += changes[5];
+                Initiative += changes[6];
+            }
+            else
+            {
+                ArmorProtection -= changes[0];
+                Evasione -= changes[1];
+                Accuracy -= changes[2];
+                CritChance -= changes[3];
+                CritRate -= changes[4];
+                BaseDamage -= changes[5];
+                Initiative -= changes[6];
+            }
+        }
+
+        public int RollInitiative()
+        {
+            int DiceRoll = Roll(MinRoll, MaxRoll);
+
+            if (DiceRoll == 1)
+            {
+                return 0;
+            }
+
+            return DiceRoll + Initiative;
+        }
+
+        public int Roll(int minRoll, int maxRoll)
+        {
+            return random.Next(minRoll, maxRoll);
+        }
+
+        public bool IsDead()
+        {
+            if (HealthPoint <= 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void LoseEvasioneCheck(string hit)
+        {
+            if (hit == "CritFail" && IsEvaseoneLost == false)
+            {
+                Console.WriteLine($"{ShowClassName()} подставился под удар, уклонение -{LostEvasione} до следующего хода");
+                Evasione -= LostEvasione;
+                IsEvaseoneLost = true;
+            }
+            else if (hit != "CritFail" && IsEvaseoneLost == true)
+            {
+                Evasione += LostEvasione;
+                IsEvaseoneLost = false;
+            }
+        }
+
+        public string ShowClassName()
+        {
+            return ClassName;
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{ClassName}\nЗдоровье: {HealthPoint} \nЭнергия: {EnergyPoint} \n");
+        }
+
+        public override string ToString()
+        {
+            return ClassName;
+        }
+    }
+
+    class Barbarian : Player
+    {
+        public Barbarian() : base("Варвар")
+        {
+            HealthPoint += 50;
+            BaseDamage += 5;
+            CritRate += 1;
+            Accuracy -= 2;
+            Initiative -= 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Ярость";
+        private int abilityRecharge = 10;
+        private int currentRecharge;
+        private int abilityDuration = 5;
+        private int currentDuration;
+        private int armorProtectionBonus = 2;
+        private int baseDamageBonus = 5;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{baseDamageBonus} к урону и +{armorProtectionBonus} к броне на {abilityDuration} ходов, перезарядка {abilityRecharge} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                ArmorProtection += armorProtectionBonus;
+                BaseDamage += baseDamageBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                ArmorProtection -= armorProtectionBonus;
+                BaseDamage -= baseDamageBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+          
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+    }
+
+    class Knight : Player
+    {
+        public Knight() : base("Рыцарь")
+        {
+            HealthPoint += 20;
+            ArmorProtection += 4;
+            Evasione -= 2;
+            Initiative -= 2;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Стена щитов";
+        private int abilityRecharge = 5;
+        private int currentRecharge;
+        private int abilityDuration = 3;
+        private int currentDuration;
+        private int armorProtectionBonus = 16;
+        private int evasionBonus = -8;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{armorProtectionBonus} к броне и {evasionBonus} к уклонению на {abilityDuration} ходов, перезарядка {abilityRecharge} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                ArmorProtection += armorProtectionBonus;
+                Evasione += evasionBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                ArmorProtection -= armorProtectionBonus;
+                Evasione -= evasionBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+    }
+
+    class Gladiator : Player
+    {
+        public Gladiator() : base("Гладиатор")
+        {
+            HealthPoint += 30;
+            ArmorProtection += 2;
+            BaseDamage += 2;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Боевой клич";
+        private int abilityRecharge = 8;
+        private int currentRecharge;
+        private int abilityDuration = 4;
+        private int currentDuration;
+        private int multiplay = 2;
+        private int accuracyBonus = 5;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"множит свою броню и урон на {multiplay} и +{accuracyBonus} к точности на {abilityDuration} ходов, перезарядка {abilityRecharge} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                ArmorProtection *= multiplay;
+                BaseDamage *= multiplay;
+                Accuracy += accuracyBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                ArmorProtection /= multiplay;
+                BaseDamage /= multiplay;
+                Accuracy -= accuracyBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+    }
+
+    class Paladin : Player
+    {
+        public Paladin() : base("Паладин")
+        {
+            HealthPoint += 20;
+            MaxHealthPoint = HealthPoint;
+            EnergyPoint += 25;
+            ArmorProtection += 3;
+            Accuracy += 1;
+            BaseDamage += 3;
+            Initiative -= 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            UseMagic();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Кара";
+        private int abilityRecharge = 5;
+        private int currentRecharge;
+        private int abilityDuration = 1;
+        private int currentDuration;
+        private int baseDamageBonus = 25;
+        private int accuracyBonus = 5;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{baseDamageBonus} урона и +{accuracyBonus} точности к следующей атаке, перезарядка {abilityRecharge} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                BaseDamage += baseDamageBonus;
+                Accuracy += accuracyBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                BaseDamage -= baseDamageBonus;
+                Accuracy -= accuracyBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+
+        private string magicName = "Возложение рук";
+        private int magicPower = 6;
+        private int energyCost = 1;
+        private int magicRecharge = 2;
+        private int currentMagicRecharge = 0;
+
+        private void UseMagic()
+        {
+            string magicDescription = $"Лечит себя на {magicPower} хитов, перезарядка {magicRecharge} ходов.";
+
+            if (energyCost <= EnergyPoint && currentMagicRecharge == 0 && TakeHeal(magicPower) == true)
+            {
+                ExpendEnergy(energyCost);
+
+                currentMagicRecharge = magicRecharge;
+
+                Console.WriteLine($"{ClassName} использует {magicName} и получает: {magicDescription}");
+            }
+
+            if (currentMagicRecharge > 0)
+            {
+                currentMagicRecharge--;
+            }
+        }
+    }
+
+    class Berserk : Player
+    {
+        public Berserk() : base("Берсерк")
+        {
+            HealthPoint += 15;
+            ArmorProtection += 1;
+            BaseDamage += 8;
+            Evasione -= 3;
+            Initiative += 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Боевое безумие";
+        private int abilityRecharge = 4;
+        private int currentRecharge;
+        private int abilityDuration = 3;
+        private int currentDuration;
+        private int baseDamageBonus = 10;
+        private int accuracyBonus = -2;
+        private int initiativeBonus = 5;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{baseDamageBonus} урона, +{initiativeBonus} к инициативе, {accuracyBonus} к точности, перезарядка {abilityRecharge} ходов, длительность {abilityDuration} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                BaseDamage += baseDamageBonus;
+                Accuracy += accuracyBonus;
+                Initiative += initiativeBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                BaseDamage -= baseDamageBonus;
+                Accuracy -= accuracyBonus;
+                Initiative -= initiativeBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+    }
+
+    class Hunter : Player
+    {
+        public Hunter() : base("Охотник")
+        {
+            ArmorProtection += 1;
+            BaseDamage += 1;
+            CritChance -= 1;
+            CritRate += 1;
+            Evasione += 2;
+            Accuracy += 2;
+            Initiative += 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string trickName = "Капкан";
+        private int trickRecharge = 6;
+        private int currentTrickRecharge = 0;
+        private int trickDuration = 1;
+        private int currentTrickDuration = 0;
+        private int trickDamage = 15;
+        private int evasionBonus = 5;
+        private int initiativeBonus = 5;
+        private bool isActive = false;
+
+        private void UseTrick(Player target)
+        {
+            string trickDescription = $"{trickDamage} урона, -{evasionBonus} уклонения, -{initiativeBonus} инициативы на один ход, перезарядка {trickRecharge} ходов.";
+
+            if (currentTrickRecharge == 0)
+            {
+                currentTrickRecharge = trickRecharge;
+                currentTrickDuration = trickDuration;
+
+                Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+                target.TakeDamage(trickDamage);
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionBonus,
+                    0,
+                    0,
+                    0,
+                    0,
+                    initiativeBonus
+                }, false);
+
+                isActive = true;
+            }
+
+            if (currentTrickDuration == 0 && isActive == true)
+            {
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionBonus,
+                    0,
+                    0,
+                    0,
+                    0,
+                    initiativeBonus
+                }, true);
+
+                isActive = false;
+            }
+
+            if (currentTrickDuration > 0)
+            {
+                currentTrickDuration--;
+            }
+
+            if (currentTrickRecharge > 0)
+            {
+                currentTrickRecharge--;
+            }
+        }
+    }
+
+    class Rogue : Player
+    {
+        public Rogue() : base("Плут")
+        {
+            HealthPoint -= 20;
+            Evasione += 6;
+            BaseDamage -= 1;
+            CritChance -= 2;
+            CritRate += 2;
+            Accuracy += 3;
+            Initiative += 3;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string trickName = "Грязь в лицо";
+        private int trickRecharge = 3;
+        private int currentTrickRecharge = 0;
+        private int trickDuration = 1;
+        private int currentTrickDuration = 0;
+        private int evasionBonus = 5;
+        private int accuracyBonus = 5;
+        private int initiativeBonus = 5;
+        private bool isActive = false;
+
+        private void UseTrick(Player target)
+        {
+            string trickDescription = $"-{evasionBonus} уклонения, -{accuracyBonus} точность, -{initiativeBonus} инициативы и морального унижения на 1 ход, перезарядка {trickRecharge} ходов.";
+
+            if (currentTrickRecharge == 0)
+            {
+                currentTrickRecharge = trickRecharge;
+                currentTrickDuration = trickDuration;
+
+                Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionBonus,
+                    accuracyBonus,
+                    0,
+                    0,
+                    0,
+                    initiativeBonus
+                }, false);
+
+                isActive = true;
+            }
+
+            if (currentTrickDuration == 0 && isActive == true)
+            {
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionBonus,
+                    accuracyBonus,
+                    0,
+                    0,
+                    0,
+                    initiativeBonus
+                }, true);
+
+                isActive = false;
+            }
+
+            if (currentTrickDuration > 0)
+            {
+                currentTrickDuration--;
+            }
+
+            if (currentTrickRecharge > 0)
+            {
+                currentTrickRecharge--;
+            }
+        }
+    }
+
+    class Monk : Player
+    {
+        public Monk() : base("Монах")
+        {
+            Evasione += 8;
+            Accuracy += 5;
+            Initiative += 4;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string abilityName = "Стойка дракона";
+        private int abilityRecharge = 1;
+        private int currentRecharge = 0;
+        private int abilityDuration = 1;
+        private int currentDuration = 0;
+        private int armorProtectionBonus = 2;
+        private int baseDamageBonus = 2;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{armorProtectionBonus} брони, +{baseDamageBonus} урона.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                ArmorProtection += armorProtectionBonus;
+                BaseDamage += baseDamageBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                ArmorProtection -= armorProtectionBonus;
+                BaseDamage -= baseDamageBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+
+        private string trickName = "Унижающая мудрость";
+        private int trickRecharge = 2;
+        private int currentTrickRecharge = 0;
+        private int trickDuration = 1;
+        private int currentTrickDuration = 0;
+        private int evasionPenalty = 1;
+        private int accuracyPenalty = 1;
+        private int critChancePenalty = -1;
+        private int critRatePenalty = 1;
+        private int baseDamagePenalty = 1;
+        private int initiativePenalty = 1;
+        private bool isActive = false;
+
+        private void UseTrick(Player target)
+        {
+            string trickDescription = "Моральное унижение (все параметры -1).";
+
+            if (currentTrickRecharge == 0)
+            {
+                currentTrickRecharge = trickRecharge;
+                currentTrickDuration = trickDuration;
+
+                Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionPenalty,
+                    accuracyPenalty,
+                    critChancePenalty,
+                    critRatePenalty,
+                    baseDamagePenalty,
+                    initiativePenalty
+                }, false);
+
+                isActive = true;
+            }
+
+            if (currentTrickDuration == 0 && isActive == true)
+            {
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionPenalty,
+                    accuracyPenalty,
+                    critChancePenalty,
+                    critRatePenalty,
+                    baseDamagePenalty,
+                    initiativePenalty
+                }, true);
+
+                isActive = false;
+            }
+
+            if (currentTrickDuration > 0)
+            {
+                currentTrickDuration--;
+            }
+
+            if (currentTrickRecharge > 0)
+            {
+                currentTrickRecharge--;
+            }
+        }
+    }
+
+    class Assasin : Player
+    {
+        public Assasin() : base("Убийца")
+        {
+            HealthPoint += 10;
+            ArmorProtection += 1;
+            BaseDamage -= 1;
+            Evasione += 5;
+            CritRate += 4;
+            CritChance -= 5;
+            Initiative += 2;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string trickName = "Подлая атака скрытым оружием";
+        private int trickRecharge = 6;
+        private int currentTrickRecharge = 0;
+
+        private void UseTrick(Player target)
+        {
+            int trickDamage = BaseDamage * CritRate;
+            string trickDescription = $"{trickDamage} урона.";
+
+            if (currentTrickRecharge == 0)
+            {
+                currentTrickRecharge = trickRecharge;
+
+                Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+                target.TakeDamage(trickDamage);
+            }
+
+            if (currentTrickRecharge > 0)
+            {
+                currentTrickRecharge--;
+            }
+        }
+    }
+
+    class Trickster : Player
+    {
+        public Trickster() : base("Трюкач")
+        {
+            ArmorProtection += 1;
+            Evasione += 3;
+            Accuracy += 3;
+            Initiative += 4;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string trickName = "Гипнотические часы";
+        private int trickRecharge = 6;
+        private int currentTrickRecharge = 0;
+        private int trickDuration = 2;
+        private int currentTrickDuration = 0;
+        private int evasionPenalty = 10;
+        private int accuracyPenalty = 10;
+        private bool isActive = false;
+
+        private void UseTrick(Player target)
+        {
+            string trickDescription = $"-{evasionPenalty} уклонения, -{accuracyPenalty} точности, на {trickDuration} ходов, перезарядка {trickRecharge} ходов.";
+
+            if (currentTrickRecharge == 0)
+            {
+                currentTrickRecharge = trickRecharge;
+                currentTrickDuration = trickDuration;
+
+                Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionPenalty,
+                    accuracyPenalty,
+                    0,
+                    0,
+                    0,
+                    0
+                }, false);
+
+                isActive = true;
+            }
+
+            if (currentTrickDuration == 0 && isActive == true)
+            {
+                target.ChangeStats(new int[7]
+                {
+                    0,
+                    evasionPenalty,
+                    accuracyPenalty,
+                    0,
+                    0,
+                    0,
+                    0
+                }, true);
+
+                isActive = false;
+            }
+
+            if (currentTrickDuration > 0)
+            {
+                currentTrickDuration--;
+            }
+
+            if (currentTrickRecharge > 0)
+            {
+                currentTrickRecharge--;
+            }
+        }
+    }
+
+    class Mage : Player
+    {
+        public Mage() : base("Маг")
+        {
+            HealthPoint -= 30;
+            EnergyPoint += 50;
+            BaseDamage -= 3;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseMagic(target);
+            base.Attack(target);
+        }
+
+        private string magicName = "Шар огня";
+        private int magicPower = 40;
+        private int energyCost = 5;
+        private int magicRecharge = 3;
+        private int currentMagicRecharge = 0;
+
+        private void UseMagic(Player target)
+        {
+            string magicDescription = $"{magicPower} урона, перезарядка {magicRecharge} ходов.";
+
+            if (energyCost <= EnergyPoint && currentMagicRecharge == 0)
+            {
+                ExpendEnergy(energyCost);
+
+                currentMagicRecharge = magicRecharge;
+         
+                Console.WriteLine($"{ClassName} использует {magicName}, {target.ClassName} получает: {magicDescription}");
+
+                target.TakeDamage(magicPower);
+            }
+
+            if (currentMagicRecharge > 0)
+            {
+                currentMagicRecharge--;
+            }
+        }
+    }
+
+    class Shaman : Player
+    {
+        public Shaman() : base("Шаман")
+        {
+            HealthPoint += 15;
+            EnergyPoint += 30;
+            Accuracy += 1;
+            Evasione += 1;
+            Initiative -= 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseMagic(target);
+            base.Attack(target);
+        }
+
+        private string magicName = "Духовный оберег";
+        private int magicPower = 5;
+        private int energyCost = 6;
+        private int magicRecharge = 3;
+        private int currentMagicRecharge = 0;
+        private int magicDuration = 3;
+        private int currentMagicDuration = 0;
+        private bool isActive = false;
+
+        private void UseMagic(Player target)
+        {
+            string magicDescription = $"+{magicPower} к броне и уклонению, на {magicDuration} ходов, перезарядка {magicRecharge} ходов.";
+
+            if (energyCost <= EnergyPoint && currentMagicRecharge == 0)
+            {
+                ExpendEnergy(energyCost);
+
+                currentMagicRecharge = magicRecharge;
+                currentMagicDuration = magicDuration;
+
+                Console.WriteLine($"{ClassName} использует {magicName} и получает: {magicDescription}");
+
+                isActive = true;
+
+                ArmorProtection += magicPower;
+                Evasione += magicPower;
+            }
+
+            if (currentMagicDuration == 0 && isActive == true)
+            {
+                ArmorProtection -= magicPower;
+                Evasione -= magicPower;
+            }
+
+            if (currentMagicRecharge > 0)
+            {
+                currentMagicRecharge--;
+            }
+
+            if (currentMagicDuration > 0)
+            {
+                currentMagicDuration--;
+            }
+        }
+    }
+
+    class Warlock : Player
+    {
+        public Warlock() : base("Чернокнижник")
+        {
+            HealthPoint -= 30;
+            EnergyPoint += 50;
+            BaseDamage -= 3;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseMagic(target);
+            UseTrick(target);
+            base.Attack(target);
+        }
+
+        private string trickName = "Атака фамильяра";
+        private int trickDamage = 8;
+
+        private void UseTrick(Player target)
+        {
+            string trickDescription = $"{trickDamage} урона от фамильяра.";
+
+            Console.WriteLine($"{ClassName} использует {trickName}, {target.ClassName} получает: {trickDescription}");
+
+            target.TakeDamage(trickDamage);
+        }
+
+        private string magicName = "Проклятье";
+        private int magicPower = 10;
+        private int energyCost = 10;
+        private int magicRecharge = 5;
+        private int currentMagicRecharge = 0;
+        private int magicDuration = 5;
+        private int currentMagicDuration = 0;
+        private bool isActive = false;
+
+        private void UseMagic(Player target)
+        {
+            string magicDescription = $"{magicPower} штраф к характеристикам на {magicDuration} ходов, перезарядка {magicRecharge} ходов.";
+
+            if (energyCost <= EnergyPoint && currentMagicRecharge == 0)
+            {
+                ExpendEnergy(energyCost);
+
+                currentMagicRecharge = magicRecharge;
+                currentMagicDuration = magicDuration;
+
+                Console.WriteLine($"{ClassName} использует {magicName}, {target.ClassName} получает: {magicDescription}");
+
+                isActive = true;
+
+                target.ChangeStats(new int[7] {
+                    0,
+                    magicPower,
+                    magicPower,
+                    -magicPower,
+                    magicPower,
+                    magicPower,
+                    magicPower
+                }, false);
+            }
+
+            if (currentMagicDuration == 0 && isActive == true)
+            {
+                target.ChangeStats(new int[7] {
+                    0,
+                    magicPower,
+                    magicPower,
+                    -magicPower,
+                    magicPower,
+                    magicPower,
+                    magicPower
+                }, true);
+
+                isActive = false;
+            }
+
+            if (currentMagicRecharge > 0)
+            {
+                currentMagicRecharge--;
+            }
+
+            if (currentMagicDuration > 0)
+            {
+                currentMagicDuration--;
+            }
+        }
+    }
+
+    class Priest : Player
+    {
+        public Priest() : base("Жрец")
+        {
+            HealthPoint += 15;
+            MaxHealthPoint = HealthPoint;
+            EnergyPoint += 20;
+            ArmorProtection += 2;
+            Accuracy += 2;
+            BaseDamage += 1;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseAbility();
+            UseMagic();
+            base.Attack(target);
+        }
+
+        private string abilityName = "Bonk";
+        private int abilityRecharge = 5;
+        private int currentRecharge;
+        private int abilityDuration = 1;
+        private int currentDuration;
+        private int baseDamageBonus = 25;
+        private int accuracyBonus = 5;
+        private bool isActive = false;
+
+        private void UseAbility()
+        {
+            string abilityDescription = $"+{baseDamageBonus} урона и +{accuracyBonus} точности к следующей атаке, перезарядка {abilityRecharge} ходов.";
+
+            if (currentRecharge == 0)
+            {
+                isActive = true;
+
+                BaseDamage += baseDamageBonus;
+                Accuracy += accuracyBonus;
+
+                currentRecharge = abilityRecharge;
+                currentDuration = abilityDuration;
+
+                Console.WriteLine($"{ClassName} использует {abilityName} и получает: {abilityDescription}");
+            }
+
+            if (currentDuration == 0 && isActive == true)
+            {
+                isActive = false;
+
+                BaseDamage -= baseDamageBonus;
+                Accuracy -= accuracyBonus;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration > 0)
+            {
+                currentDuration--;
+            }
+        }
+
+        private string magicName = "Слово лечения";
+        private int magicPower = 20;
+        private int energyCost = 4;
+        private int magicRecharge = 3;
+        private int currentMagicRecharge = 0;
+
+        private void UseMagic()
+        {
+            string magicDescription = $"Лечит себя на {magicPower} хитов, перезарядка {magicRecharge} ходов.";
+
+            if (energyCost <= EnergyPoint && currentMagicRecharge == 0 && TakeHeal(magicPower) == true)
+            {
+                ExpendEnergy(energyCost);
+
+                currentMagicRecharge = magicRecharge;
+
+                Console.WriteLine($"{ClassName} использует {magicName} и получает: {magicDescription}");
+            }
+
+            if (currentMagicRecharge > 0)
+            {
+                currentMagicRecharge--;
+            }
+        }
+    }
+
+    class Summoner : Player
+    {
+        public Summoner() : base("Призыватель")
+        {
+            HealthPoint -= 20;
+            EnergyPoint += 40;
+            ArmorProtection += 2;
+            BaseDamage -= 2;
+        }
+
+        public override void Attack(Player target)
+        {
+            UseMagic(target);
+            base.Attack(target);
+        }
+
+        private string magicName = "Призыв паука";
+        private int magicPower = 13;
+        private int energyCost = 5;
+        private int magicRecharge = 1;
+        private int currentRecharge = 0;
+        private int magicDuration = 5;
+        private int currentDuration = 0;
+        private bool isActive = false;
+
+        private void UseMagic(Player target)
+        {
+            string magicDescription = $"Призван паук с уроном в {magicPower} ед. на {magicDuration} ходов.";
+
+            if (currentRecharge == 0 && isActive == false)
+            {
+                ExpendEnergy(energyCost);
+
+                isActive = true;
+
+                Console.WriteLine($"{ClassName} использует {magicName}: {magicDescription}");
+
+                currentRecharge = magicRecharge;
+                currentDuration = magicDuration;
+            }
+
+            if (currentDuration > 0 && isActive == true)
+            {
+                Console.WriteLine($"Паук атакует {target.ClassName}");
+                target.TakeDamage(magicPower);
+                currentDuration--;
+            }
+
+            if (currentRecharge > 0)
+            {
+                currentRecharge--;
+            }
+
+            if (currentDuration == 0)
+            {
+                isActive = false;
+            }
+        }
+    }
+}
