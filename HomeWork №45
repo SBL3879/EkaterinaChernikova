@@ -5,63 +5,65 @@ namespace HomeWork_1
 {
     class Program
     {
-       static void Main(string[] args)
+        static void Main(string[] args)
         {
-            const string CommandChooseFighter = "1";
-            const string CommandFight = "2";
-            const string CommandExit = "3";
-
-            Player player1 = null;
-            Player player2 = null;
-
             Arena arena = new Arena();
-
-            string userInput;
-
-            bool isExit = false;
-
-            while (isExit == false)
-            {
-                Console.Clear();
-                if (player1 != null && player2 != null)
-                {
-                    Console.WriteLine(
-                         $"\n Боец 1 - {player1.ToString()}" +
-                         $"\n Боец 2 - {player2.ToString()}");
-                }
-
-
-                Console.Write($"\n{CommandChooseFighter} - Выбрать бойцов " +
-                              $"\n{CommandFight} - Начать бой " +
-                              $"\n{CommandExit} - Выйти \n\nВаш выбор: ");
-                userInput = Console.ReadLine();
-
-                switch (userInput)
-                {
-                    case CommandChooseFighter:
-                        player1 = arena.ChooseFighter();
-                        player2 = arena.ChooseFighter();
-                        break;
-                    case CommandFight:
-                        arena.Fight(player1, player2);
-                        break;
-                    case CommandExit:
-                        isExit = true;
-                        break;
-                }                
-            }
+            arena.Menu();
         }
     }
 
     class Arena
     {
-        public Player ChooseFighter()
+        private Player _player1 = null;
+        private Player _player2 = null;
+
+        public void Menu()
+        {
+            const string Command_Choose_Fighter = "1";
+            const string Command_Fight = "2";
+            const string Command_Exit = "3";
+            string userInput;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                Console.Clear();
+                if (_player1 != null && _player2 != null)
+                {
+                    Console.WriteLine(
+                         $"\n Боец 1 - {_player1.ClassName}" +
+                         $"\n Боец 2 - {_player2.ClassName}");
+                }
+
+
+                Console.Write($"\n{Command_Choose_Fighter} - Выбрать бойцов " +
+                              $"\n{Command_Fight} - Начать бой " +
+                              $"\n{Command_Exit} - Выйти \n\nВаш выбор: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case Command_Choose_Fighter:
+                        _player1 = ChooseFighter();
+                        _player2 = ChooseFighter();
+                        break;
+                    case Command_Fight:
+                        Fight();
+                        break;
+                    case Command_Exit:
+                        isExit = true;
+                        break;
+                }
+            }
+        }
+
+        private Player ChooseFighter()
         {
             Player player = null;
             List<Player> classes = new List<Player>()
             {
                 new Barbarian(), new Knight(), new Gladiator(), new Paladin(), new Berserk(),
-                new Hunter(), new Rogue(), new Monk(), new Assasin(), new Trickster(),
+                new Hunter(),new Rogue(), new Monk(), new Assasin(), new Trickster(),
                 new Mage(), new Shaman(), new Warlock(), new Priest(), new Summoner()
             };
 
@@ -76,7 +78,7 @@ namespace HomeWork_1
 
                 for (int i = 0; i < classes.Count; i++)
                 {
-                    Console.WriteLine($"{i + 1}. {classes[i].ToString()}");
+                    Console.WriteLine($"{i + 1}. {classes[i].ClassName}");
                 }
 
                 Console.Write("\nВаш выбор: ");
@@ -93,7 +95,7 @@ namespace HomeWork_1
             return player;
         }
 
-        public void Fight(Player player1, Player player2)
+        private void Fight()
         {
             int initiativePlayer1;
             int initiativePlayer2;
@@ -104,44 +106,46 @@ namespace HomeWork_1
             {
                 Console.Clear();
                 Console.WriteLine($"Ход боя: {round}\n");
-
-                player1.ShowInfo();
-                player2.ShowInfo();
+                ShowRoundInfo();
 
                 do
                 {
-                    initiativePlayer1 = player1.RollInitiative();
-                    initiativePlayer2 = player2.RollInitiative();
+                    initiativePlayer1 = _player1.RollInitiative();
+                    initiativePlayer2 = _player2.RollInitiative();
                 }
                 while (initiativePlayer1 == initiativePlayer2);
 
                 Console.WriteLine("\nИнициатива бойцов: " +
-                    $"\n{player1.ClassName} - {initiativePlayer1}" +
-                    $"\n{player2.ClassName} - {initiativePlayer2}\n");
+                    $"\n{_player1.ClassName} - {initiativePlayer1}" +
+                    $"\n{_player2.ClassName} - {initiativePlayer2}\n");
 
-                if (initiativePlayer1 == 0)
+                if(initiativePlayer1 <= 0 && initiativePlayer2 <= 0)
                 {
-                    Console.WriteLine($"Первым атакует: {player2.ClassName}" +
-                        $"\n{player1.ClassName} провал инициативы, пропускает ход.");
-                    player2.Attack(player1);
+                    Console.WriteLine("Оба бойца провалили инициативу, ход пропущкен.");
                 }
-                else if (initiativePlayer2 == 0)
+                else if (initiativePlayer1 <= 0)
                 {
-                    Console.WriteLine($"Первым атакует: {player1.ClassName}" +
-                        $"\n{player2.ClassName} провал инициативы, пропускает ход.");
-                    player1.Attack(player2);
+                    Console.WriteLine($"Первым атакует: {_player2.ClassName}" +
+                        $"\n{_player1.ClassName} провал инициативы, пропускает ход.");
+                        _player2.Attack(_player1);
+                }
+                else if (initiativePlayer2 <= 0)
+                {
+                    Console.WriteLine($"Первым атакует: {_player1.ClassName}" +
+                        $"\n{_player2.ClassName} провал инициативы, пропускает ход.");
+                    _player1.Attack(_player2);
                 }
                 else if (initiativePlayer1 > initiativePlayer2)
                 {
-                    Console.WriteLine($"Первым ходит: {player1.ClassName}");
-                    player1.Attack(player2);
-                    player2.Attack(player1);
+                    Console.WriteLine($"Первым ходит: {_player1.ClassName}");
+                    _player1.Attack(_player2);
+                    _player2.Attack(_player1);
                 }
                 else if (initiativePlayer2 > initiativePlayer1)
                 {
-                    Console.WriteLine($"Первым ходит: {player2.ClassName}");
-                    player2.Attack(player1);
-                    player1.Attack(player2);
+                    Console.WriteLine($"Первым ходит: {_player2.ClassName}");
+                    _player2.Attack(_player1);
+                    _player1.Attack(_player2);
                 }
                 else
                 {
@@ -149,35 +153,42 @@ namespace HomeWork_1
                 }
 
                 Console.WriteLine("\nИтог хода: \n");
-                player1.ShowInfo();
-                player2.ShowInfo();
+                ShowRoundInfo();
 
                 Console.Write("Нажмите любую кнопку, чтобы продолжить....");
                 Console.ReadKey();
                 round++;
 
-                if (player1.IsDead() == true || player2.IsDead() == true)
+                if (_player1.IsDead() == true || _player2.IsDead() == true)
                 {
                     isSomeoneDead = true;
                 }
             }
 
             Console.Clear();
+            WhoWin();
+            Console.ReadKey();
+        }
 
-            if (player1.IsDead() == true && player2.IsDead() == false)
+        private void ShowRoundInfo()
+        {
+            _player1.ShowInfo();
+            _player2.ShowInfo();
+        }
+        private void WhoWin() 
+        { 
+            if (_player1.IsDead() == true && _player2.IsDead() == false)
             {
-                Console.WriteLine($"Победитель: {player2.ClassName}");
+                Console.WriteLine($"Победитель: {_player2.ClassName}");
             }
-            else if (player2.IsDead() == true && player1.IsDead() == false)
+            else if (_player2.IsDead() == true && _player1.IsDead() == false)
             {
-                Console.WriteLine($"Победитель: {player1.ClassName}");
+                Console.WriteLine($"Победитель: {_player1.ClassName}");
             }
-            else if (player1.IsDead() == true && player2.IsDead() == true)
+            else if (_player1.IsDead() == true && _player2.IsDead() == true)
             {
                 Console.WriteLine($"Ничья");
             }
-
-            Console.ReadKey();
         }
     }
 
@@ -229,28 +240,28 @@ namespace HomeWork_1
 
         public string MakeHit(Player target)
         {
-            int DiceRoll = Roll(MinRoll, MaxRoll);
-            int TotalRoll = DiceRoll + Accuracy;
+            int diceRoll = Roll(MinRoll, MaxRoll);
+            int totalRoll = diceRoll + Accuracy;
 
-            if (DiceRoll <= CritFail)
+            if (diceRoll <= CritFail)
             {
-                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} - критический промах");
+                Console.WriteLine($"{ClassName} - Атака: {diceRoll} - критический промах");
                 return _critFail;
             }
-            else if (DiceRoll >= CritChance)
+            else if (diceRoll >= CritChance)
             {
-                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} - критическое попадание");
+                Console.WriteLine($"{ClassName} - Атака: {diceRoll} - критическое попадание");
                 return _critHit;
             }
 
-            if (target.Evasione < TotalRoll)
+            if (target.Evasione < totalRoll)
             {
-                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} + {Accuracy} = {TotalRoll} > {target.ClassName} уклонение: {target.Evasione} - попадание");
+                Console.WriteLine($"{ClassName} - Атака: {diceRoll} + {Accuracy} = {totalRoll} > {target.ClassName} уклонение: {target.Evasione} - попадание");
                 return _hit;
             }
-            else if (target.Evasione >= TotalRoll)
+            else if (target.Evasione >= totalRoll)
             {
-                Console.WriteLine($"{ClassName} - Атака: {DiceRoll} + {Accuracy} = {TotalRoll} <= {target.ClassName} уклонение: {target.Evasione} - промах");
+                Console.WriteLine($"{ClassName} - Атака: {diceRoll} + {Accuracy} = {totalRoll} <= {target.ClassName} уклонение: {target.Evasione} - промах");
                 return _fail;
             }
 
@@ -335,14 +346,8 @@ namespace HomeWork_1
 
         public int RollInitiative()
         {
-            int DiceRoll = Roll(MinRoll, MaxRoll);
-
-            if (DiceRoll == 1)
-            {
-                return 0;
-            }
-
-            return DiceRoll + Initiative;
+            int diceRoll = Roll(MinRoll, MaxRoll);
+            return diceRoll + Initiative;
         }
 
         public int Roll(int minRoll, int maxRoll)
@@ -393,11 +398,11 @@ namespace HomeWork_1
 
         public Barbarian() : base("Варвар")
         {
-            HealthPoint += 50;
-            BaseDamage += 5;
-            CritRate += 1;
-            Accuracy -= 2;
-            Initiative -= 1;
+            HealthPoint = 150;
+            BaseDamage = 10;
+            CritRate = 3;
+            Accuracy = -2;
+            Initiative = -1;
         }
 
         public override void Attack(Player target)
@@ -456,10 +461,10 @@ namespace HomeWork_1
 
         public Knight() : base("Рыцарь")
         {
-            HealthPoint += 20;
-            ArmorProtection += 4;
-            Evasione -= 2;
-            Initiative -= 2;
+            HealthPoint = 120;
+            ArmorProtection = 4;
+            Evasione = 8;
+            Initiative = -2;
         }
 
         public override void Attack(Player target)
@@ -518,9 +523,9 @@ namespace HomeWork_1
 
         public Gladiator() : base("Гладиатор")
         {
-            HealthPoint += 30;
-            ArmorProtection += 2;
-            BaseDamage += 2;
+            HealthPoint = 130;
+            ArmorProtection = 2;
+            BaseDamage = 7;
         }
 
         public override void Attack(Player target)
@@ -586,13 +591,13 @@ namespace HomeWork_1
 
         public Paladin() : base("Паладин")
         {
-            HealthPoint += 20;
+            HealthPoint = 120;
             MaxHealthPoint = HealthPoint;
-            EnergyPoint += 25;
-            ArmorProtection += 3;
-            Accuracy += 1;
-            BaseDamage += 3;
-            Initiative -= 1;
+            EnergyPoint = 25;
+            ArmorProtection = 3;
+            Accuracy = 1;
+            BaseDamage = 8;
+            Initiative = -1;
         }
 
         public override void Attack(Player target)
@@ -672,11 +677,11 @@ namespace HomeWork_1
 
         public Berserk() : base("Берсерк")
         {
-            HealthPoint += 15;
-            ArmorProtection += 1;
-            BaseDamage += 8;
-            Evasione -= 3;
-            Initiative += 1;
+            HealthPoint = 115;
+            ArmorProtection = 1;
+            BaseDamage = 13;
+            Evasione = 7;
+            Initiative = 1;
         }
 
         public override void Attack(Player target)
@@ -738,13 +743,13 @@ namespace HomeWork_1
 
         public Hunter() : base("Охотник")
         {
-            ArmorProtection += 1;
-            BaseDamage += 1;
-            CritChance -= 1;
-            CritRate += 1;
-            Evasione += 2;
-            Accuracy += 2;
-            Initiative += 1;
+            ArmorProtection = 1;
+            BaseDamage = 6;
+            CritChance = 19;
+            CritRate = 3;
+            Evasione = 12;
+            Accuracy = 2;
+            Initiative = 1;
         }
 
         public override void Attack(Player target)
@@ -821,13 +826,13 @@ namespace HomeWork_1
 
         public Rogue() : base("Плут")
         {
-            HealthPoint -= 20;
-            Evasione += 6;
-            BaseDamage -= 1;
-            CritChance -= 2;
-            CritRate += 2;
-            Accuracy += 3;
-            Initiative += 3;
+            HealthPoint = 80;
+            Evasione = 16;
+            BaseDamage = 4;
+            CritChance = 18;
+            CritRate = 4;
+            Accuracy = 3;
+            Initiative = 3;
         }
 
         public override void Attack(Player target)
@@ -914,9 +919,9 @@ namespace HomeWork_1
 
         public Monk() : base("Монах")
         {
-            Evasione += 8;
-            Accuracy += 5;
-            Initiative += 4;
+            Evasione = 18;
+            Accuracy = 5;
+            Initiative = 4;
         }
 
         public override void Attack(Player target)
@@ -1023,13 +1028,13 @@ namespace HomeWork_1
 
         public Assasin() : base("Убийца")
         {
-            HealthPoint += 10;
-            ArmorProtection += 1;
-            BaseDamage -= 1;
-            Evasione += 5;
-            CritRate += 4;
-            CritChance -= 5;
-            Initiative += 2;
+            HealthPoint = 110;
+            ArmorProtection = 1;
+            BaseDamage = 4;
+            Evasione = 15;
+            CritRate = 6;
+            CritChance = 15;
+            Initiative = 2;
         }
 
         public override void Attack(Player target)
@@ -1072,10 +1077,10 @@ namespace HomeWork_1
 
         public Trickster() : base("Трюкач")
         {
-            ArmorProtection += 1;
-            Evasione += 3;
-            Accuracy += 3;
-            Initiative += 4;
+            ArmorProtection = 1;
+            Evasione = 13;
+            Accuracy = 3;
+            Initiative = 4;
         }
 
         public override void Attack(Player target)
@@ -1147,9 +1152,9 @@ namespace HomeWork_1
 
         public Mage() : base("Маг")
         {
-            HealthPoint -= 30;
-            EnergyPoint += 50;
-            BaseDamage -= 3;
+            HealthPoint = 70;
+            EnergyPoint = 50;
+            BaseDamage = 2;
         }
 
         public override void Attack(Player target)
@@ -1193,11 +1198,11 @@ namespace HomeWork_1
 
         public Shaman() : base("Шаман")
         {
-            HealthPoint += 15;
-            EnergyPoint += 30;
-            Accuracy += 1;
-            Evasione += 1;
-            Initiative -= 1;
+            HealthPoint = 115;
+            EnergyPoint = 30;
+            Accuracy = 1;
+            Evasione = 11;
+            Initiative = -1;
         }
 
         public override void Attack(Player target)
@@ -1259,9 +1264,9 @@ namespace HomeWork_1
 
         public Warlock() : base("Чернокнижник")
         {
-            HealthPoint -= 30;
-            EnergyPoint += 50;
-            BaseDamage -= 3;
+            HealthPoint = 70;
+            EnergyPoint = 50;
+            BaseDamage = 2;
         }
 
         public override void Attack(Player target)
@@ -1352,12 +1357,12 @@ namespace HomeWork_1
 
         public Priest() : base("Жрец")
         {
-            HealthPoint += 15;
+            HealthPoint = 115;
             MaxHealthPoint = HealthPoint;
-            EnergyPoint += 20;
-            ArmorProtection += 2;
-            Accuracy += 2;
-            BaseDamage += 1;
+            EnergyPoint = 20;
+            ArmorProtection = 2;
+            Accuracy = 2;
+            BaseDamage = 6;
         }
 
         public override void Attack(Player target)
@@ -1436,10 +1441,10 @@ namespace HomeWork_1
 
         public Summoner() : base("Призыватель")
         {
-            HealthPoint -= 20;
-            EnergyPoint += 40;
-            ArmorProtection += 2;
-            BaseDamage -= 2;
+            HealthPoint = 80;
+            EnergyPoint = 40;
+            ArmorProtection = 2;
+            BaseDamage = 3;
         }
 
         public override void Attack(Player target)
