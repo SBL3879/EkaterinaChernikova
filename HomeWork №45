@@ -8,7 +8,7 @@ namespace HomeWork_1
         static void Main(string[] args)
         {
             Arena arena = new Arena();
-            arena.Menu();
+            arena.OpenMenu();
         }
     }
 
@@ -17,10 +17,10 @@ namespace HomeWork_1
         private Player _player1 = null;
         private Player _player2 = null;
 
-        public void Menu()
+        public void OpenMenu()
         {
-            const string Command_Choose_Fighter = "1";
-            const string Command_Fight = "2";
+            const string Command_Choose_StartFighter = "1";
+            const string Command_StartFight = "2";
             const string Command_Exit = "3";
             string userInput;
             bool isExit = false;
@@ -36,19 +36,19 @@ namespace HomeWork_1
                 }
 
 
-                Console.Write($"\n{Command_Choose_Fighter} - Выбрать бойцов " +
-                              $"\n{Command_Fight} - Начать бой " +
+                Console.Write($"\n{Command_Choose_StartFighter} - Выбрать бойцов " +
+                              $"\n{Command_StartFight} - Начать бой " +
                               $"\n{Command_Exit} - Выйти \n\nВаш выбор: ");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
-                    case Command_Choose_Fighter:
-                        _player1 = ChooseFighter();
-                        _player2 = ChooseFighter();
+                    case Command_Choose_StartFighter:
+                        _player1 = ChooseStartFighter();
+                        _player2 = ChooseStartFighter();
                         break;
-                    case Command_Fight:
-                        Fight();
+                    case Command_StartFight:
+                        StartFight();
                         break;
                     case Command_Exit:
                         isExit = true;
@@ -57,7 +57,7 @@ namespace HomeWork_1
             }
         }
 
-        private Player ChooseFighter()
+        private Player ChooseStartFighter()
         {
             Player player = null;
             List<Player> classes = new List<Player>()
@@ -95,7 +95,7 @@ namespace HomeWork_1
             return player;
         }
 
-        private void Fight()
+        private void StartFight()
         {
             int initiativePlayer1;
             int initiativePlayer2;
@@ -209,7 +209,7 @@ namespace HomeWork_1
         protected int MaxRoll = 21;
         protected int LostEvasione = 10;
         protected bool IsEvaseoneLost = false;
-        protected Random random = new Random();
+        protected Random Random = new Random();
         private string _hit = "Hit";
         private string _fail = "Fail";
         private string _critHit = "CritHit";
@@ -315,9 +315,9 @@ namespace HomeWork_1
             return false;
         }
 
-        public void ExpendEnergy(int _energyCost)
+        public void ExpendEnergy(int energyCost)
         {
-            EnergyPoint -= _energyCost;
+            EnergyPoint -= energyCost;
         }
 
         public void ChangeStats(int[] changes, bool isIncreace)
@@ -352,7 +352,7 @@ namespace HomeWork_1
 
         public int Roll(int minRoll, int maxRoll)
         {
-            return random.Next(minRoll, maxRoll);
+            return Random.Next(minRoll, maxRoll);
         }
 
         public bool IsDead()
@@ -585,7 +585,7 @@ namespace HomeWork_1
         private bool _isActive = false;
         private string _magicName = "Возложение рук";
         private int _magicPower = 6;
-        private int _energyCost = 1;
+        private int energyCost = 1;
         private int _magicRecharge = 2;
         private int _currentMagicRecharge = 0;
 
@@ -647,9 +647,9 @@ namespace HomeWork_1
         {
             string magicDescription = $"Лечит себя на {_magicPower} хитов, перезарядка {_magicRecharge} ходов.";
 
-            if (_energyCost <= EnergyPoint && _currentMagicRecharge == 0 && TakeHeal(_magicPower) == true)
+            if (energyCost <= EnergyPoint && _currentMagicRecharge == 0 && TakeHeal(_magicPower) == true)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _currentMagicRecharge = _magicRecharge;
 
@@ -1146,7 +1146,7 @@ namespace HomeWork_1
     {
         private string _magicName = "Шар огня";
         private int _magicPower = 40;
-        private int _energyCost = 5;
+        private int energyCost = 5;
         private int _magicRecharge = 3;
         private int _currentMagicRecharge = 0;
 
@@ -1167,9 +1167,9 @@ namespace HomeWork_1
         {
             string magicDescription = $"{_magicPower} урона, перезарядка {_magicRecharge} ходов.";
 
-            if (_energyCost <= EnergyPoint && _currentMagicRecharge == 0)
+            if (energyCost <= EnergyPoint && _currentMagicRecharge == 0)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _currentMagicRecharge = _magicRecharge;
          
@@ -1189,7 +1189,7 @@ namespace HomeWork_1
     {
         private string _magicName = "Духовный оберег";
         private int _magicPower = 5;
-        private int _energyCost = 6;
+        private int energyCost = 6;
         private int _magicRecharge = 3;
         private int _currentMagicRecharge = 0;
         private int _magicDuration = 3;
@@ -1215,9 +1215,9 @@ namespace HomeWork_1
         {
             string magicDescription = $"+{_magicPower} к броне и уклонению, на {_magicDuration} ходов, перезарядка {_magicRecharge} ходов.";
 
-            if (_energyCost <= EnergyPoint && _currentMagicRecharge == 0)
+            if (energyCost <= EnergyPoint && _currentMagicRecharge == 0)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _currentMagicRecharge = _magicRecharge;
                 _currentMagicDuration = _magicDuration;
@@ -1255,7 +1255,7 @@ namespace HomeWork_1
 
         private string _magicName = "Проклятье";
         private int _magicPower = 10;
-        private int _energyCost = 10;
+        private int energyCost = 10;
         private int _magicRecharge = 5;
         private int _currentMagicRecharge = 0;
         private int _magicDuration = 5;
@@ -1289,9 +1289,9 @@ namespace HomeWork_1
         {
             string magicDescription = $"{_magicPower} штраф к характеристикам на {_magicDuration} ходов, перезарядка {_magicRecharge} ходов.";
 
-            if (_energyCost <= EnergyPoint && _currentMagicRecharge == 0)
+            if (energyCost <= EnergyPoint && _currentMagicRecharge == 0)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _currentMagicRecharge = _magicRecharge;
                 _currentMagicDuration = _magicDuration;
@@ -1351,7 +1351,7 @@ namespace HomeWork_1
 
         private string _magicName = "Слово лечения";
         private int _magicPower = 20;
-        private int _energyCost = 4;
+        private int energyCost = 4;
         private int _magicRecharge = 3;
         private int _currentMagicRecharge = 0;
 
@@ -1412,9 +1412,9 @@ namespace HomeWork_1
         {
             string magicDescription = $"Лечит себя на {_magicPower} хитов, перезарядка {_magicRecharge} ходов.";
 
-            if (_energyCost <= EnergyPoint && _currentMagicRecharge == 0 && TakeHeal(_magicPower) == true)
+            if (energyCost <= EnergyPoint && _currentMagicRecharge == 0 && TakeHeal(_magicPower) == true)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _currentMagicRecharge = _magicRecharge;
 
@@ -1432,7 +1432,7 @@ namespace HomeWork_1
     {
         private string _magicName = "Призыв паука";
         private int _magicPower = 13;
-        private int _energyCost = 5;
+        private int energyCost = 5;
         private int _magicRecharge = 1;
         private int _currentRecharge = 0;
         private int _magicDuration = 5;
@@ -1459,7 +1459,7 @@ namespace HomeWork_1
 
             if (_currentRecharge == 0 && _isActive == false)
             {
-                ExpendEnergy(_energyCost);
+                ExpendEnergy(energyCost);
 
                 _isActive = true;
 
