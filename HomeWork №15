@@ -9,9 +9,9 @@ namespace HomeWork
             string userInput;
             string password = "123456";
             string secretMessage = "Хорошего вам настроения =)";
-            int tryes = 3;
+            int attempts = 3;
 
-            for (int i = 0; i < tryes; i++)
+            for (int i = 0; i < attempts; i++)
             {
                 Console.Clear();
                 Console.Write("Введите пароль к сообщению: ");
