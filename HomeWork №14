@@ -7,21 +7,23 @@ namespace HomeWork
         static void Main(string[] args)
         {
             string userName;
+            string nameLine;
             string symbolLine = "";
             string showingText;
             char userSymbol;
-            int symbolLineLength = 2;
+            int symbolLineLength;
 
             Console.Write("Введите имя: ");
             userName = Console.ReadLine();
             Console.Write("Введите символ: ");
             userSymbol = Convert.ToChar(Console.ReadLine());
-            symbolLineLength += userName.Length;
+            nameLine = userSymbol + userName + userSymbol;
+            symbolLineLength = nameLine.Length;
 
             for (int i = 0; i < symbolLineLength; i++)
                 symbolLine += userSymbol;
 
-            showingText = $"{symbolLine}\n{userSymbol}{userName}{userSymbol}\n{symbolLine}";
+            showingText = $"{symbolLine}\n{nameLine}\n{symbolLine}";
 
             Console.Clear();
             Console.WriteLine(showingText);
