@@ -17,11 +17,11 @@ namespace HomeWork
             float exchangeRateEurUsd = 1.0334f;
             float exchangeRateEurRub = 0.0170f;
 
-            bool exit = false;
+            bool isExit = false;
             string userInput;
             float transferSum = 0.0f;
 
-            while (exit == false)
+            while (isExit == false)
             {
                 Console.Clear();
                 Console.WriteLine($"Ваш баланс:\n" +
@@ -39,42 +39,63 @@ namespace HomeWork
                 Console.Write("Введите номер меню: ");
                 userInput = Console.ReadLine();
 
-                if (userInput == "1" || userInput == "2" || userInput == "3" ||
-                   userInput == "4" || userInput == "5" || userInput == "6")
-                   
-                {
-                    Console.Write("Сколько валюты сконвертировать: ");
-                    transferSum = Convert.ToSingle(Console.ReadLine());
-                }
+                Console.Write("Сколько валюты сконвертировать: ");
+                transferSum = Convert.ToSingle(Console.ReadLine());
+
+                const string CommandRubToUsd = "1";
+                const string CommandRubToEur = "2";
+                const string CommandUsdToRub = "3";
+                const string CommandUsdToEur = "4";
+                const string CommandEurToRub = "5";
+                const string CommandEurToUsd = "6";
+                const string CommandExit = "7";
 
                 switch (userInput)
                 {
-                    case "1":
-                        rub -= transferSum;
-                        usd += transferSum * exchangeRateUsdRub;
+                    case CommandRubToUsd:
+                        if (rub >= transferSum)
+                        {
+                            rub -= transferSum;
+                            usd += transferSum * exchangeRateUsdRub;
+                        }
                         break;
-                    case "2":
-                        rub -= transferSum;
-                        eur += transferSum * exchangeRateEurRub;
+                    case CommandRubToEur:
+                        if (rub >= transferSum)
+                        {
+                            rub -= transferSum;
+                            eur += transferSum * exchangeRateEurRub;
+                        }
                         break;
-                    case "3":
-                        usd -= transferSum;
-                        rub += transferSum * exchangeRateRubUsd;
+                    case CommandUsdToRub:
+                        if (usd >= transferSum)
+                        {
+                            usd -= transferSum;
+                            rub += transferSum * exchangeRateRubUsd;
+                        }
                         break;
-                    case "4":
-                        usd -= transferSum;
-                        eur += transferSum * exchangeRateEurUsd;
+                    case CommandUsdToEur:
+                        if (usd >= transferSum)
+                        {
+                            usd -= transferSum;
+                            eur += transferSum * exchangeRateEurUsd;
+                        }
                         break;
-                    case "5":
-                        eur -= transferSum;
-                        rub += transferSum * exchangeRateRubEur;
+                    case CommandEurToRub:
+                        if (eur >= transferSum)
+                        {
+                            eur -= transferSum;
+                            rub += transferSum * exchangeRateRubEur;
+                        }
                         break;
-                    case "6":
-                        eur -= transferSum;
-                        usd += transferSum * exchangeRateUsdEur;
+                    case CommandEurToUsd:
+                        if (eur >= transferSum)
+                        {
+                            eur -= transferSum;
+                            usd += transferSum * exchangeRateUsdEur;
+                        }
                         break;
-                    case "7":
-                        exit = true;
+                    case CommandExit:
+                        isExit = true;
                         break;
                 }
             }
