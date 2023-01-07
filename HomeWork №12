@@ -6,6 +6,14 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            const string CommandRubToUsd = "1";
+            const string CommandRubToEur = "2";
+            const string CommandUsdToRub = "3";
+            const string CommandUsdToEur = "4";
+            const string CommandEurToRub = "5";
+            const string CommandEurToUsd = "6";
+            const string CommandExit = "7";
+
             float rub = 1000.0f;
             float usd = 1000.0f;
             float eur = 1000.0f;
@@ -29,26 +37,18 @@ namespace HomeWork
                     $"USD = {usd}\n" +
                     $"EUR = {eur}\n" +
                     $"\nКакую валюту вы хотите конвертировать?\n" +
-                    $"1. RUB => USD \n" +
-                    $"2. RUB => EUR \n" +
-                    $"3. USD => RUB \n" +
-                    $"4. USD => EUR \n" +
-                    $"5. EUR => RUB \n" +
-                    $"6. EUR => USD \n" +
-                    $"7. Выйти из программы.");
+                    $"{CommandRubToUsd}. RUB => USD \n" +
+                    $"{CommandRubToEur}. RUB => EUR \n" +
+                    $"{CommandUsdToRub}. USD => RUB \n" +
+                    $"{CommandUsdToEur}. USD => EUR \n" +
+                    $"{CommandEurToRub}. EUR => RUB \n" +
+                    $"{CommandEurToUsd}. EUR => USD \n" +
+                    $"{CommandExit}. Выйти из программы.");
                 Console.Write("Введите номер меню: ");
                 userInput = Console.ReadLine();
 
                 Console.Write("Сколько валюты сконвертировать: ");
                 transferSum = Convert.ToSingle(Console.ReadLine());
-
-                const string CommandRubToUsd = "1";
-                const string CommandRubToEur = "2";
-                const string CommandUsdToRub = "3";
-                const string CommandUsdToEur = "4";
-                const string CommandEurToRub = "5";
-                const string CommandEurToUsd = "6";
-                const string CommandExit = "7";
 
                 switch (userInput)
                 {
