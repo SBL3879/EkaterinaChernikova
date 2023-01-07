@@ -17,11 +17,18 @@ namespace HomeWork
             number = random.Next(randomMin, randomMax);
 
             Console.WriteLine($"Случайное число: {number}");
+            Console.Write($"Числа меньше {number} и кратные {divider1} или {divider2}: ");
 
             for (int i = 1; i < number; i++)
+            {
                 if (i % divider1 == 0 || i % divider2 == 0)
+                {
+                    Console.Write(i + " ");
                     sum += i;
-            Console.WriteLine($"Сумма чисел меньше {number} и кратных {divider1} или {divider2} равна: {sum}");
+                }
+            }
+
+            Console.WriteLine($"\nИх сумма равна: {sum}");
             Console.ReadKey();
         }
     }
