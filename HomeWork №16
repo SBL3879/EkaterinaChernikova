@@ -13,18 +13,21 @@ namespace HomeWork
             int divisibleNumber = 0;
             int minDivisible = 100;
             int maxDivisible = 1000;
-            double divisible;
 
             number = random.Next(minNumber, maxNumber);
 
-            for (double i = minDivisible; i < maxDivisible; i++)
+            for (int i = minDivisible; i < maxDivisible; i++)
             {
-                divisible = Math.IEEERemainder(i, number);
-                if (divisible == 0)
-                    divisibleNumber++;
+                for(int j = i; j > 0;)
+                {
+                    j -= number;
+
+                    if (j == 0)
+                        divisibleNumber++;
+                }
             }
 
-            Console.WriteLine($"Кол-во трехзначных чисел краттных {number}: {divisibleNumber}");
+            Console.WriteLine($"Кол-во трехзначных чисел кратных {number}: {divisibleNumber}");
             Console.ReadKey();
         }
     }
