@@ -15,10 +15,6 @@ namespace HomeWork
 
             while (isExit == false)
             {
-                Console.Clear();
-                Console.WriteLine("Да поможет вам help =)");
-                userInput = Console.ReadLine();
-
                 const string CommandSetName = "SetName";
                 const string CommandSetPassword = "SetPassword";
                 const string CommandShowName = "ShowName";
@@ -27,6 +23,10 @@ namespace HomeWork
                 const string CommandResetColor = "ResetColor";
                 const string CommandExit = "Exit";
                 const string CommandHelp = "Help";
+
+                Console.Clear();
+                Console.WriteLine("Да поможет вам help =)");
+                userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
@@ -93,19 +93,6 @@ namespace HomeWork
                         break;
 
                     case CommandChangeConsoleColor:
-                        Console.Write("Выберите цвет:\n" +
-                            "0 - Чёрный\n" +
-                            "1 - Тёмно-синий\n" +
-                            "2 - Тёмно-зелёный\n" +
-                            "3 - Тёмно-голубой\n" +
-                            "4 - Тёмно-красный\n" +
-                            "5 - Тёмно-пурпурный\n" +
-                            "6 - Тёмно-жёлтый\n" +
-                            "7 - Тёмно-серый\n" +
-                            "8 - Белый\n" +
-                            "Выберите цвет: ");
-                        userInput = Console.ReadLine();
-
                         const string CommandBackgroundColorBlack = "0";
                         const string CommandBackgroundColorDarkBlue = "1";
                         const string CommandBackgroundColorDarkGreen = "2";
@@ -116,32 +103,53 @@ namespace HomeWork
                         const string CommandBackgroundColorDarkGray = "7";
                         const string CommandBackgroundColorWhite = "8";
 
+                        Console.Write("Выберите цвет:\n" +
+                            $"{CommandBackgroundColorBlack} - Чёрный\n" +
+                            $"{CommandBackgroundColorDarkBlue} - Тёмно-синий\n" +
+                            $"{CommandBackgroundColorDarkGreen} - Тёмно-зелёный\n" +
+                            $"{CommandBackgroundColorDarkCyan} - Тёмно-голубой\n" +
+                            $"{CommandBackgroundColorDarkRed} - Тёмно-красный\n" +
+                            $"{CommandBackgroundColorDarkMagenta} - Тёмно-пурпурный\n" +
+                            $"{CommandBackgroundColorDarkYellow} - Тёмно-жёлтый\n" +
+                            $"{CommandBackgroundColorDarkGray} - Тёмно-серый\n" +
+                            $"{CommandBackgroundColorWhite} - Белый\n" +
+                            "Ваш выбор: ");
+                        userInput = Console.ReadLine();
+
                         switch (userInput)
                         {
                             case CommandBackgroundColorBlack:
                                 Console.BackgroundColor = ConsoleColor.Black;
                                 break;
+
                             case CommandBackgroundColorDarkBlue:
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                                 break;
+
                             case CommandBackgroundColorDarkGreen:
                                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                                 break;
+
                             case CommandBackgroundColorDarkCyan:
                                 Console.BackgroundColor = ConsoleColor.DarkCyan;
                                 break;
+
                             case CommandBackgroundColorDarkRed:
                                 Console.BackgroundColor = ConsoleColor.DarkRed;
                                 break;
+
                             case CommandBackgroundColorDarkMagenta:
                                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
                                 break;
+
                             case CommandBackgroundColorDarkYellow:
                                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                                 break;
+
                             case CommandBackgroundColorDarkGray:
                                 Console.BackgroundColor = ConsoleColor.DarkGray;
                                 break;
+
                             case CommandBackgroundColorWhite:
                                 Console.BackgroundColor = ConsoleColor.White;
                                 break;
@@ -149,19 +157,6 @@ namespace HomeWork
                         break;
 
                     case CommandChangeTextColor:
-                        Console.Write("Выберите цвет:\n" +
-                            "0 - Чёрный\n" +
-                            "1 - Cиний\n" +
-                            "2 - Зелёный\n" +
-                            "3 - Голубой\n" +
-                            "4 - Красный\n" +
-                            "5 - Пурпурный\n" +
-                            "6 - Жёлтый\n" +
-                            "7 - Серый\n" +
-                            "8 - Белый\n" +
-                            "Выберите цвет: ");
-                        userInput = Console.ReadLine();
-
                         const string CommandForegroundColorBlack = "0";
                         const string CommandForegroundColorBlue = "1";
                         const string CommandForegroundColorGreen = "2";
@@ -172,32 +167,53 @@ namespace HomeWork
                         const string CommandForegroundColorGray = "7";
                         const string CommandForegroundColorWhite = "8";
 
+                        Console.Write("Выберите цвет:\n" +
+                            $"{CommandForegroundColorBlack} - Чёрный\n" +
+                            $"{CommandForegroundColorBlue} - Cиний\n" +
+                            $"{CommandForegroundColorGreen} - Зелёный\n" +
+                            $"{CommandForegroundColorCyan} - Голубой\n" +
+                            $"{CommandForegroundColorRed} - Красный\n" +
+                            $"{CommandForegroundColorMagenta} - Пурпурный\n" +
+                            $"{CommandForegroundColorYellow} - Жёлтый\n" +
+                            $"{CommandForegroundColorGray} - Серый\n" +
+                            $"{CommandForegroundColorWhite} - Белый\n" +
+                            "Ваш выбор: ");
+                        userInput = Console.ReadLine();
+
                         switch (userInput)
                         {
                             case CommandForegroundColorBlack:
                                 Console.ForegroundColor = ConsoleColor.Black;
                                 break;
+
                             case CommandForegroundColorBlue:
                                 Console.ForegroundColor = ConsoleColor.Blue;
                                 break;
+
                             case CommandForegroundColorGreen:
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 break;
+
                             case CommandForegroundColorCyan:
                                 Console.ForegroundColor = ConsoleColor.Cyan;
                                 break;
+
                             case CommandForegroundColorRed:
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 break;
+
                             case CommandForegroundColorMagenta:
                                 Console.ForegroundColor = ConsoleColor.Magenta;
                                 break;
+
                             case CommandForegroundColorYellow:
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 break;
+
                             case CommandForegroundColorGray:
                                 Console.ForegroundColor = ConsoleColor.Gray;
                                 break;
+
                             case CommandForegroundColorWhite:
                                 Console.ForegroundColor = ConsoleColor.White;
                                 break;
@@ -214,19 +230,19 @@ namespace HomeWork
 
                     case CommandHelp:
                         Console.WriteLine("Список команд: \n" +
-                            "help - список команд\n" +
-                            "SetName - установить имя пользователя\n" +
-                            "SetPassword - установить пароль пользователя\n" +
-                            "ShowName - показать имя пользователя\n" +
-                            "ChangeConsoleColor - изменить цвет консоли\n" +
-                            "ChangeTextColor - изменить цвет текста\n" +
-                            "ResetColor - сбросить цвет текста\n" +
-                            "Exit - выйти из программы.");
+                            $"{CommandHelp} - список команд\n" +
+                            $"{CommandSetName} - установить имя пользователя\n" +
+                            $"{CommandSetPassword} - установить пароль пользователя\n" +
+                            $"{CommandShowName} - показать имя пользователя\n" +
+                            $"{CommandChangeConsoleColor} - изменить цвет консоли\n" +
+                            $"{CommandChangeTextColor} - изменить цвет текста\n" +
+                            $"{CommandResetColor} - сбросить цвет текста\n" +
+                            $"{CommandExit} - выйти из программы.");
                         Console.ReadKey();
                         break;
 
                     default:
-                        Console.WriteLine("Введённой команды не предусмотренно, введите help для дополнительной информации.");
+                        Console.WriteLine($"Введённой команды не предусмотренно, введите {CommandHelp} для дополнительной информации.");
                         Console.ReadKey();
                         break;
                 }
