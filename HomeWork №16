@@ -9,21 +9,18 @@ namespace HomeWork
             Random random = new Random();
             int number;
             int minNumber = 1;
-            int maxNumber = 28;
+            int maxNumber = 27 + 1;
             int divisibleNumber = 0;
             int minDivisible = 100;
             int maxDivisible = 1000;
 
             number = random.Next(minNumber, maxNumber);
 
-            for (int i = minDivisible; i < maxDivisible; i++)
+            for (int i = number; i < maxDivisible; i+= number)
             {
-                for(int j = i; j > 0;)
+                if(i >= minDivisible)
                 {
-                    j -= number;
-
-                    if (j == 0)
-                        divisibleNumber++;
+                    divisibleNumber++;
                 }
             }
 
