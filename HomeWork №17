@@ -10,19 +10,22 @@ namespace HomeWork
             int randomNumber;
             int minNumber = 10;
             int maxNumber = 100;
-            int divisibleTwo = 2;
+            int finalValue = 2;
             int multipleTwo = 2;
-            int divisibleCounter = 1;
+            int degree = 1;
 
             randomNumber = random.Next(minNumber, maxNumber);
 
-            while (divisibleTwo <= randomNumber)
+            while (finalValue <= randomNumber)
             {
-                divisibleTwo *= multipleTwo;
-                divisibleCounter++;
+                finalValue *= multipleTwo;
+                degree++;
             }
 
-            Console.WriteLine($"Наименьшая степень числа 2 больше {randomNumber}: {divisibleCounter}");
+            Console.WriteLine($"Случайное число: {randomNumber}\n" +
+                $"Найденная наименьшая степень числа 2: {degree}\n" +
+                $"Число 2 в степени {degree} = {finalValue}\n" +
+                $"{finalValue} > {randomNumber}");
             Console.ReadKey();
         }
     }
