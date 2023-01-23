@@ -7,35 +7,37 @@ namespace HomeWork
         static void Main(string[] args)
         {
             string text;
+            char bracketLeft = '(';
+            char bracketRight = ')';
             int depth = 0;
             int depthMax = 0;
-            int bracketLeft = 0;
-            int bracketRight = 0;
+            int bracketLeftCount = 0;
+            int bracketRightCount = 0;
             bool isCorrect = true;
 
             text = Console.ReadLine();
 
             for (int i = 0; i < text.Length; i++)
             {
-                if (text[i] == ')')
+                if (text[i] == bracketRight)
                 {
-                    bracketRight++;
+                    bracketRightCount++;
                     depth--;
                 }
-                else if (text[i] == '(')
+                else if (text[i] == bracketLeft)
                 {
-                    bracketLeft++;
+                    bracketLeftCount++;
                     depth++;
                 }
 
                 if (depth < 0)
                     isCorrect = false;
 
-                if (depth > depthMax) 
+                if (depth > depthMax)
                     depthMax = depth;
             }
 
-            if (bracketRight == bracketLeft && isCorrect == true) 
+            if (bracketRightCount == bracketLeftCount && isCorrect == true)
                 Console.WriteLine($"{text} - корректная строка, глубина вложения: {depthMax}");
             else
                 Console.WriteLine($"Строка {text} не является корректной");
