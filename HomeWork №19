@@ -6,14 +6,29 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            const string CommandAttack = "1";
+            const string CommandSpell = "2";
+            const string CommandStance = "3";
+
+            const string CommandSpellFrost = "1";
+            const string CommandSpellSummon = "2";
+            const string CommandSpellLifeSteal = "3";
+            const string CommandSpellSacriface = "4";
+
+            const string CommandAttackStance = "1";
+            const string CommandDefendStance = "2";
+            const string CommandNeutralStance = "3";
+
             int playerHealth = 100;
+            int playerHealthEnd = 0;
             int playerDamage = 20;
             int spellCastLimit = 5;
+            int spellCastEmpty = 0;
             int playerAccuracy = 8;
             int playerEvasion = 16;
             int playerCritMult = 2;
-            int AttackStanceBonus = 5;
-            int DefendStanceBonus = 5;
+            int attackStanceBonus = 5;
+            int defendStanceBonus = 5;
             bool isAttackStance = false;
             bool isDefendStance = false;
 
@@ -21,6 +36,7 @@ namespace HomeWork
             int frostSpellEffect = 5;
             int frostSpellDuration = 5;
             int frostEffectTimer = 0;
+            int frostTimerEnd = 0;
             bool isFrozen = false;
 
             int summonDamage = 5;
@@ -33,6 +49,7 @@ namespace HomeWork
             int sacrifaceDamage = 150;
 
             int enemyHealth = 500;
+            int enemyHealthEnd = 0;
             int enemyDamage = 15;
             int enemyAccuracy = 5;
             int enemyEvasion = 12;
@@ -55,15 +72,16 @@ namespace HomeWork
             {
                 Console.Clear();
 
-                if(isFrozen == true)
+                if (isFrozen == true)
                 {
                     frostEffectTimer--;
-                }
-                if(frostEffectTimer == 0 && isFrozen == true)
-                {
-                    enemyAccuracy += frostSpellEffect;
-                    enemyEvasion += frostSpellEffect;
-                    enemyDamage += frostSpellEffect;
+
+                    if (frostEffectTimer == frostTimerEnd)
+                    {
+                        enemyAccuracy += frostSpellEffect;
+                        enemyEvasion += frostSpellEffect;
+                        enemyDamage += frostSpellEffect;
+                    }
                 }
 
                 Console.WriteLine(
@@ -75,6 +93,7 @@ namespace HomeWork
                     $"{"Множитель крита:",20 }  {playerCritMult,5} {"Множитель крита:",20 }  {enemyCritMult,5}\n" +
                     $"{"Запас заклинаний:",20 }  {spellCastLimit,5}\n\n" +
                     $"{"Ход боя:",20} {battleTurn}");
+
                 if (isAttackStance)
                     Console.WriteLine($"{"Ваша стойка:",20} Атакующая\n");
                 else if (isDefendStance)
@@ -83,25 +102,26 @@ namespace HomeWork
                     Console.WriteLine($"{"Ваша стойка:",20} Нейтральная\n");
 
                 Console.Write(
-                    $"1.Атаковать\n" +
-                    $"2.Заклинание\n" +
-                    $"3.Сменить стойку\n" +
+                    $"{CommandAttack}.Атаковать\n" +
+                    $"{CommandSpell}.Заклинание\n" +
+                    $"{CommandStance}.Сменить стойку\n" +
                     $"Ваши действия: ");
 
                 userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
-                    case "1":
+                    case CommandAttack:
                         attackRoll = random.Next(rollMin, rollMax);
                         totalAttackRoll = attackRoll + playerAccuracy;
                         Console.WriteLine($"\nАтака: {attackRoll} + {playerAccuracy} = {attackRoll + playerAccuracy}");
+
                         if (attackRoll == critRoll)
                         {
                             enemyHealth -= playerDamage * playerCritMult;
                             Console.WriteLine($"Критическое попадание, нанесённый урон: {playerDamage * playerCritMult}");
                         }
-                        else if(totalAttackRoll > enemyEvasion)
+                        else if (totalAttackRoll > enemyEvasion)
                         {
                             enemyHealth -= playerDamage;
                             Console.WriteLine($"Попадание, нанесённый урон: {playerDamage}");
@@ -110,22 +130,24 @@ namespace HomeWork
                         {
                             Console.WriteLine($"Промах, урона не насено.");
                         }
-                        break;
 
-                    case "2":
-                        if (spellCastLimit > 0)
+                        battleTurn++;
+                        break;
+                    case CommandSpell:
+                        if (spellCastLimit > spellCastEmpty)
                         {
                             Console.Write(
-                                $"\n1. Обморожение (наносит {frostSpellDamage} урона, -{frostSpellEffect} к урону, точности и уклонению на {frostSpellDuration} ходов)\n" +
-                                $"2. Призыв Гекатонхейр (жертвуете {summonHeaithCost} на призыв, наносит {summonDamage} раз в ход)\n" +
-                                $"3. Вытягивание жизни (наносит {vampirDamage} урона и столько же восстанавливает жизни)\n" +
-                                $"4. Тёмный ритуал (жертвует суммоном для нанесения {sacrifaceDamage} урона) \n" +
+                                $"\n{CommandSpellFrost}. Обморожение (наносит {frostSpellDamage} урона, -{frostSpellEffect} к урону, точности и уклонению на {frostSpellDuration} ходов)\n" +
+                                $"{CommandSpellSummon}. Призыв Гекатонхейр (жертвуете {summonHeaithCost} на призыв, наносит {summonDamage} раз в ход)\n" +
+                                $"{CommandSpellLifeSteal}. Вытягивание жизни (наносит {vampirDamage} урона и столько же восстанавливает жизни)\n" +
+                                $"{CommandSpellSacriface}. Тёмный ритуал (жертвует суммоном для нанесения {sacrifaceDamage} урона) \n" +
                                 $"Ваш выбор: ");
 
                             userInput = Console.ReadLine();
+
                             switch (userInput)
                             {
-                                case "1":
+                                case CommandSpellFrost:
                                     enemyHealth -= frostSpellDamage;
                                     enemyEvasion -= frostSpellEffect;
                                     enemyAccuracy -= frostSpellEffect;
@@ -133,7 +155,7 @@ namespace HomeWork
                                     isFrozen = true;
                                     frostEffectTimer = frostSpellDuration;
                                     break;
-                                case "2":
+                                case CommandSpellSummon:
                                     if (isSummoned == false)
                                     {
                                         isSummoned = true;
@@ -144,15 +166,18 @@ namespace HomeWork
                                         Console.ReadKey();
                                         continue;
                                     }
+
                                     break;
-                                case "3":
+                                case CommandSpellLifeSteal:
                                     enemyHealth -= vampirDamage;
                                     playerHealth += vampirDamage;
+
                                     if (playerHealth > maxPlayerHealth)
                                         playerHealth = maxPlayerHealth;
+
                                     break;
-                                case "4":
-                                    if(isSummoned == true)
+                                case CommandSpellSacriface:
+                                    if (isSummoned == true)
                                     {
                                         enemyHealth -= sacrifaceDamage;
                                         isSummoned = false;
@@ -164,6 +189,7 @@ namespace HomeWork
                                         Console.ReadKey();
                                         continue;
                                     }
+
                                     break;
                                 default:
                                     continue;
@@ -177,59 +203,66 @@ namespace HomeWork
                             Console.ReadKey();
                             continue;
                         }
-                        break;
 
-                    case "3":
+                        break;
+                    case CommandStance:
                         Console.Write(
-                            $"\n1.Атакующая +{AttackStanceBonus} к урону -{AttackStanceBonus} к уклонению\n" +
-                            $"2.Защитная +{DefendStanceBonus} к уклонению -{AttackStanceBonus} к точности\n" +
-                            $"3.Нейтральная -/+0\n" +
+                            $"\n{CommandAttackStance}.Атакующая +{attackStanceBonus} к урону -{attackStanceBonus} к уклонению\n" +
+                            $"{CommandDefendStance}.Защитная +{defendStanceBonus} к уклонению -{attackStanceBonus} к точности\n" +
+                            $"{CommandNeutralStance}.Нейтральная -/+0\n" +
                             $"Ваш выбор: ");
 
                         userInput = Console.ReadLine();
+
                         switch (userInput)
                         {
-                            case "1":
-                                if (isAttackStance == false) 
+                            case CommandAttackStance:
+                                if (isAttackStance == false)
                                 {
                                     isAttackStance = true;
-                                    playerDamage += AttackStanceBonus;
-                                    playerEvasion -= AttackStanceBonus;
+                                    playerDamage += attackStanceBonus;
+                                    playerEvasion -= attackStanceBonus;
                                 }
-                                if (isDefendStance == true) 
+
+                                if (isDefendStance == true)
                                 {
                                     isDefendStance = false;
-                                    playerEvasion -= DefendStanceBonus;
-                                    playerAccuracy += DefendStanceBonus;
+                                    playerEvasion -= defendStanceBonus;
+                                    playerAccuracy += defendStanceBonus;
                                 }
+
                                 break;
-                            case "2":
+                            case CommandDefendStance:
                                 if (isAttackStance == true)
                                 {
                                     isAttackStance = false;
-                                    playerDamage -= AttackStanceBonus;
-                                    playerEvasion += AttackStanceBonus;
+                                    playerDamage -= attackStanceBonus;
+                                    playerEvasion += attackStanceBonus;
                                 }
+
                                 if (isDefendStance == false)
                                 {
                                     isDefendStance = true;
-                                    playerEvasion += DefendStanceBonus;
-                                    playerAccuracy -= DefendStanceBonus;
+                                    playerEvasion += defendStanceBonus;
+                                    playerAccuracy -= defendStanceBonus;
                                 }
+
                                 break;
-                            case "3":
-                                if(isAttackStance == true)
+                            case CommandNeutralStance:
+                                if (isAttackStance == true)
                                 {
                                     isAttackStance = false;
-                                    playerDamage -= AttackStanceBonus;
-                                    playerEvasion += AttackStanceBonus;
+                                    playerDamage -= attackStanceBonus;
+                                    playerEvasion += attackStanceBonus;
                                 }
-                                if(isDefendStance == true)
+
+                                if (isDefendStance == true)
                                 {
                                     isDefendStance = false;
-                                    playerEvasion -= DefendStanceBonus;
-                                    playerAccuracy += DefendStanceBonus;
+                                    playerEvasion -= defendStanceBonus;
+                                    playerAccuracy += defendStanceBonus;
                                 }
+
                                 break;
                             default:
                                 continue;
@@ -239,7 +272,7 @@ namespace HomeWork
                         continue;
                 }
 
-                if(isSummoned == true)
+                if (isSummoned == true)
                 {
                     enemyHealth -= summonDamage;
                     Console.WriteLine($"Суммон нанёс {summonDamage} урона");
@@ -252,7 +285,7 @@ namespace HomeWork
 
                 if (attackRoll == critRoll)
                 {
-                    playerHealth-= enemyDamage * enemyCritMult;
+                    playerHealth -= enemyDamage * enemyCritMult;
                     Console.WriteLine($"Критическое попадание, нанесённый урон: {enemyDamage * enemyCritMult}");
                 }
                 else if (totalAttackRoll > playerEvasion)
@@ -265,12 +298,17 @@ namespace HomeWork
                     Console.WriteLine($"Промах, урона не насено.");
                 }
 
-                if (playerHealth <= 0)
+                if (playerHealth <= playerHealthEnd && enemyHealth <= enemyHealthEnd)
+                {
+                    isBattleEnd = true;
+                    Console.WriteLine("Ничья. Оба погибли.");
+                }
+                else if (playerHealth <= playerHealthEnd)
                 {
                     isBattleEnd = true;
                     Console.WriteLine("Вы проиграли.");
                 }
-                else if (enemyHealth <= 0)
+                else if (enemyHealth <= enemyHealthEnd)
                 {
                     isBattleEnd = true;
                     Console.WriteLine("Босс повержен.");
