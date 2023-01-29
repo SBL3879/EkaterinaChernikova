@@ -10,7 +10,7 @@ namespace HomeWork
 
             int randomMin = 1;
             int randomMax = 11;
-            int maxElement = randomMin;
+            int maxElement = int.MinValue;
 
             Console.WriteLine("Исходная матрица: ");
 
@@ -28,6 +28,7 @@ namespace HomeWork
                         maxElement = matrix[i, j];
                     }
                 }
+
                 Console.WriteLine();
             }
 
@@ -42,10 +43,13 @@ namespace HomeWork
                     {
                         matrix[i, j] = 0;
                     }
+
                     Console.Write($"{matrix[i, j],2}" + " ");
                 }
+
                 Console.WriteLine();
             }
+
             Console.ReadKey();
         }
     }
