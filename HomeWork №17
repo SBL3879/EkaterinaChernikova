@@ -11,14 +11,14 @@ namespace HomeWork
             int minNumber = 10;
             int maxNumber = 100;
             int finalValue = 2;
-            int multipleTwo = 2;
+            int multiple = 2;
             int degree = 1;
 
             randomNumber = random.Next(minNumber, maxNumber);
 
             while (finalValue <= randomNumber)
             {
-                finalValue *= multipleTwo;
+                finalValue *= multiple;
                 degree++;
             }
 
