@@ -6,11 +6,13 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            const string CommandSum = "sum";
+            const string CommandExit = "exit";
+
             int[] numbers = new int[0];
-            string[] numbersString;
+            int[] temporaryNumbers = new int[0];
 
             string userInput;
-            string userString = "0";
 
             bool isExit = false;
 
@@ -18,12 +20,12 @@ namespace HomeWork
             {
                 Console.Clear();
 
-                Console.Write("Введите число или команду (sum или exit): ");
+                Console.Write($"Введите число или команду ({CommandSum} или {CommandExit}): ");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
-                    case "sum":
+                    case CommandSum:
                         int sum = 0;
 
                         for (int i = 0; i < numbers.Length; i++)
@@ -34,25 +36,30 @@ namespace HomeWork
                         Console.WriteLine($"Сумма введенных чисел: {sum}");
                         sum = 0;
                         break;
-
-                    case "exit":
+                    case CommandExit:
                         isExit = true;
                         continue;
-
-
                     default:
-                        userString += " " + userInput;
-                        numbersString = userString.Split(' ');
-                        numbers = new int[numbersString.Length - 1];
+                        temporaryNumbers = new int[numbers.Length + 1];
 
                         for (int i = 0; i < numbers.Length; i++)
                         {
-                            numbers[i] = Convert.ToInt32(numbersString[i + 1]);
+                            temporaryNumbers[i] = numbers[i];
                         }
 
+                        numbers = new int[temporaryNumbers.Length];
+
+                        for(int i = 0; i < numbers.Length; i++)
+                        {
+                            numbers[i] = temporaryNumbers[i];
+                        }
+
+                        numbers[numbers.Length - 1] = Convert.ToInt32(userInput);
+                        temporaryNumbers = new int[0];
                         break;
                 }
-                Console.Write("Введенные чила: ");
+
+                Console.Write("Введенные чиcла: ");
 
                 for (int i = 0; i < numbers.Length; i++)
                 {
