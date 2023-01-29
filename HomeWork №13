@@ -6,6 +6,15 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            const string CommandSetName = "SetName";
+            const string CommandSetPassword = "SetPassword";
+            const string CommandShowName = "ShowName";
+            const string CommandChangeConsoleColor = "ChangeConsoleColor";
+            const string CommandChangeTextColor = "ChangeTextColor";
+            const string CommandResetColor = "ResetColor";
+            const string CommandExit = "Exit";
+            const string CommandHelp = "Help";
+
             string emptySpace = "";
             string userName = "";
             string userPassword = "";
@@ -15,17 +24,8 @@ namespace HomeWork
 
             while (isExit == false)
             {
-                const string CommandSetName = "SetName";
-                const string CommandSetPassword = "SetPassword";
-                const string CommandShowName = "ShowName";
-                const string CommandChangeConsoleColor = "ChangeConsoleColor";
-                const string CommandChangeTextColor = "ChangeTextColor";
-                const string CommandResetColor = "ResetColor";
-                const string CommandExit = "Exit";
-                const string CommandHelp = "Help";
-
                 Console.Clear();
-                Console.WriteLine("Да поможет вам help =)");
+                Console.WriteLine($"Да поможет вам {CommandHelp} =)");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
@@ -54,6 +54,7 @@ namespace HomeWork
                                 Console.ReadKey();
                             }
                         }
+
                         break;
 
                     case CommandSetPassword:
@@ -71,6 +72,7 @@ namespace HomeWork
                                 Console.Write("Введите новый пароль пользователя: ");
                             }
                         }
+
                         userPassword = Console.ReadLine();
                         break;
 
@@ -89,6 +91,7 @@ namespace HomeWork
                             else
                                 Console.WriteLine("Пароль неверен!");
                         }
+
                         Console.ReadKey();
                         break;
 
@@ -154,6 +157,7 @@ namespace HomeWork
                                 Console.BackgroundColor = ConsoleColor.White;
                                 break;
                         }
+
                         break;
 
                     case CommandChangeTextColor:
@@ -218,6 +222,7 @@ namespace HomeWork
                                 Console.ForegroundColor = ConsoleColor.White;
                                 break;
                         }
+
                         break;
 
                     case CommandResetColor:
