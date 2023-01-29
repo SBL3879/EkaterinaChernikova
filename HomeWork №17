@@ -10,6 +10,7 @@ namespace HomeWork
             int randomNumber;
             int minNumber = 10;
             int maxNumber = 100;
+            int number = 2;
             int finalValue = 2;
             int multiple = 2;
             int degree = 1;
@@ -23,8 +24,8 @@ namespace HomeWork
             }
 
             Console.WriteLine($"Случайное число: {randomNumber}\n" +
-                $"Найденная наименьшая степень числа 2: {degree}\n" +
-                $"Число 2 в степени {degree} = {finalValue}\n" +
+                $"Найденная наименьшая степень числа {number}: {degree}\n" +
+                $"Число {number} в степени {degree} = {finalValue}\n" +
                 $"{finalValue} > {randomNumber}");
             Console.ReadKey();
         }
