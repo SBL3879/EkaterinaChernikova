@@ -8,15 +8,16 @@ namespace HomeWork
         {
             int healthPercent = 10;
             int manaPercent = 5;
-            int barLength = 20;
+            char haelthBarFiller = '#';
+            char manaBarFiller = '@';
             bool isExit = false;
             bool isFirstStart = true;
             string userInput;
 
             while (isExit == false)
             {
-                DrawBar(healthPercent, 0, barLength, '#');
-                DrawBar(manaPercent, 1, barLength, '@');
+                DrawBar(healthPercent, 0, haelthBarFiller);
+                DrawBar(manaPercent, 1, manaBarFiller);
 
                 Console.SetCursorPosition(0, 3);
 
@@ -25,12 +26,12 @@ namespace HomeWork
                     Console.Write("Продолжить? (Yes/No): ");
                     userInput = Console.ReadLine();
 
-                    if(userInput == "No")
+                    if (userInput == "No")
                     {
                         isExit = true;
                         continue;
                     }
-                    else if(userInput != "Yes" && userInput != "No")
+                    else if (userInput != "Yes" && userInput != "No")
                     {
                         Console.Clear();
                         continue;
@@ -43,47 +44,64 @@ namespace HomeWork
 
                 Console.Write("Введите процент, на который изменится жизни: ");
                 healthPercent += Convert.ToInt32(Console.ReadLine());
+                healthPercent = LimitPercentage(healthPercent);
                 Console.Write("Введите процент, на который изменится мана: ");
                 manaPercent += Convert.ToInt32(Console.ReadLine());
+                manaPercent = LimitPercentage(manaPercent);
 
                 Console.Clear();
             }
         }
 
-        static void DrawBar(int percent, int position, int barLength, char symbol = ' ')
+        static int LimitPercentage(int percent)
         {
             int minPercent = 0;
             int maxPercent = 100;
-            string bar = "";
-            float onePercentBarLength = (float)barLength / maxPercent;
 
-            if (percent < minPercent)
+            if(percent < minPercent)
             {
                 percent = minPercent;
             }
-            else if (percent > maxPercent)
+            else if(percent > maxPercent)
             {
                 percent = maxPercent;
             }
 
-            int filledValue = (int)Math.Ceiling(percent * onePercentBarLength);
+            return percent;
+        }
 
-            for (int i = 0; i < filledValue; i++)
-            {
-                bar += symbol;
-            }
+        static void DrawBar(int percent, int position, char symbol = ' ')
+        {
+            int maxPercent = 100;
+            int barLenght = 20;
+            string bar ;
+            char emptySpace = '_';
+
+            float onePercentBarLength = (float)barLenght / maxPercent;
+            int filledValue = (int)Math.Ceiling(percent * onePercentBarLength);
+            int unfilledValue = barLenght - filledValue;
+
+            bar = FillString(filledValue, symbol);
 
             Console.SetCursorPosition(0, position);
             Console.Write('[');
             Console.Write(bar);
 
-            bar = "";
+            bar = FillString(unfilledValue, emptySpace);
 
-            for (int i = filledValue; i < barLength; i++)
-            {
-                bar += '_';
-            }
             Console.Write(bar + ']' + $" {percent}%");
+        }
+
+        static string FillString(int FillValue, char symbol)
+        {
+            string bar = "";
+
+            for(int i = 0; i < FillValue; i++)
+            {
+                bar += symbol;
+            }
+
+            return bar;
         }
     }
 }
