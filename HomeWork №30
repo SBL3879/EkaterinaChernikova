@@ -6,11 +6,11 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Число успешно конвертировано: " + RequestNumberInput());
+            Console.WriteLine("Число успешно конвертировано: " + GetNumber());
             Console.ReadKey();
         }
 
-        static int RequestNumberInput()
+        static int GetNumber()
         {
             int convertedNumber = 0;
             bool isNumber = false;
@@ -29,6 +29,7 @@ namespace HomeWork
                     Console.Clear();
                 }
             }
+
             return convertedNumber;
         }
     }
