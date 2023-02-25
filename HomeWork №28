@@ -6,6 +6,12 @@ namespace HomeWork
     {
         static void Main(string[] args)
         {
+            const string CommandAddPerson = "1";
+            const string CommandPrint = "2";
+            const string CommandRemowePerson = "3";
+            const string CommandSearch = "4";
+            const string CommandExit = "5";
+
             string[] fullNames = new string[0];
             string[] posts = new string[0];
             string userInput;
@@ -15,30 +21,34 @@ namespace HomeWork
             {
                 Console.Clear();
                 Console.WriteLine(
-               "1. Добавить досье\n" +
-               "2. Вывести все досье\n" +
-               "3. Удалить досье\n" +
-               "4. Поиск по фамилии\n" +
-               "5. Выход\n"
+               $"{CommandAddPerson}. Добавить досье\n" +
+               $"{CommandPrint}. Вывести все досье\n" +
+               $"{CommandRemowePerson}. Удалить досье\n" +
+               $"{CommandSearch}. Поиск по фамилии\n" +
+               $"{CommandExit}. Выход\n"
                );
                 Console.Write("Введите номер меню: ");
 
                 userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":
+                    case CommandAddPerson:
                         AddPerson(ref fullNames, ref posts);
                         break;
-                    case "2":
+
+                    case CommandPrint:
                         PrintInfo(fullNames, posts);
                         break;
-                    case "3":
+
+                    case CommandRemowePerson:
                         RemowePerson(ref fullNames, ref posts);
                         break;
-                    case "4":
+
+                    case CommandSearch:
                         Search(fullNames, posts);
                         break;
-                    case "5":
+
+                    case CommandExit:
                         isExit = true;
                         break;
                 }
@@ -47,7 +57,11 @@ namespace HomeWork
 
         static void AddPerson(ref string[] fullNames, ref string[] posts)
         {
-            string firstName, secondName, lastName, post;
+            string firstName;
+            string secondName;
+            string lastName;
+            string post;
+
             Console.Write("\nВведите имя: ");
             firstName = Console.ReadLine();
             Console.Write("\nВведите фамилию: ");
@@ -57,10 +71,10 @@ namespace HomeWork
             Console.Write("\nВведите должность: ");
             post = Console.ReadLine();
 
-            IncreaseSize(ref fullNames);
+            fullNames = IncreaseSize(fullNames);
             fullNames[fullNames.Length - 1] = lastName + " " + firstName + " " + secondName;
 
-            IncreaseSize(ref posts);
+            posts = IncreaseSize(posts);
             posts[posts.Length - 1] = post;
         }
 
@@ -91,8 +105,8 @@ namespace HomeWork
                     posts[i] = posts[i + 1];
                 }
 
-                DecreaseSize(ref fullNames);
-                DecreaseSize(ref posts);
+                fullNames = DecreaseSize(fullNames);
+                posts = DecreaseSize(posts);
             }
         }
 
@@ -104,10 +118,11 @@ namespace HomeWork
             Console.Write("Введите фамилию для поиска: ");
             string userInput = Console.ReadLine();
             string[] splitString;
+            char separator = ' ';
 
             for (int i = 0; i < fullNames.Length; i++)
             {
-                splitString = fullNames[i].Split(' ');
+                splitString = fullNames[i].Split(separator);
 
                 if (splitString[0] == userInput)
                 {
@@ -129,32 +144,32 @@ namespace HomeWork
             return true;
         }
 
-        static void DecreaseSize(ref string[] massive)
+        static string[] DecreaseSize(string[] massive)
         {
-            string[] buffer = new string[massive.Length - 1];
+            string[] newMassive = new string[massive.Length - 1];
 
-            for(int i = 0; i < buffer.Length; i++)
+            for (int i = 0; i < newMassive.Length; i++)
             {
-                buffer[i] = massive[i];
+                newMassive[i] = massive[i];
             }
 
-            massive = buffer;
+            return newMassive;
         }
 
-        static void IncreaseSize(ref string[] massive)
+        static string[] IncreaseSize(string[] massive)
         {
             int oldSize = massive.Length;
-            string[] buffer = new string[massive.Length + 1];
+            string[] newMassive = new string[massive.Length + 1];
 
-            if(massive.Length > 0)
+            if (massive.Length > 0)
             {
                 for (int i = 0; i < massive.Length; i++)
                 {
-                    buffer[i] = massive[i];
+                    newMassive[i] = massive[i];
                 }
             }
 
-            massive = buffer;
+            return newMassive;
         }
     }
 }
