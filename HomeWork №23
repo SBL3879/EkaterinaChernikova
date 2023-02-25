@@ -10,37 +10,35 @@ namespace HomeWork
             const string CommandExit = "exit";
 
             int[] numbers = new int[0];
-            int[] temporaryNumbers = new int[0];
 
-            string userInput;
+            bool isWorking = true;
 
-            bool isExit = false;
-
-            while (isExit == false)
+            while (isWorking == true)
             {
                 Console.Clear();
 
                 Console.Write($"Введите число или команду ({CommandSum} или {CommandExit}): ");
-                userInput = Console.ReadLine();
+                string userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
                     case CommandSum:
                         int sum = 0;
 
-                        for (int i = 0; i < numbers.Length; i++)
+                        foreach (int number in numbers)
                         {
-                            sum += numbers[i];
+                            sum += number;
                         }
 
                         Console.WriteLine($"Сумма введенных чисел: {sum}");
-                        sum = 0;
                         break;
+
                     case CommandExit:
-                        isExit = true;
+                        isWorking = false;
                         continue;
+
                     default:
-                        temporaryNumbers = new int[numbers.Length + 1];
+                        int[] temporaryNumbers = new int[numbers.Length + 1];
 
                         for (int i = 0; i < numbers.Length; i++)
                         {
@@ -49,21 +47,20 @@ namespace HomeWork
 
                         numbers = new int[temporaryNumbers.Length];
 
-                        for(int i = 0; i < numbers.Length; i++)
+                        for (int i = 0; i < numbers.Length; i++)
                         {
                             numbers[i] = temporaryNumbers[i];
                         }
 
                         numbers[numbers.Length - 1] = Convert.ToInt32(userInput);
-                        temporaryNumbers = new int[0];
                         break;
                 }
 
                 Console.Write("Введенные чиcла: ");
 
-                for (int i = 0; i < numbers.Length; i++)
+                foreach(int number in numbers)
                 {
-                    Console.Write(numbers[i] + " ");
+                    Console.Write(numbers + " ");
                 }
 
                 Console.ReadKey();
