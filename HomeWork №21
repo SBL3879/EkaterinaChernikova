@@ -11,21 +11,24 @@ namespace HomeWork
             int randomMin = 1;
             int randomMax = 11;
             int maxElement = int.MinValue;
+            int numbersLenght = 10;
+            int numbersHigh = 10;
+            int replaceNumber = 0;
 
             Console.WriteLine("Исходная матрица: ");
 
-            int[,] matrix = new int[10, 10];
+            int[,] numbers = new int[numbersLenght, numbersHigh];
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            for (int i = 0; i < numbers.GetLength(0); i++)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
+                for (int j = 0; j < numbers.GetLength(1); j++)
                 {
-                    matrix[i, j] = random.Next(randomMin, randomMax);
-                    Console.Write($"{matrix[i, j],2}" + " ");
+                    numbers[i, j] = random.Next(randomMin, randomMax);
+                    Console.Write($"{numbers[i, j],2}" + " ");
 
-                    if (matrix[i, j] > maxElement)
+                    if (numbers[i, j] > maxElement)
                     {
-                        maxElement = matrix[i, j];
+                        maxElement = numbers[i, j];
                     }
                 }
 
@@ -35,16 +38,16 @@ namespace HomeWork
             Console.WriteLine($"Наибольший элемент: {maxElement}");
             Console.WriteLine("Итоговая матрица: ");
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            for (int i = 0; i < numbers.GetLength(0); i++)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
+                for (int j = 0; j < numbers.GetLength(1); j++)
                 {
-                    if (matrix[i, j] == maxElement)
+                    if (numbers[i, j] == maxElement)
                     {
-                        matrix[i, j] = 0;
+                        numbers[i, j] = replaceNumber;
                     }
 
-                    Console.Write($"{matrix[i, j],2}" + " ");
+                    Console.Write($"{numbers[i, j],2}" + " ");
                 }
 
                 Console.WriteLine();
